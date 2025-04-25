@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #F2E3B3;
+  --color-primary-dark: #DED2A9;
+  --color-primary-saturated: #e8d38d;
+  --color-textcolor: #34342F;
+  --color-background: #F5F5F5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-saturated: var(--color-primary-saturated);
+  --color-textcolor: var(--color-textcolor);
+  --color-background: var(--color-background);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html, body {
+    @apply h-full m-0 p-0;
+  }
+
+  body {
+    @apply text-textcolor bg-background;
+  }
+
+  h1, h2, h3, h4, h5, h6, p, a {
+    @apply text-textcolor;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .clickable-card {
+    @apply shadow transition-all duration-200 hover:-translate-y-1 hover:shadow-md;
+  }
+
+  .clickable-card-md {
+    @apply shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  }
 }

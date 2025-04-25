@@ -1,3 +1,5 @@
+require('dotenv').config(); // load env variables
+
 const express = require('express');
 const next = require('next');
 
@@ -22,6 +24,6 @@ app.prepare().then(() => {
   const port = process.env.PORT || 3000;
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Server is running on http://localhost:${port}`);
   });
 });
