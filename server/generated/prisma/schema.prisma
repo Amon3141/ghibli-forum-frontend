@@ -1,0 +1,19 @@
+// defines where the database is and how to connect
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// defines what to generate (prisma client for js)
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+// defines the table structure
+model Movie {
+  id           Int      @id @default(autoincrement())
+  title        String
+  director     String
+  release_date DateTime
+}

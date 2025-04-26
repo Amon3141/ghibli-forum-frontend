@@ -1,4 +1,5 @@
-require('dotenv').config(); // load env variables
+require('dotenv').config();
+require('dotenv').config({ path: './server/.env' });
 
 const express = require('express');
 const next = require('next');
@@ -7,10 +8,16 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+/* ----- Routes ----- */
+const movieRoutes = require('./routes/movieRoutes');
+
 app.prepare().then(() => {
   const server = express();
-
+  server.use(express.json());
+  
   /* ----- Custom Express API routes ----- */
+  server.use('/api/movies', movieRoutes);
+
   server.get('/api/hello', (req, res) => {
     res.json({ message: 'Hello from Express!' });
   });
