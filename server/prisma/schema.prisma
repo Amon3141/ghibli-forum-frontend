@@ -16,7 +16,7 @@ model Movie {
   id           Int      @id @default(autoincrement())
   title        String   @unique
   director     String
-  release_date DateTime
+  releaseDate  DateTime
   threads      Thread[]
 }
 
@@ -40,7 +40,7 @@ model Thread {
   description String
   likes       Int
   movieId     Int
-  Movie       Movie     @relation(fields: [movieId], references: [id])
+  movie       Movie     @relation(fields: [movieId], references: [id])
   creatorId   Int
   creator     User      @relation(fields: [creatorId], references: [id])
   comments    Comment[]
