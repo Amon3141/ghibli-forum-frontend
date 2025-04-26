@@ -20,12 +20,9 @@ brew services stop postgresql
 
 ### Prisma
 ```bash
-# initialize prisma (from `server/`)
-npx prisma init
-
-# sync schema and db (from `server/`)
-npx prisma db psh
+# sync schema and db (from root)
+npx prisma db push
 
 # generate prisma client (from root)
-npm run prisma:generate
+npx prisma generate
 ```
