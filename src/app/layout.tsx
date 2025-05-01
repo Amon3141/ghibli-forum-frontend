@@ -19,7 +19,7 @@ export default function RootLayout({
         <main className="
           flex-1
           flex flex-col items-center
-          w-full px-8 py-4
+          w-full px-6 py-4
           overflow-y-scroll
         ">
           {children}

@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-export default function FilmCard({
-    title, filmId 
+export default function MovieCard({
+    title, movieId
   }: {
-    title : string, filmId : string
+    title : string, movieId : number
   }) {
   return (
-    <Link href={`/films/${filmId}`}>
+    <Link href={`/movies/${movieId}`}>
       <div className="
         clickable-card-md
         w-full bg-white rounded-lg overflow-hidden

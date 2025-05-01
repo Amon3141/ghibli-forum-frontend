@@ -1,0 +1,28 @@
+const express = require('express');
+const router = express.Router();
+const threadController = require('../controllers/threadController');
+const commentController = require('../controllers/commentController');
+
+/* ----- Basic routes ----- */
+
+// GET /api/threads - Get all threads
+router.get('/', threadController.getAllThreads);
+
+// GET /api/threads/:id - Get a specific thread by ID
+router.get('/:id', threadController.getThreadById);
+
+// PUT /api/threads/:id - Update a thread
+router.put('/:id', threadController.putThread);
+
+// DELETE /api/threads/:id - Delete a thread
+router.delete('/:id', threadController.deleteThread);
+
+/* ----- Comment-related routes ----- */
+
+// GET /api/threads/:id/comments - Get all top-level comments for a thread
+router.get('/:id/comments', commentController.getCommentsByThread);
+
+// POST /api/threads/:id/comments - Create a new comment
+router.post('/:id/comments', commentController.postComment);
+
+module.exports = router; 

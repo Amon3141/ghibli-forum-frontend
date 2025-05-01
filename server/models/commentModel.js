@@ -55,10 +55,32 @@ async function findCommentsByThread(threadId) {
       parentId: null // Only get top-level comments
     },
     include: {
-      author: {
+      author: true,
+      _count: {
         select: {
-          username: true,
-          userId: true
+          replies: true
+        }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+}
+
+/**
+ * Find all comments by a specific author
+ * @async
+ * @param {number} authorId - The ID of the author
+ * @returns {Promise<Array<Comment>>} Array of comment objects
+ */
+async function findCommentsByAuthor(authorId) {
+  return await prisma.comment.findMany({
+    where: { authorId },
+    include: {
+      author: true,
+      thread: {
+        select: {
+          id: true,
+          title: true
         }
       },
       _count: {
@@ -83,12 +105,7 @@ async function findRepliesByComment(commentId) {
       parentId: commentId
     },
     include: {
-      author: {
-        select: {
-          username: true,
-          userId: true
-        }
-      },
+      author: true,
       replyTo: {
         select: {
           id: true,
@@ -101,7 +118,7 @@ async function findRepliesByComment(commentId) {
         }
       }
     },
-    orderBy: { createdAt: 'asc' }
+    orderBy: { createdAt: 'desc' }
   });
 }
 
@@ -123,12 +140,7 @@ async function createComment(data) {
       likes: 0
     },
     include: {
-      author: {
-        select: {
-          username: true,
-          userId: true
-        }
-      }
+      author: true
     }
   });
 }
@@ -147,12 +159,7 @@ async function updateComment(id, data) {
     where: { id }, 
     data,
     include: {
-      author: {
-        select: {
-          username: true,
-          userId: true
-        }
-      }
+      author: true
     }
   });
 }
@@ -190,7 +197,8 @@ async function updateLikes(id, increment = true) {
 const readOperations = {
   findCommentsByThread,
   findCommentById,
-  findRepliesByComment
+  findRepliesByComment,
+  findCommentsByAuthor
 };
 
 // Write operations

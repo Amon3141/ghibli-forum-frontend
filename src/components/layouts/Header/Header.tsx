@@ -21,7 +21,7 @@ export default function Header() {
         <Link className="font-bold text-2xl" href="/">風の谷の集い</Link>
         <nav className="font-bold flex items-center justify-end gap-8">
           <Link className={styles.nav_link} href="/">ホーム</Link>
-          <Link className={styles.nav_link} href="/films/">作品別ページ</Link>
+          <Link className={styles.nav_link} href="/movies/">作品別ページ</Link>
           <Link className={styles.nav_link} href="/">創作ギャラリー</Link>
           <Link className={styles.nav_link} href="/">ニュース・イベント</Link>
           <Link className={styles.nav_link} href="/">プロフィール</Link>

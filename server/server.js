@@ -8,26 +8,33 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-/* ----- Routes ----- */
-const movieRoutes = require('./routes/movieRoutes');
+/* ----- Route Imports ----- */
+const movieRoutes = require('./routes/movieRoutes');    // Handles /api/movies/*
+const userRoutes = require('./routes/userRoutes');      // Handles /api/users/*
+const threadRoutes = require('./routes/threadRoutes');  // Handles /api/threads/*
+const commentRoutes = require('./routes/commentRoutes'); // Handles /api/comments/*
 
 app.prepare().then(() => {
   const server = express();
   server.use(express.json());
   
-  /* ----- Custom Express API routes ----- */
+  /* ----- API Routes ----- */
   server.use('/api/movies', movieRoutes);
+  server.use('/api/users', userRoutes);
+  server.use('/api/threads', threadRoutes);
+  server.use('/api/comments', commentRoutes);
 
+  // Test endpoint
   server.get('/api/hello', (req, res) => {
     res.json({ message: 'Hello from Express!' });
   });
 
-  /* ----- All other Next.js API routes ----- */
+  /* ----- Next.js Handler ----- */
   server.all('*', (req, res) => {
     return handle(req, res);
   });
 
-  /* ----- Start the server ----- */
+  /* ----- Start Server ----- */
   const port = process.env.PORT || 3000;
   server.listen(port, (err) => {
     if (err) throw err;

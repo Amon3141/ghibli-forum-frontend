@@ -20,7 +20,11 @@ const prisma = require('../utils/PrismaClient');
  * @returns {Promise<Array<Movie>>} Array of movie objects
  */
 async function findAllMovies() {
-  return await prisma.movie.findMany();
+  return await prisma.movie.findMany({
+    orderBy: {
+      releaseDate: 'asc'
+    }
+  });
 }
 
 /**
@@ -30,7 +34,24 @@ async function findAllMovies() {
  * @returns {Promise<Movie|null>} Movie object if found, null otherwise
  */
 async function findMovieById(id) {
-  return await prisma.movie.findUnique({ where: { id }});
+  return await prisma.movie.findUnique({
+    where: { id },
+    include: {
+      threads: {
+        include: {
+          creator: {
+            select: {
+              username: true,
+              userId: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      }
+    }
+  });
 }
 
 /**
@@ -39,8 +60,8 @@ async function findMovieById(id) {
  * @param {Object} data - The movie data
  * @param {string} data.title - The title of the movie
  * @param {string} data.director - The director of the movie
- * @param {Date} data.releaseDate - The release date of the movie
- * @returns {Promise<Movie>} Created movie object
+ * @param {string} data.releaseDate - The release date of the movie
+ * @returns {Promise<{movie: Movie, isNewlyCreated: boolean}>} Object containing created/existing movie and whether it was newly created
  * @throws {Error} If title already exists (due to @unique constraint)
  */
 async function createMovie(data) {
