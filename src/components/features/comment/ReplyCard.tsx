@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { api } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 import LikeButton from "@/components/features/action_buttons/LikeButton";
 import TrashButton from "@/components/features/action_buttons/TrashButton";
@@ -21,7 +22,9 @@ interface ReplyCardProps {
 }
 
 export default function ReplyCard({ replyData, onClickTrashButton: handleClickTrashButton }: ReplyCardProps) {
-  const userNumId = 1; // TODO: Context Providerから取得する
+  const { user } = useAuth();
+  const userDBId = user?.id;
+  
   const handleClickLikeButton = (isLike: boolean) => {
     try {
       api.put(`/comments/${replyData.id}/likes`, {
@@ -49,7 +52,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
         onLike={() => handleClickLikeButton(true)}
           onUnlike={() => handleClickLikeButton(false)}
         />
-        {replyData.author?.id === userNumId && (
+        {replyData.author?.id === userDBId && (
           <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
         )}
       </div>

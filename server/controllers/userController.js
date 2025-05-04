@@ -5,30 +5,7 @@
 
 const userModel = require('../models/userModel');
 
-/**
- * Get a user by their database ID
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Database ID (numeric)
- * @returns {Promise<void>} - Returns JSON of the requested user or 404
- * @throws {Error} Database error or user not found
- */
-async function getUserById(req, res) {
-  try {
-    const { id } = req.params;  // Database ID (numeric)
-    const user = await userModel.findUserById(Number(id));
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    // Don't send password in response
-    const { password: _, ...userWithoutPassword } = user;
-    res.json(userWithoutPassword);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch user' });
-  }
-}
+/* ----- PUBLIC ROUTES ----- */
 
 /**
  * Get a user by their public userId
@@ -48,8 +25,7 @@ async function getUserByUserId(req, res) {
       return res.status(404).json({ error: 'User not found' });
     }
     // Don't send password in response
-    const { password, ...userWithoutPassword } = user;
-    res.json(userWithoutPassword);
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch user' });
   }
@@ -71,9 +47,14 @@ async function getUserByUserId(req, res) {
 async function postUser(req, res) {
   try {
     const { userId, username, password, email } = req.body;
-    const user = await userModel.createUser({ userId, username, password, email });
-    const { password: _, ...userWithoutPassword } = user;
-    res.status(201).json(userWithoutPassword);
+    const user = await userModel.createUser({
+      userId,
+      username,
+      password,
+      email,
+      isAdmin: false
+    });
+    res.status(201).json(user);
   } catch (error) {
     if (error.code === 'P2002') {
       const field = error.meta?.target?.[0];
@@ -82,6 +63,23 @@ async function postUser(req, res) {
     res.status(500).json({ error: 'Failed to create user' });
   }
 }
+
+/* ----- PROTECTED ROUTES ----- */
+
+/**
+ * Get the current user
+ * @async
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @returns {Promise<void>} - Returns JSON of the current user
+ */
+const getCurrentUser = async (req, res) => {
+  const user = await userModel.findUserById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  res.json({ user });
+};
 
 /**
  * Update an existing user
@@ -96,17 +94,21 @@ async function postUser(req, res) {
  * @param {string} [req.body.username] - Updated username
  * @param {string} [req.body.password] - Updated password
  * @param {string} [req.body.email] - Updated email
+ * @param {boolean} [req.body.isAdmin] - Updated admin status
  * 
  * @returns {Promise<void>} - Returns JSON of the updated user
  * @throws {Error} Database error, user not found, or validation error
  */
-async function putUser(req, res) {
+async function putCurrentUser(req, res) {
   try {
-    const { id } = req.params;
-    const { username, password, email } = req.body;
-    const user = await userModel.updateUser(Number(id), { username, password, email });
-    const { password: _, ...userWithoutPassword } = user;
-    res.json(userWithoutPassword);
+    const { username, password, email, isAdmin } = req.body;
+    const user = await userModel.updateUser(req.user.id, {
+      username,
+      password,
+      email,
+      isAdmin
+    });
+    res.json(user);
   } catch (error) {
     if (error.code === 'P2025') {
       return res.status(404).json({ error: 'User not found' });
@@ -129,10 +131,9 @@ async function putUser(req, res) {
  * @returns {Promise<void>} - Returns 204 No Content on success
  * @throws {Error} Database error or user not found
  */
-async function deleteUser(req, res) {
+async function deleteCurrentUser(req, res) {
   try {
-    const { id } = req.params;
-    await userModel.deleteUser(Number(id));
+    await userModel.deleteUser(req.user.id);
     res.status(204).send();
   } catch (error) {
     if (error.code === 'P2025') {
@@ -145,10 +146,65 @@ async function deleteUser(req, res) {
   }
 }
 
-module.exports = {
-  getUserById,
+/* ----- ADMIN ROUTES ----- */
+
+/**
+ * Get all users (for admin use only)
+ * @async
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @returns {Promise<void>} - Returns JSON of all users
+ */
+async function getAllUsers(req, res) {
+  try {
+    const users = await userModel.findAllUsers();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+}
+
+/**
+ * Get a user by their database ID (for admin use only)
+ * @async
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {Object} req.params - URL parameters
+ * @param {string} req.params.id - Database ID (numeric)
+ * @returns {Promise<void>} - Returns JSON of the requested user or 404
+ * @throws {Error} Database error or user not found
+ */
+async function getUserById(req, res) {
+  try {
+    const { id } = req.params;  // Database ID (numeric)
+    const user = await userModel.findUserById(Number(id));
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+}
+
+const publicRoutes = {
   getUserByUserId,
-  postUser,
-  putUser,
-  deleteUser
-}; 
+  postUser
+};
+
+const protectedRoutes = {
+  getCurrentUser,
+  putCurrentUser,
+  deleteCurrentUser
+};
+
+const adminRoutes = {
+  getUserById,
+  getAllUsers
+};
+
+module.exports = {
+  ...publicRoutes,
+  ...protectedRoutes,
+  ...adminRoutes
+};

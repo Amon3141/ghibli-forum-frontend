@@ -231,7 +231,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
                     setNewReply("");
                   }}
                 >
-                  投稿
+                  返信
                 </button>
               </div>
             </div>

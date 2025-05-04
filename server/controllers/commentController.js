@@ -105,7 +105,7 @@ async function getCommentsByUser(req, res) {
 async function postComment(req, res) {
   try {
     const { id: threadId } = req.params;
-    const authorId = 1;
+    const authorId = req.user.id;
     const { content, parentId, replyToId } = req.body;
     const comment = await commentModel.createComment({
       content,

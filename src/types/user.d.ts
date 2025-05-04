@@ -5,8 +5,8 @@ export interface User {
   id: number;
   userId: string;
   username: string;
-  password: string;
   email: string;
+  isAdmin: boolean;
   comments?: Comment[];
   threads?: Thread[];
 };

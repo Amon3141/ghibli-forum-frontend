@@ -101,7 +101,7 @@ async function getThreadsByMovie(req, res) {
 async function postThread(req, res) {
   try {
     const { id: movieId } = req.params;
-    const creatorId = 1; // TODO: get creatorId from req.user.id, which should be setup by the auth middleware
+    const creatorId = req.user.id; // TODO: get creatorId from req.user.id, which should be setup by the auth middleware
     const { title, description } = req.body;
 
     const thread = await threadModel.createThread({

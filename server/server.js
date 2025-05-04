@@ -3,6 +3,7 @@ require('dotenv').config({ path: './server/.env' });
 
 const express = require('express');
 const next = require('next');
+const cookieParser = require('cookie-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -13,21 +14,19 @@ const movieRoutes = require('./routes/movieRoutes');    // Handles /api/movies/*
 const userRoutes = require('./routes/userRoutes');      // Handles /api/users/*
 const threadRoutes = require('./routes/threadRoutes');  // Handles /api/threads/*
 const commentRoutes = require('./routes/commentRoutes'); // Handles /api/comments/*
+const authRoutes = require('./routes/authRoutes');      // Handles /api/auth/*
 
 app.prepare().then(() => {
   const server = express();
   server.use(express.json());
-  
+  server.use(cookieParser());
+
   /* ----- API Routes ----- */
   server.use('/api/movies', movieRoutes);
-  server.use('/api/users', userRoutes);
   server.use('/api/threads', threadRoutes);
   server.use('/api/comments', commentRoutes);
-
-  // Test endpoint
-  server.get('/api/hello', (req, res) => {
-    res.json({ message: 'Hello from Express!' });
-  });
+  server.use('/api/users', userRoutes);
+  server.use('/api/auth', authRoutes);
 
   /* ----- Next.js Handler ----- */
   server.all('*', (req, res) => {
