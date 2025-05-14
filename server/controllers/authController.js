@@ -77,7 +77,8 @@ const loginUser = async (req, res) => {
       {
         id: user.id,
         userId: user.userId,
-        username: user.username
+        username: user.username,
+        isAdmin: user.isAdmin
       },
       secretKey,
       { expiresIn: '3h' }
@@ -87,7 +88,7 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',       // CSRF protection
-      maxAge: 60 * 60 * 1000    // 1 hour
+      maxAge: 3 * 60 * 60 * 1000    // 3 hour
     });
 
     return res.status(200).json({

@@ -60,7 +60,8 @@ async function findMovieById(id) {
  * @param {Object} data - The movie data
  * @param {string} data.title - The title of the movie
  * @param {string} data.director - The director of the movie
- * @param {string} data.releaseDate - The release date of the movie
+ * @param {Date} data.releaseDate - The release date of the movie
+ * @param {string} [data.imagePath] - The image path of the movie
  * @returns {Promise<{movie: Movie, isNewlyCreated: boolean}>} Object containing created/existing movie and whether it was newly created
  * @throws {Error} If title already exists (due to @unique constraint)
  */
@@ -76,6 +77,7 @@ async function createMovie(data) {
  * @param {string} [data.title] - The updated title
  * @param {string} [data.director] - The updated director
  * @param {Date} [data.releaseDate] - The updated release date
+ * @param {string} [data.imagePath] - The updated image path
  * @returns {Promise<Movie>} Updated movie object
  * @throws {Error} If movie not found or if new title conflicts with existing one
  */

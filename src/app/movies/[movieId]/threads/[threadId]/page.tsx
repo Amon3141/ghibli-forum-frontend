@@ -40,6 +40,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
 
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState<boolean>(false);
+  const [isFetchingReply, setIsFetchingReply] = useState<boolean>(false);
 
   const fetchThread = async () => {
     try {
@@ -73,9 +74,9 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     }
   }
 
-  const setSelectedComment = (replyId: number) => {
-    setSelectedCommentId(replyId);
-    fetchReplies(replyId);
+  const setSelectedComment = (commentId: number) => {
+    if (isFetchingReply) return;
+    setSelectedCommentId(commentId);
   }
 
   const handlePostComment = async (comment: string) => {
@@ -84,6 +85,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
         content: comment
       });
       setComments([response.data, ...comments]);
+      setSelectedComment(response.data.id);
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメント投稿時にエラーが発生しました', err);
       setCreateCommentError(err.response?.data?.error || 'コメント投稿時にエラーが発生しました');
@@ -126,12 +128,16 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 
       if (fetchedComments.length > 0) {
         setSelectedCommentId(fetchedComments[0].id);
-        await fetchReplies(fetchedComments[0].id);
       }
     };
 
     initializeData();
   }, []);
+
+  useEffect(() => {
+    if (!selectedCommentId) return;
+    fetchReplies(selectedCommentId);
+  }, [selectedCommentId])
 
   return (
     <div className="w-full space-y-4">
@@ -150,7 +156,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       )}
 
       <div className={`
-        h-[83vh]
         flex justify-start items-start gap-4
         transition-all duration-300
       `}>
@@ -185,6 +190,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
               flex-1
               bg-white rounded-md p-4
               flex flex-col
+              sticky top-0
             `}>
               <div className="flex items-center justify-between w-full">
                 <h3 className="font-bold text-lg">返信</h3>

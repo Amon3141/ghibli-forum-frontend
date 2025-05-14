@@ -15,14 +15,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
+      </head>
       <AuthProvider>
         <body className="h-full flex flex-col">
           <Header />
           <main className="
             flex-1
             flex flex-col items-center
-            w-full px-6 py-4
+            w-full p-4
             overflow-y-scroll
+            relative
           ">
             {children}
           </main>

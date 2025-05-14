@@ -13,7 +13,8 @@ interface ReplyCardProps {
     content: string,
     author: {
       id: number,
-      username: string
+      username: string,
+      userId: string
     } | null,
     likes: number,
     replyTo: string | null
@@ -39,9 +40,10 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
     <div className={`
       py-1 text-left
       flex flex-col items-start gap-2
+      group/reply-card
     `}>
       <div className="flex items-end justify-between w-full">
-        <p className="font-bold">{replyData.author?.username || "不明"}</p>
+        <p className="font-bold">{replyData.author?.username || "不明"} <span className="text-textcolor/70">@{replyData.author?.userId ?? "不明"}</span></p>
         <p className="text-sm">{format(new Date(replyData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
       </div>
       <p>{replyData.content}</p>
@@ -53,7 +55,9 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
           onUnlike={() => handleClickLikeButton(false)}
         />
         {replyData.author?.id === userDBId && (
-          <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
+          <div className="opacity-0 group-hover/reply-card:opacity-100 transition-opacity duration-200">
+            <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
+          </div>
         )}
       </div>
       <div className="w-full h-[1px] bg-gray-200 mt-2 mb-3"></div>

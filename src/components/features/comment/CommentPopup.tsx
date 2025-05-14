@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { api } from "@/lib/api";
 
 export default function CommentPopup({
   onClose, handlePostComment

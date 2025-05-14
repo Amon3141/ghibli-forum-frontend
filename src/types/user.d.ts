@@ -7,6 +7,7 @@ export interface User {
   username: string;
   email: string;
   isAdmin: boolean;
+  imagePath?: string;
   comments?: Comment[];
   threads?: Thread[];
 };

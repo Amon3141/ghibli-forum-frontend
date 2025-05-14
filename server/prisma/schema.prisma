@@ -13,22 +13,26 @@ generator client {
 
 // defines the table structure
 model Movie {
-  id           Int      @id @default(autoincrement())
-  title        String   @unique
-  director     String
-  releaseDate  DateTime
-  threads      Thread[]
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  director    String
+  releaseDate DateTime
+  imagePath   String?
+  threads     Thread[]
+
+  @@index([releaseDate])
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  userId   String    @unique
-  username String
-  password String
-  email    String    @unique
-  isAdmin  Boolean
-  comments Comment[]
-  threads  Thread[]
+  id        Int       @id @default(autoincrement())
+  userId    String    @unique
+  username  String
+  password  String
+  email     String    @unique
+  isAdmin   Boolean
+  imagePath String?
+  comments  Comment[]
+  threads   Thread[]
 
   @@index([username])
 }
@@ -40,6 +44,7 @@ model Thread {
   updatedAt   DateTime? @default(now())
   description String
   likes       Int       @default(0)
+  imagePath   String?
   movieId     Int
   movie       Movie     @relation(fields: [movieId], references: [id])
   creatorId   Int

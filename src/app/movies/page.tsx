@@ -36,6 +36,7 @@ export default function Movies() {
 
   const handleCreateMovie = async () => {
     try {
+      console.log("Request headers:", api.defaults.headers); // test
       const response = await api.post('/movies', newMovie);
       setMovies([...movies, response.data.movie]);
     } catch (err: any) {
@@ -52,42 +53,50 @@ export default function Movies() {
   {
     title: "ナウシカ",
     director: "宮崎駿",
-    releaseDate: "1984-03-11"
+    releaseDate: "1984-03-11",
+    imagePath: "/images/nausicaa_teto.jpg"
   },
   {
     title: "ラピュタ",
     director: "宮崎駿",
-    releaseDate: "1986-08-02"
+    releaseDate: "1986-08-02",
+    imagePath: "/images/laputa_flower.jpg"
   },
   {
     title: "千と千尋の神隠し",
     director: "宮崎駿",
-    releaseDate: "2001-07-20"
+    releaseDate: "2001-07-20",
+    imagePath: "/images/chihiro_onigiri.jpg"
   },
   {
     title: "崖の上のポニョ",
     director: "宮崎駿",
-    releaseDate: "2008-07-19"
+    releaseDate: "2008-07-19",
+    imagePath: "/images/ponyo_boat.jpg"
   },
   {
     title: "風立ちぬ",
     director: "宮崎駿",
-    releaseDate: "2013-07-20"
+    releaseDate: "2013-07-20",
+    imagePath: "/images/kazetachinu_kiss.jpg"
   },
   {
     title: "となりのトトロ",
     director: "宮崎駿",
-    releaseDate: "1988-04-16"
+    releaseDate: "1988-04-16",
+    imagePath: "/images/totoro_mei.jpg"
   },
   {
     title: "もののけ姫",
     director: "宮崎駿",
-    releaseDate: "1997-07-12"
+    releaseDate: "1997-07-12",
+    imagePath: "/images/mononoke_eboshi.jpg"
   },
   {
     title: "ハウルの動く城",
     director: "宮崎駿",
-    releaseDate: "2004-11-20"
+    releaseDate: "2004-11-20",
+    imagePath: "/images/howl_star.jpg"
   }
 ];
 
@@ -107,7 +116,7 @@ const initializeMovies = async () => {
 };
 
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-6 w-full px-2">
       <div className="space-y-3">
         <h2 className="text-3xl font-bold py-2">作品一覧</h2>
         {fetchMoviesError && (
@@ -117,7 +126,7 @@ const initializeMovies = async () => {
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
           {movies.map(movie => (
-            <MovieCard key={movie.id} title={movie.title} movieId={movie.id} />
+            <MovieCard key={movie.id} title={movie.title} movieId={movie.id} imagePath={movie.imagePath}/>
           ))}
         </div>
       </div>

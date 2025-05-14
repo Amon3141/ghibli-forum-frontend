@@ -13,7 +13,8 @@ interface CommentCardProps {
     content: string,
     author: {
       id: number,
-      username: string
+      username: string,
+      userId: string
     } | null,
     likes: number,
   },
@@ -43,10 +44,11 @@ export default function CommentCard({
       clickable-card
       rounded-md p-4 text-left
       flex flex-col items-start gap-2
+      group/comment-card
       ${selectedCommentId === commentData.id ? "bg-primary/70" : "bg-white"}
     `}>
       <div className="flex items-end justify-between w-full">
-        <p className="font-bold">{commentData.author?.username || "不明"}</p>
+        <p className="font-bold">{commentData.author?.username ?? "不明"} <span className="text-textcolor/70">@{commentData.author?.userId ?? "不明"}</span></p>
         <p className="text-sm">{format(new Date(commentData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
       </div>
       <p>{commentData.content}</p>
@@ -61,7 +63,9 @@ export default function CommentCard({
           onUnlike={() => handleClickLikeButton(false)}
         />
         {commentData.author?.id === userDBId && (
-          <TrashButton onClick={() => handleClickTrashButton(commentData.id)} />
+          <div className="opacity-0 group-hover/comment-card:opacity-100 transition-opacity duration-200">
+            <TrashButton onClick={() => handleClickTrashButton(commentData.id)} />
+          </div>
         )}
       </div>
     </div>
