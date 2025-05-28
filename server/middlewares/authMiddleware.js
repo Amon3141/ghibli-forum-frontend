@@ -4,12 +4,12 @@ function verifyToken(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
-    console.log("No token")
+    console.log("No auth token")
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
-    console.log("Token is valid")
+    console.log("Auth token is valid")
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded;
     next()
@@ -19,7 +19,7 @@ function verifyToken(req, res, next) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict'
     });
-    console.log("Token is invalid")
+    console.log("Auth token is invalid")
     return res.status(401).json({ error: 'Unauthorized' });
   }
 };

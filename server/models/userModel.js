@@ -15,7 +15,8 @@ const secureSelection = {
   userId: true,
   username: true,
   email: true,
-  isAdmin: true
+  isAdmin: true,
+  imagePath: true
 };
 
 /**
@@ -143,6 +144,7 @@ async function createUser(data) {
  * @param {string} [data.password] - The updated password
  * @param {string} [data.email] - The updated email
  * @param {boolean} [data.isAdmin] - Whether the user is an admin
+ * @param {string} [data.imagePath] - The updated image path
  * @returns {Promise<User>} Updated user object
  * @throws {Error} If user not found
  * PASSWORD IS NOT INCLUDED

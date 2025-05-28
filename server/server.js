@@ -15,6 +15,7 @@ const userRoutes = require('./routes/userRoutes');      // Handles /api/users/*
 const threadRoutes = require('./routes/threadRoutes');  // Handles /api/threads/*
 const commentRoutes = require('./routes/commentRoutes'); // Handles /api/comments/*
 const authRoutes = require('./routes/authRoutes');      // Handles /api/auth/*
+const sasRoutes = require('./routes/sasRoutes');        // Handles /api/sas/*
 
 app.prepare().then(() => {
   const server = express();
@@ -27,6 +28,7 @@ app.prepare().then(() => {
   server.use('/api/comments', commentRoutes);
   server.use('/api/users', userRoutes);
   server.use('/api/auth', authRoutes);
+  server.use('/api/sas', sasRoutes);
 
   /* ----- Next.js Handler ----- */
   server.all('*', (req, res) => {

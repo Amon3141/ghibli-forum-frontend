@@ -95,20 +95,22 @@ const getCurrentUser = async (req, res) => {
  * @param {string} [req.body.password] - Updated password
  * @param {string} [req.body.email] - Updated email
  * @param {boolean} [req.body.isAdmin] - Updated admin status
+ * @param {string} [req.body.imagePath] - Updated image path
  * 
  * @returns {Promise<void>} - Returns JSON of the updated user
  * @throws {Error} Database error, user not found, or validation error
  */
 async function putCurrentUser(req, res) {
   try {
-    const { username, password, email, isAdmin } = req.body;
-    const user = await userModel.updateUser(req.user.id, {
+    const { username, password, email, isAdmin, imagePath } = req.body;
+    const updatedUser = await userModel.updateUser(req.user.id, {
       username,
       password,
       email,
-      isAdmin
+      isAdmin,
+      imagePath
     });
-    res.json(user);
+    res.json(updatedUser);
   } catch (error) {
     if (error.code === 'P2025') {
       return res.status(404).json({ error: 'User not found' });

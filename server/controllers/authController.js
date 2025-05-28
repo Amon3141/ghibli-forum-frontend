@@ -93,7 +93,7 @@ const loginUser = async (req, res) => {
 
     return res.status(200).json({
       message: 'ログインに成功しました',
-      user: { id: user.id, userId: user.userId, username: user.username, email: user.email, isAdmin: user.isAdmin }
+      user: { id: user.id, userId: user.userId, username: user.username, email: user.email, isAdmin: user.isAdmin, imagePath: user.imagePath }
     })
   } catch (err) {
     return res.status(500).json({ error: 'ログイン中にエラーが発生しました' });
