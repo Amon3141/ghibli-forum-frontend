@@ -1,7 +1,6 @@
 const blobSasGenerator = require("../utils/BlobSasGenerator");
 
 const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
 
 /**
  * Generate a SAS token for Azure Blob Storage
@@ -11,9 +10,10 @@ const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
  */
 const generateSasToken = (req, res) => {
   const sasToken = blobSasGenerator.generateSasToken("cwr");
+  const containerName = req.query.containerName;
   res.json({
     sasToken,
-    url: `https://${accountName}.blob.core.windows.net/${containerName}`,
+    containerUrl: `https://${accountName}.blob.core.windows.net/${containerName}`,
   })
 }
 
