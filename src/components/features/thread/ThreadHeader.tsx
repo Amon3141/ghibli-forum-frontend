@@ -1,15 +1,22 @@
-import LikeButton from "@/components/features/action_buttons/LikeButton";
+import LikeButton from "@/components/features/action/LikeButton";
+import UsernameInline from "../user/UsernameInline";
+import { User } from "@/types/user";
 
-export default function ThreadTitleCard({
+interface ThreadHeaderProps {
+  title: string,
+  creator?: User | null,
+  summary: string,
+  likes: number
+}
+
+export default function ThreadHeader({
   title, creator, summary, likes
-}: {
-  title: string, creator: string, summary: string, likes: number
-}) {
+}: ThreadHeaderProps) {
   // TODO: スレッドのいいねAPIルートを作る&繋げる
   return (
     <div className="space-y-2 bg-white rounded-lg p-6">
       <h4 className="text-3xl font-bold">{title}</h4>
-      <p className="text-sm">投稿者: {creator}</p>
+      <UsernameInline user={creator} />
       <div className="w-full h-[1px] bg-gray-200 my-4"></div>
       <p className="pb-2">{summary}</p>
       <LikeButton

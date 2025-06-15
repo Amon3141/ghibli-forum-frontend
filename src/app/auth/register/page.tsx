@@ -47,14 +47,14 @@ export default function RegisterForm() {
         <h2 className="text-2xl font-bold">新規登録</h2>
         <form onSubmit={handleRegister} className="space-y-2 w-full">
           <InputField
-            value={userId}
-            onChange={(e)=>setUserId(e.target.value)}
-            placeholder="ユーザーIDを入力"
-          />
-          <InputField
             value={username}
             onChange={(e)=>setUsername(e.target.value)}
             placeholder="ユーザー名を入力"
+          />
+          <InputField
+            value={userId}
+            onChange={(e)=>setUserId(e.target.value)}
+            placeholder="ユーザーIDを入力"
           />
           <InputField
             value={email}
@@ -103,7 +103,7 @@ export default function RegisterForm() {
             >
               すでにアカウントをお持ちですか？
             </button>
-            <GeneralButton type="submit" onClick={()=>{}}>登録</GeneralButton>
+            <GeneralButton type="submit">登録</GeneralButton>
           </div>
         </form>
         {registerError && <MessageBox type="error" message={registerError} />}

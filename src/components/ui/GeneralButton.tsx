@@ -6,8 +6,8 @@ export default function GeneralButton({
   return (
     <button className={`
       py-1.5 px-4 box-border rounded-md
-      bg-gray-50 hover:bg-primary
-      border-1 border-gray-200
+      bg-gray-50 border-1 border-gray-200
+      hover:bg-primary hover:border-bg-primary hover:cursor-pointer
       transition-all duration-200
       ${className}
     `}

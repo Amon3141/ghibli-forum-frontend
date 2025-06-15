@@ -7,4 +7,7 @@ export interface Movie {
   releaseDate: string;
   imagePath?: string;
   threads?: Thread[];
+  _count?: {
+    threads: number;
+  }
 };

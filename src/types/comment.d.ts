@@ -15,4 +15,7 @@ export interface Comment {
   replyToId?: number;
   replyTo?: Comment;
   mentionedBy?: Comment[];
-};
+  _count?: {
+    replies: number;
+  };
+}

@@ -1,12 +1,42 @@
 'use client';
-
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 import GeneralButton from '@/components/ui/GeneralButton';
+import ProfileHeader from '@/components/features/user/ProfileHeader';
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
+  const [showMainContent, setShowMainContent] = useState(true);
+  const prevIsEditing = useRef(isEditing);
+  const headerTransitionDuration = 1000;
+  const mainContentTransitionDuration = 100;
+
+  const handleMainContentTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (isEditing && e.propertyName == 'opacity') {
+      setShowHeaderInCenter(true);
+    }
+  }
+
+  const handleHeaderTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (!isEditing && e.propertyName == 'translate') {
+      setShowMainContent(true);
+    }
+  }
+
+  useEffect(() => {
+    if (prevIsEditing.current !== isEditing) {
+      if (isEditing) {
+        setShowMainContent(false);
+      } else {
+        setShowHeaderInCenter(false);
+      }
+      prevIsEditing.current = isEditing;
+    }
+  }, [isEditing]);
   
   if (!user) {
     return (
@@ -21,23 +51,28 @@ export default function ProfilePage() {
     )
   } else {
     return (
-      <div className="space-y-6 w-full">
-        <div className="space-y-3">
-          <h2 className="text-3xl font-bold py-2">マイページ</h2>
-          <div className="flex flex-col items-start gap-1">
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="text-2xl">{user.username ?? '不明'}</p>
-                {user.isAdmin && (
-                  <div className="px-2 py-1 text-xs bg-gray-200 rounded-full flex items-center justify-center" style={{ height: '80%' }}>管理者</div>
-                )}
-              </div>
-              <p className="text-textcolor/80">@{user.userId ?? '不明'}</p>
-            </div>
-            <p className="text-lg">{user.email ?? '不明'}</p>
-          </div>
+      <div className="flex flex-col w-full h-full py-6 px-8">
+        <div 
+          className={`
+            transition-all ease-in-out
+            ${showHeaderInCenter ? 'translate-y-[calc(30vh-50%)]' : 'translate-y-0'}
+          `}
+          style={{ transitionDuration: `${headerTransitionDuration}ms` }}
+          onTransitionEnd={handleHeaderTransitionEnd}
+        >
+          <ProfileHeader user={user} isEditing={isEditing && showHeaderInCenter} setIsEditing={setIsEditing} transitionDuration={headerTransitionDuration} />
         </div>
-        <GeneralButton onClick={logout}>ログアウト</GeneralButton>
+        <div 
+          className={`
+            transition-all ease-in-out
+            ${showMainContent ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+          `}
+          style={{ transitionDuration: `${mainContentTransitionDuration}ms` }}
+          onTransitionEnd={handleMainContentTransitionEnd}
+        >
+          <div className="h-[1px] bg-gray-200 my-8" />
+          <div className="h-full flex flex-col items-center">色々</div>
+        </div>
       </div>
     )
   }

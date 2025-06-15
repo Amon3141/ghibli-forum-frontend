@@ -33,6 +33,11 @@ async function findAllThreads() {
           username: true,
           userId: true
         }
+      },
+      _count: {
+        select: {
+          comments: true
+        }
       }
     },
     orderBy: { createdAt: 'desc' }
@@ -55,7 +60,12 @@ async function findThreadById(id) {
           userId: true
         }
       },
-      comments: true
+      comments: true,
+      _count: {
+        select: {
+          comments: true
+        }
+      }
     }
   });
 }
@@ -74,6 +84,11 @@ async function findThreadsByUser(userId) {
         select: {
           username: true,
           userId: true
+        }
+      },
+      _count: {
+        select: {
+          comments: true
         }
       }
     },
@@ -95,6 +110,11 @@ async function findThreadsByMovie(movieId) {
         select: {
           username: true,
           userId: true
+        }
+      },
+      _count: {
+        select: {
+          comments: true
         }
       }
     },

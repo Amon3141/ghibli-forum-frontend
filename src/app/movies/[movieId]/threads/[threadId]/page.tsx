@@ -3,11 +3,11 @@
 import { useState, useEffect, use } from 'react';
 import { api } from "@/lib/api";
 
-import ThreadTitleCard from "@/components/features/ThreadTitleCard";
-import CommentCard from "@/components/features/comment/CommentCard";
-import ReplyCard from "@/components/features/comment/ReplyCard";
-import CommentPopup from "@/components/features/comment/CommentPopup";
-import CommentPopupPortal from "@/components/features/comment/CommentPopupPortal";
+import ThreadHeader from "@/components/features/thread/ThreadHeader";
+import CommentCard from "@/components/features/post/CommentCard";
+import ReplyCard from "@/components/features/post/ReplyCard";
+import CommentPopup from "@/components/features/post/CommentPopup";
+import CommentPopupPortal from "@/components/features/post/CommentPopupPortal";
 
 import { FaComment } from "react-icons/fa6";
 
@@ -42,6 +42,14 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState<boolean>(false);
   const [isFetchingReply, setIsFetchingReply] = useState<boolean>(false);
 
+  const [refreshComment, setRefreshComment] = useState<{
+    refreshCount: number,
+    commentId: number
+  }>({
+    refreshCount: 0,
+    commentId: 0
+  });
+
   const fetchThread = async () => {
     try {
       const response = await api.get(`/threads/${threadId}`);
@@ -61,6 +69,15 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       console.error(err.response?.data?.error || 'コメント取得時にエラーが発生しました', err);
       setFetchCommentsError(err.response?.data?.error || 'コメント取得時にエラーが発生しました');
       return [];
+    }
+  }
+
+  const fetchCommentById = async (commentId: number) => {
+    try {
+      const response = await api.get(`/comments/${commentId}`);
+      return response.data;
+    } catch (err: any) {
+      console.error(err.response?.data?.error || 'コメント取得時にエラーが発生しました', err);
     }
   }
 
@@ -99,7 +116,11 @@ export default function ThreadPage({ params } : ThreadPageProps) {
         parentId,
         replyToId: replyToId || undefined
       });
-      setReplies([response.data, ...replies]);
+      setReplies([...replies, response.data]);
+      setRefreshComment((prev) => ({
+        refreshCount: prev.refreshCount + 1,
+        commentId: parentId
+      }));
     } catch (err: any) {
       console.error(err.response?.data?.error || '返信投稿時にエラーが発生しました', err);
       setCreateReplyError(err.response?.data?.error || '返信投稿時にエラーが発生しました');
@@ -111,6 +132,10 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       await api.delete(`/comments/${commentId}`);
       if (isReply) {
         setReplies(replies.filter((reply) => reply.id !== commentId));
+        setRefreshComment((prev) => ({
+          refreshCount: prev.refreshCount + 1,
+          commentId: selectedCommentId ?? 0
+        }));
       } else {
         setComments(comments.filter((comment) => comment.id !== commentId));
       }
@@ -118,6 +143,23 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       console.error(err.response?.data?.error || 'コメントの削除に失敗しました', err);
     }
   };
+
+  useEffect(() => {
+    if (refreshComment.refreshCount == 0) return;
+    console.log('refreshComment:', refreshComment);
+    const updateComment = async () => {
+      const updatedComment = await fetchCommentById(refreshComment.commentId);
+      if (updatedComment) {
+        console.log('updatedComment:', updatedComment);
+        setComments(prevComments =>
+          prevComments.map(comment =>
+            comment.id === updatedComment.id ? updatedComment : comment
+          )
+        )
+      }
+    }
+    updateComment();
+  }, [refreshComment]);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -142,9 +184,9 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   return (
     <div className="w-full space-y-4">
       {thread && (
-        <ThreadTitleCard
+        <ThreadHeader
           title={thread.title}
-          creator={thread.creator?.username || "不明"}
+          creator={thread.creator}
           summary={thread.description}
           likes={thread.likes}
         />
@@ -163,13 +205,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
           {comments && comments.map((comment) => (
             <CommentCard
               key={comment.id}
-              commentData={{
-                id: comment.id,
-                createdAt: comment.createdAt,
-                content: comment.content,
-                author: comment.author ?? null,
-                likes: comment.likes
-              }}
+              commentData={comment}
               selectedCommentId={selectedCommentId}
               onClickShowReply={() => {
                 setSelectedComment(comment.id);
@@ -178,6 +214,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
               onClickTrashButton={() => {
                 handleClickTrashButton(comment.id, false);
               }}
+              refreshComment={refreshComment}
             />
           ))}
         </div>
@@ -200,22 +237,15 @@ export default function ThreadPage({ params } : ThreadPageProps) {
                 <div className="flex flex-col mt-3">
                   {replies && replies.map((reply) => (
                     <div key={reply.id}>
-                      <ReplyCard replyData={{
-                        id: reply.id,
-                        createdAt: reply.createdAt,
-                        content: reply.content,
-                        author: reply.author ?? null,
-                        likes: reply.likes,
-                        replyTo: reply.replyTo?.author?.username || "不明"
-                      }}
-                      onClickTrashButton={() => {
-                        handleClickTrashButton(reply.id, true);
-                      }} />
+                      <ReplyCard
+                        replyData={reply}
+                        onClickTrashButton={() => handleClickTrashButton(reply.id, true)}
+                      />
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-3 mt-4">
+              <div className="flex flex-col gap-3 mt-1">
                 <textarea
                   className={`
                     w-full p-3 border border-gray-300 rounded-md

@@ -2,23 +2,14 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { Comment } from "@/types/comment";
 
-import LikeButton from "@/components/features/action_buttons/LikeButton";
-import TrashButton from "@/components/features/action_buttons/TrashButton";
+import LikeButton from "@/components/features/action/LikeButton";
+import TrashButton from "@/components/features/action/TrashButton";
+import UsernameIcon from "../user/UsernameIcon";
 
 interface ReplyCardProps {
-  replyData: {
-    id: number,
-    createdAt: string,
-    content: string,
-    author: {
-      id: number,
-      username: string,
-      userId: string
-    } | null,
-    likes: number,
-    replyTo: string | null
-  },
+  replyData: Comment,
   onClickTrashButton: (replyId: number) => void
 }
 
@@ -42,8 +33,8 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
       flex flex-col items-start gap-2
       group/reply-card
     `}>
-      <div className="flex items-end justify-between w-full">
-        <p className="font-bold">{replyData.author?.username || "不明"} <span className="text-textcolor/70">@{replyData.author?.userId ?? "不明"}</span></p>
+      <div className="flex items-center justify-between w-full">
+        <UsernameIcon user={replyData.author} />
         <p className="text-sm">{format(new Date(replyData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
       </div>
       <p>{replyData.content}</p>
@@ -51,7 +42,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
         <LikeButton
           likes={replyData.likes}
           isLiked={false}
-        onLike={() => handleClickLikeButton(true)}
+          onLike={() => handleClickLikeButton(true)}
           onUnlike={() => handleClickLikeButton(false)}
         />
         {replyData.author?.id === userDBId && (

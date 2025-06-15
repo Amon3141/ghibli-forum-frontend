@@ -1,24 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
+import { PiYarn } from "react-icons/pi";
+
+import { Movie } from "@/types/movie";
 
 interface MovieCardProps {
-  title : string,
-  movieId : number,
-  imagePath? : string | null
+  movie: Movie;
 }
 
-export default function MovieCard({title, movieId, imagePath = null}: MovieCardProps) {
+export default function MovieCard({movie}: MovieCardProps) {
   return (
-    <Link href={`/movies/${movieId}`}>
+    <Link href={`/movies/${movie.id}`}>
       <div className="
-        clickable-card-md
+        clickable-card-lg
         w-full bg-white rounded-lg overflow-hidden
       ">
-        {imagePath ? (
+        {movie.imagePath ? (
           <div className="relative aspect-[16/9]">
             <Image
-              src={imagePath}
-              alt={`${title} image`}
+              src={movie.imagePath}
+              alt={`${movie.title} image`}
               fill
               className="object-cover"
               // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 30vw"
@@ -28,8 +29,12 @@ export default function MovieCard({title, movieId, imagePath = null}: MovieCardP
           <div className="aspect-[16/9] bg-primary-dark"></div>
         )}
         
-        <div className="p-4">
-          <div className="font-bold text-lg">{title}</div>
+        <div className="flex items-center justify-between py-4 px-3">
+          <div className="font-bold text-lg">{movie.title}</div>
+          <div className="flex items-center gap-[3px]">
+            <PiYarn className="text-lg"/>
+            <span>{movie._count?.threads ?? 0}</span>
+          </div>
         </div>
       </div>
     </Link>

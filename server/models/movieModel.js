@@ -21,6 +21,13 @@ const prisma = require('../utils/PrismaClient');
  */
 async function findAllMovies() {
   return await prisma.movie.findMany({
+    include: {
+      _count: {
+        select: {
+          threads: true
+        }
+      }
+    },
     orderBy: {
       releaseDate: 'asc'
     }
@@ -43,6 +50,11 @@ async function findMovieById(id) {
             select: {
               username: true,
               userId: true
+            }
+          },
+          _count: {
+            select: {
+              comments: true
             }
           }
         },

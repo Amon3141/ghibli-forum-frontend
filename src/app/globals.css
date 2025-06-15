@@ -33,10 +33,10 @@
 
 @layer components {
   .clickable-card {
-    @apply shadow transition-all duration-200 hover:-translate-y-1 hover:shadow-md;
+    @apply shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:shadow-md;
   }
 
-  .clickable-card-md {
-    @apply shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  .clickable-card-lg {
+    @apply shadow transition-all duration-200 hover:-translate-y-[2px] hover:shadow-lg;
   }
 }

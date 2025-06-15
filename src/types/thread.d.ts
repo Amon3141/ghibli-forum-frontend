@@ -15,4 +15,7 @@ export interface Thread {
   creatorId: number;
   creator?: User;
   comments?: Comment[];
+  _count?: {
+    comments: number;
+  }
 };

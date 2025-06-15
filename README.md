@@ -26,3 +26,8 @@ npx prisma db push
 # generate prisma client (from root)
 npx prisma generate
 ```
+
+### Test Account
+userName: AmonN (N >= 2)
+email:    amonN@email.com
+password: Amon1103

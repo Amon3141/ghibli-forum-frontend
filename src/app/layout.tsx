@@ -21,7 +21,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
       </head>
       <AuthProvider>
-        <body className="h-full flex flex-col">
+        <body className="h-full flex flex-col relative">
           <Header />
           <main className="
             flex-1

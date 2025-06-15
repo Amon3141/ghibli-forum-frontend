@@ -63,7 +63,7 @@ export default function CommentCard({
           onUnlike={() => handleClickLikeButton(false)}
         />
         {commentData.author?.id === userDBId && (
-          <div className="opacity-0 group-hover/comment-card:opacity-100 transition-opacity duration-200">
+          <div className="opacity-0 group-hover/comment-card:opacity-100">
             <TrashButton onClick={() => handleClickTrashButton(commentData.id)} />
           </div>
         )}

@@ -32,10 +32,10 @@ async function findCommentById(id) {
   return await prisma.comment.findUnique({ 
     where: { id },
     include: {
-      author: {
+      author: true,
+      _count: {
         select: {
-          username: true,
-          userId: true
+          replies: true
         }
       }
     }
@@ -109,16 +109,11 @@ async function findRepliesByComment(commentId) {
       replyTo: {
         select: {
           id: true,
-          author: {
-            select: {
-              username: true,
-              userId: true
-            }
-          }
+          author: true
         }
       }
     },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'asc' }
   });
 }
 
@@ -140,7 +135,12 @@ async function createComment(data) {
       likes: 0
     },
     include: {
-      author: true
+      author: true,
+      _count: {
+        select: {
+          replies: true
+        }
+      }
     }
   });
 }
@@ -159,7 +159,12 @@ async function updateComment(id, data) {
     where: { id }, 
     data,
     include: {
-      author: true
+      author: true,
+      _count: {
+        select: {
+          replies: true
+        }
+      }
     }
   });
 }

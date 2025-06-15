@@ -126,7 +126,7 @@ const initializeMovies = async () => {
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
           {movies.map(movie => (
-            <MovieCard key={movie.id} title={movie.title} movieId={movie.id} imagePath={movie.imagePath}/>
+            <MovieCard key={movie.id} movie={movie}/>
           ))}
         </div>
       </div>
