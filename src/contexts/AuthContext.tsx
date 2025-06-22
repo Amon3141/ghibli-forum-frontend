@@ -14,7 +14,7 @@ export interface UserInfo {
 
 interface AuthContextType {
   user: UserInfo | null;
-  loading: boolean;
+  isLoading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
   register: (userId: string, username: string, password: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -30,27 +30,26 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
   const checkAuth = async () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const response = await api.get('/users/me');
-      console.log("checkAuth is called, response: ", response.data);
       setUser(response.data.user as UserInfo);
     } catch (err: any) {
       setUser(null);
       console.log(err.response?.data?.error);
       throw err;
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const login = async (identifier: string, password: string) => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const response = await api.post('/auth/login', {
         identifier,
@@ -62,12 +61,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(err.response?.data?.error);
       throw err;
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const register = async (userId: string, username: string, password: string, email: string) => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const response = await api.post('/auth/register', {
         userId, username, password, email
@@ -77,15 +76,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(err.response?.data?.error);
       throw err;
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
-    setLoading(true);
+    setIsLoading(true);
     await api.post('/auth/logout');
     setUser(null);
-    setLoading(false);
+    setIsLoading(false);
   };
 
   // Check authentication status on mount
@@ -98,7 +97,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, checkAuth, setUser }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, checkAuth, setUser }}>
       {children}
     </AuthContext.Provider>
   );

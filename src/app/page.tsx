@@ -1,7 +1,11 @@
+import Hero from '@/components/features/home/Hero';
+import Trending from '@/components/features/home/Trending';
+
 export default function Home() {
   return (
-    <div className="grow flex items-center justify-center">
-      ジブリの世界へようこそ
-    </div>
+    <main className="w-full">
+      <Hero />
+      <Trending />
+    </main>
   );
 }

@@ -39,4 +39,13 @@
   .clickable-card-lg {
     @apply shadow transition-all duration-200 hover:-translate-y-[2px] hover:shadow-lg;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }

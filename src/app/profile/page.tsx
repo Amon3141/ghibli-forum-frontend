@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 import GeneralButton from '@/components/ui/GeneralButton';
+import LoadingScreen from '@/components/ui/LoadingScreen';
 import ProfileHeader from '@/components/features/user/ProfileHeader';
+import UserContents from '@/components/features/user/userContents';
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
   const [showMainContent, setShowMainContent] = useState(true);
@@ -37,7 +39,13 @@ export default function ProfilePage() {
       prevIsEditing.current = isEditing;
     }
   }, [isEditing]);
-  
+
+  if (isLoading) {
+    return (
+      <LoadingScreen message="ユーザー情報を読み込んでいます..." />
+    );
+  }
+
   if (!user) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -49,31 +57,30 @@ export default function ProfilePage() {
         </div>
       </div>
     )
-  } else {
-    return (
-      <div className="flex flex-col w-full h-full py-6 px-8">
-        <div 
-          className={`
-            transition-all ease-in-out
-            ${showHeaderInCenter ? 'translate-y-[calc(30vh-50%)]' : 'translate-y-0'}
-          `}
-          style={{ transitionDuration: `${headerTransitionDuration}ms` }}
-          onTransitionEnd={handleHeaderTransitionEnd}
-        >
-          <ProfileHeader user={user} isEditing={isEditing && showHeaderInCenter} setIsEditing={setIsEditing} transitionDuration={headerTransitionDuration} />
-        </div>
-        <div 
-          className={`
-            transition-all ease-in-out
-            ${showMainContent ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-          `}
-          style={{ transitionDuration: `${mainContentTransitionDuration}ms` }}
-          onTransitionEnd={handleMainContentTransitionEnd}
-        >
-          <div className="h-[1px] bg-gray-200 my-8" />
-          <div className="h-full flex flex-col items-center">色々</div>
-        </div>
-      </div>
-    )
   }
+
+  return (
+    <div className="flex flex-col w-full h-full py-6 px-8">
+      <div 
+        className={`
+          transition-all ease-in-out
+          ${showHeaderInCenter ? 'translate-y-[calc(30vh-50%)]' : 'translate-y-0'}
+        `}
+        style={{ transitionDuration: `${headerTransitionDuration}ms` }}
+        onTransitionEnd={handleHeaderTransitionEnd}
+      >
+        <ProfileHeader user={user} isEditing={isEditing && showHeaderInCenter} setIsEditing={setIsEditing} transitionDuration={headerTransitionDuration} />
+      </div>
+      <div 
+        className={`
+          transition-all ease-in-out mt-8
+          ${showMainContent ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        `}
+        style={{ transitionDuration: `${mainContentTransitionDuration}ms` }}
+        onTransitionEnd={handleMainContentTransitionEnd}
+      >
+        <UserContents user={user} />
+      </div>
+    </div>
+  )
 }

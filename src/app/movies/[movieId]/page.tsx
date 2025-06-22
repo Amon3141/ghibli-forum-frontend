@@ -102,10 +102,15 @@ export default function MoviePage({ params }: MoviePageProps) {
           <div className="flex items-center gap-6">
             <h3 className="text-2xl font-bold py-1">{movie && movie.title && `${movie.title}の`}スレッド</h3>
             {!showThreadForm && (
-              <GeneralButton onClick={() => {
-                setShowThreadForm(true);
-                setCreateThreadMessage(null);
-              }}>+ スレッドを作成</GeneralButton>
+              <GeneralButton
+                onClick={() => {
+                  setShowThreadForm(true);
+                  setCreateThreadMessage(null);
+                }}
+                color="primary"
+              >
+                <span>  + スレッドを作成</span>
+              </GeneralButton>
             )}
           </div>
           {showThreadForm && (
@@ -129,8 +134,8 @@ export default function MoviePage({ params }: MoviePageProps) {
                 />
               </div>
               <div className="flex justify-between items-center">
-                <GeneralButton type="button" onClick={resetThreadForm}>キャンセル</GeneralButton>
-                <GeneralButton type="submit">作成</GeneralButton>
+                <GeneralButton type="button" onClick={resetThreadForm} color="default">キャンセル</GeneralButton>
+                <GeneralButton type="submit" color="primary">作成</GeneralButton>
               </div>
               {createThreadError && (
                 <div className="rounded-sm bg-red-100 p-4">

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { User } from '@/types/user';
 import { FaRegComments } from "react-icons/fa6";
 
 import { Thread } from '@/types/thread';
@@ -19,7 +18,7 @@ export default function ThreadCard({
           <div className="flex flex-col items-start gap-2">
             <div className="flex items-center justify-between w-full">
               <h4 className="text-xl font-bold">{thread.title}</h4>
-              <div className="flex items-center gap-[3px]">
+              <div className="flex items-center gap-1">
                 <FaRegComments className="text-lg"/>
                 <span>{thread._count?.comments ?? 0}</span>
               </div>

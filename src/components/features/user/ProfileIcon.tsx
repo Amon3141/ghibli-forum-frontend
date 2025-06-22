@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 interface ProfileIconProps {
@@ -9,9 +10,10 @@ interface ProfileIconProps {
   size?: number;
   sasToken?: string | null;
   className?: string;
+  quality?: number;
 }
 
-export default function ProfileIcon({ user, size = 40, sasToken = null, className = '' }: ProfileIconProps) {
+export default function ProfileIcon({ user, size = 40, sasToken = null, className = '', quality = 75 }: ProfileIconProps) {
   const [localSasToken, setLocalSasToken] = useState<string | null>(sasToken);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -37,11 +39,13 @@ export default function ProfileIcon({ user, size = 40, sasToken = null, classNam
   }, [user.imagePath, localSasToken]);
 
   return imageUrl ? (
-    <img
+    <Image
       src={imageUrl}
       alt="Profile"
-      className={`rounded-full object-cover bg-gray-200 ${className}`}
-      style={{ width: `${size}px`, height: `${size}px` }}
+      quality={quality}
+      width={size}
+      height={size}
+      className={`rounded-full bg-gray-200 ${className}`}
     />
   ) : (
     <div

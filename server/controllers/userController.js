@@ -19,7 +19,7 @@ const userModel = require('../models/userModel');
  */
 async function getUserByUserId(req, res) {
   try {
-    const { userId } = req.params;
+    const { id: userId } = req.params;
     const user = await userModel.findUserByUserId(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });

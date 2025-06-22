@@ -1,13 +1,18 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { createPortal } from 'react-dom';
 import { api } from "@/lib/api";
 
 import ThreadHeader from "@/components/features/thread/ThreadHeader";
 import CommentCard from "@/components/features/post/CommentCard";
 import ReplyCard from "@/components/features/post/ReplyCard";
-import CommentPopup from "@/components/features/post/CommentPopup";
-import CommentPopupPortal from "@/components/features/post/CommentPopupPortal";
+import PostCommentPopup from "@/components/features/post/CommentPopup";
+import ConfirmationPopup from "@/components/ui/ConfirmationPopup";
+import GeneralButton from "@/components/ui/GeneralButton";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import MessageBox from "@/components/ui/MessageBox";
+import { MessageBoxType } from '@/types/interface';
 
 import { FaComment } from "react-icons/fa6";
 
@@ -25,22 +30,33 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   const { threadId } = use(params);
 
   const [thread, setThread] = useState<Thread | null>(null);
-  const [fetchThreadError, setFetchThreadError] = useState<string | null>(null);
-
   const [comments, setComments] = useState<Comment[]>([]);
-  const [fetchCommentsError, setFetchCommentsError] = useState<string | null>(null);
-  const [createCommentError, setCreateCommentError] = useState<string | null>(null);
-
   const [replies, setReplies] = useState<Comment[]>([]);
+  
   const [newReply, setNewReply] = useState<string>("");
   const [replyToId, setReplyToId] = useState<number | null>(null);
-  const [fetchRepliesError, setFetchRepliesError] = useState<string | null>(null);
-  const [createReplyError, setCreateReplyError] = useState<string | null>(null);
-
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
 
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState<boolean>(false);
-  const [isFetchingReply, setIsFetchingReply] = useState<boolean>(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
+  const [isDeleteCommentReply, setIsDeleteCommentReply] = useState<boolean>(false);
+  const [deleteCommentId, setDeleteCommentId] = useState<number | null>(null);
+
+  // Loading States
+  const [isFetchingThread, setIsFetchingThread] = useState<boolean>(true);
+  const [isFetchingComments, setIsFetchingComments] = useState<boolean>(true);
+  const [isFetchingReplies, setIsFetchingReplies] = useState<boolean>(true);
+  const [isPostingComment, setIsPostingComment] = useState<boolean>(false);
+  const [isPostingReply, setIsPostingReply] = useState<boolean>(false);
+  const [isDeletingComment, setIsDeletingComment] = useState<boolean>(false);
+
+  // Error States
+  const [fetchThreadError, setFetchThreadError] = useState<string | null>(null);
+  const [fetchCommentsError, setFetchCommentsError] = useState<string | null>(null);
+  const [fetchRepliesError, setFetchRepliesError] = useState<string | null>(null);
+  const [postCommentError, setPostCommentError] = useState<string | null>(null);
+  const [postReplyError, setPostReplyError] = useState<string | null>(null);
+  const [deleteCommentError, setDeleteCommentError] = useState<string | null>(null);
 
   const [refreshComment, setRefreshComment] = useState<{
     refreshCount: number,
@@ -51,65 +67,92 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   });
 
   const fetchThread = async () => {
+    setIsFetchingThread(true);
+    setFetchThreadError(null);
     try {
       const response = await api.get(`/threads/${threadId}`);
       setThread(response.data);
     } catch (err: any) {
       console.error(err.response?.data?.error || 'スレッド取得時にエラーが発生しました', err);
       setFetchThreadError(err.response?.data?.error || 'スレッド取得時にエラーが発生しました');
+    } finally {
+      setIsFetchingThread(false);
     }
   }
 
   const fetchComments = async () => {
+    setIsFetchingComments(true);
+    setFetchCommentsError(null);
     try {
       const response = await api.get(`/threads/${threadId}/comments`);
       setComments(response.data);
+      setIsFetchingComments(false);
       return response.data;
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメント取得時にエラーが発生しました', err);
       setFetchCommentsError(err.response?.data?.error || 'コメント取得時にエラーが発生しました');
+      setIsFetchingComments(false);
       return [];
     }
   }
 
   const fetchCommentById = async (commentId: number) => {
+    setIsFetchingReplies(true);
+    setFetchCommentsError(null);
     try {
       const response = await api.get(`/comments/${commentId}`);
+      setIsFetchingReplies(false);
       return response.data;
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメント取得時にエラーが発生しました', err);
+      setFetchCommentsError(err.response?.data?.error || 'コメント取得時にエラーが発生しました');
+      setIsFetchingComments(false);
     }
   }
 
   const fetchReplies = async (commentId: number) => {
+    setIsFetchingReplies(true);
+    setFetchRepliesError(null);
     try {
       const response = await api.get(`/comments/${commentId}/replies`);
       setReplies(response.data);
     } catch (err: any) {
       console.error(err.response?.data?.error || '返信取得時にエラーが発生しました', err);
       setFetchRepliesError(err.response?.data?.error || '返信取得時にエラーが発生しました');
+    } finally {
+      setIsFetchingReplies(false);
     }
   }
 
-  const setSelectedComment = (commentId: number) => {
-    if (isFetchingReply) return;
+  const handleChangeSelectedComment = (commentId: number) => {
+    if (isFetchingReplies) return;
+    setNewReply("");
+    setFetchRepliesError(null);
+    setPostReplyError(null);
+    setIsPostingReply(false);
     setSelectedCommentId(commentId);
   }
 
   const handlePostComment = async (comment: string) => {
+    setIsPostingComment(true);
+    setPostCommentError(null);
     try {
       const response = await api.post(`/threads/${threadId}/comments`, {
         content: comment
       });
       setComments([response.data, ...comments]);
-      setSelectedComment(response.data.id);
+      handleChangeSelectedComment(response.data.id);
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメント投稿時にエラーが発生しました', err);
-      setCreateCommentError(err.response?.data?.error || 'コメント投稿時にエラーが発生しました');
+      setPostCommentError(err.response?.data?.error || 'コメント投稿時にエラーが発生しました');
+    } finally {
+      setIsPostingComment(false);
     }
   }
 
   const handlePostReply = async (reply: string, parentId: number, replyToId: number | null) => {
+    setIsPostingReply(true);
+    setPostReplyError(null);
     try {
       const response = await api.post(`/threads/${threadId}/comments`, {
         content: reply,
@@ -123,11 +166,15 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       }));
     } catch (err: any) {
       console.error(err.response?.data?.error || '返信投稿時にエラーが発生しました', err);
-      setCreateReplyError(err.response?.data?.error || '返信投稿時にエラーが発生しました');
+      setPostReplyError(err.response?.data?.error || '返信投稿時にエラーが発生しました');
+    } finally {
+      setIsPostingReply(false);
     }
   }
 
-  const handleClickTrashButton = async (commentId: number, isReply: boolean) => {
+  const handleDeleteComment = async (commentId: number, isReply: boolean): Promise<boolean> => {
+    setIsDeletingComment(true);
+    setDeleteCommentError(null);
     try {
       await api.delete(`/comments/${commentId}`);
       if (isReply) {
@@ -139,10 +186,29 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       } else {
         setComments(comments.filter((comment) => comment.id !== commentId));
       }
+      return true; // Success
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメントの削除に失敗しました', err);
+      setDeleteCommentError(err.response?.data?.error || 'コメントの削除に失敗しました');
+      return false; // Error occurred
+    } finally {
+      setIsDeletingComment(false);
     }
   };
+
+  const handleClosePostCommentPopup = () => {
+    setIsCommentPopupOpen(false);
+    setIsPostingComment(false);
+    setPostCommentError(null);
+  }
+
+  const handleCloseDeletePopup = () => {
+    setIsDeletePopupOpen(false);
+    setIsDeletingComment(false);
+    setDeleteCommentError(null);
+    setIsDeleteCommentReply(false);
+    setDeleteCommentId(null);
+  }
 
   useEffect(() => {
     if (refreshComment.refreshCount == 0) return;
@@ -181,45 +247,59 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     fetchReplies(selectedCommentId);
   }, [selectedCommentId])
 
+  if (isFetchingThread) return (
+    <LoadingScreen message="スレッドを読み込んでいます..." />
+  );
+
   return (
-    <div className="w-full space-y-4">
-      {thread && (
-        <ThreadHeader
-          title={thread.title}
-          creator={thread.creator}
-          summary={thread.description}
-          likes={thread.likes}
-        />
-      )}
-      {fetchThreadError && (
-       <div className="rounded-sm bg-red-100 p-4">
-        <p className="text-textcolor/80">{fetchThreadError}</p>
-      </div>
+    <div className="w-full">
+      {!isFetchingThread && (
+        <>
+          {thread && (
+            <ThreadHeader
+              title={thread.title}
+              creator={thread.creator}
+              summary={thread.description}
+              likes={thread.likes}
+            />
+          )}
+    
+          {fetchThreadError && (
+            <MessageBox type={MessageBoxType.ERROR} message={fetchThreadError} className="my-3" />
+          )}
+        </>
       )}
 
       <div className={`
-        flex justify-start items-start gap-4
-        transition-all duration-300
+        flex justify-start items-start gap-4 mt-4
+        transition-all duration-300 w-full
       `}>
-        <div className="w-[50%] flex flex-col gap-4">
-          {comments && comments.map((comment) => (
-            <CommentCard
-              key={comment.id}
-              commentData={comment}
-              selectedCommentId={selectedCommentId}
-              onClickShowReply={() => {
-                setSelectedComment(comment.id);
-                setNewReply("");
-              }}
-              onClickTrashButton={() => {
-                handleClickTrashButton(comment.id, false);
-              }}
-              refreshComment={refreshComment}
-            />
-          ))}
-        </div>
+        {!isFetchingComments && (
+          <div className="w-[50%] flex flex-col gap-4">
+            {fetchCommentsError && (
+              <MessageBox type={MessageBoxType.ERROR} message={fetchCommentsError} />
+            )}
+
+            {comments && comments.map((comment) => (
+              <CommentCard
+                key={comment.id}
+                comment={comment}
+                selectedCommentId={selectedCommentId}
+                onClickShowReply={() => {
+                  handleChangeSelectedComment(comment.id);
+                }}
+                onClickTrashButton={() => {
+                  setDeleteCommentId(comment.id);
+                  setIsDeleteCommentReply(false);
+                  setIsDeletePopupOpen(true);
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {(() => {
+          if (isFetchingReplies) return null;
           if (selectedCommentId === null) return null;
 
           return (
@@ -233,19 +313,26 @@ export default function ThreadPage({ params } : ThreadPageProps) {
                 <h3 className="font-bold text-lg">返信</h3>
               </div>
               <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
-              <div className="flex-1 overflow-y-auto max-h-[54vh]">
+              {fetchRepliesError && (
+                <MessageBox type={MessageBoxType.ERROR} message={fetchRepliesError} className="mt-3" />
+              )}
+              <div className="flex-1 max-h-[56vh] overflow-y-scroll no-scrollbar">
                 <div className="flex flex-col mt-3">
                   {replies && replies.map((reply) => (
                     <div key={reply.id}>
                       <ReplyCard
                         replyData={reply}
-                        onClickTrashButton={() => handleClickTrashButton(reply.id, true)}
+                        onClickTrashButton={() => {
+                          setDeleteCommentId(reply.id);
+                          setIsDeleteCommentReply(true);
+                          setIsDeletePopupOpen(true);
+                        }}
                       />
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-3 mt-1">
+              <div className="flex flex-col items-end gap-3 mt-1">
                 <textarea
                   className={`
                     w-full p-3 border border-gray-300 rounded-md
@@ -256,19 +343,22 @@ export default function ThreadPage({ params } : ThreadPageProps) {
                   rows={3}
                   placeholder="返信を入力してください..."
                 />
-                <button
+                {postReplyError && (
+                  <MessageBox type={MessageBoxType.ERROR} message={postReplyError} />
+                )}
+                <GeneralButton
                   className={`
-                    self-end px-4 py-2 bg-primary
-                    text-sm rounded-md text-textcolor/80 font-semibold
-                    hover:bg-primary/80
+                    text-sm font-semibold bg-primary/60 border-primary
+                    ${!newReply && 'hover:bg-primary/60 pointer-events-none'}
                   `}
-                  onClick={() => {
-                    handlePostReply(newReply, selectedCommentId, replyToId);
+                  onClick={async () => {
+                    await handlePostReply(newReply, selectedCommentId, replyToId);
                     setNewReply("");
                   }}
+                  color="primary"
                 >
-                  返信
-                </button>
+                  {isPostingReply ? "返信中..." : "返信"}
+                </GeneralButton>
               </div>
             </div>
           );
@@ -276,7 +366,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       </div>
       <button
         className="
-          fixed bottom-8 right-8
+          fixed bottom-4 left-4
           w-16 h-16
           bg-primary text-textcolor
           rounded-full shadow-md
@@ -289,18 +379,45 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       >
         <FaComment size={28} />
       </button>
-      {isCommentPopupOpen && (
-        <CommentPopupPortal>
+      {isCommentPopupOpen && typeof window !== 'undefined' && createPortal(
+        <>
           <div
             className="fixed inset-0 bg-black opacity-50 z-40"
           />
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <CommentPopup
-              onClose={() => setIsCommentPopupOpen(false)}
+            <PostCommentPopup
+              onClose={handleClosePostCommentPopup}
               handlePostComment={handlePostComment}
+              isPostingComment={isPostingComment}
+              postCommentError={postCommentError}
             />
           </div>
-        </CommentPopupPortal>
+        </>,
+        document.body
+      )}
+      {isDeletePopupOpen && typeof window !== 'undefined' && createPortal(
+        <>
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-40"
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <ConfirmationPopup
+              type="delete"
+              confirmMessage="コメントを削除しますか？"
+              confirmLabel="削除"
+              onConfirm={async () => {
+                if (deleteCommentId) {
+                  return await handleDeleteComment(deleteCommentId, isDeleteCommentReply);
+                }
+                return false;
+              }}
+              onClose={handleCloseDeletePopup}
+              isProcessing={isDeletingComment}
+              processError={deleteCommentError}
+            />
+          </div>
+        </>,
+        document.body
       )}
     </div>
   );

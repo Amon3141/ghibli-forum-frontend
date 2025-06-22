@@ -9,6 +9,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import InputField from '@/components/ui/InputField';
 import GeneralButton from '@/components/ui/GeneralButton';
 import MessageBox from '@/components/ui/MessageBox';
+import { MessageBoxType } from '@/types/interface';
 
 export default function LoginForm() {
   const [identifier, setIdentifier] = useState<string>("");
@@ -75,7 +76,7 @@ export default function LoginForm() {
             <GeneralButton type="submit" onClick={()=>{}}>ログイン</GeneralButton>
           </div>
         </form>
-        {loginError && <MessageBox type="error" message={loginError} />}
+        {loginError && <MessageBox type={MessageBoxType.ERROR} message={loginError} />}
       </div>
     </div>
   );

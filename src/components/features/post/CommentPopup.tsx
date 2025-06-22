@@ -1,42 +1,62 @@
 import { useState } from 'react';
+import GeneralButton from '@/components/ui/GeneralButton';
+import MessageBox from '@/components/ui/MessageBox';
+import { MessageBoxType } from '@/types/interface';
 
-export default function CommentPopup({
-  onClose, handlePostComment
-}: {
-  onClose: () => void, handlePostComment: (comment: string) => void
-}) {
+interface PostCommentPopupProps {
+  onClose: () => void;
+  handlePostComment: (comment: string) => Promise<void>;
+  isPostingComment: boolean;
+  postCommentError: string | null;
+}
+
+export default function PostCommentPopup({
+  onClose, handlePostComment, isPostingComment, postCommentError
+}: PostCommentPopupProps) {
   const [newComment, setNewComment] = useState<string>("");
 
-  const handleSubmit = () => {
-    handlePostComment(newComment);
-    onClose();
-    setNewComment("");
+  const handleSubmit = async () => {
+    await handlePostComment(newComment);
+    if (!postCommentError) {
+      onClose();
+      setNewComment("");
+    }
   }
 
   return (
     <div className="w-[90%] md:w-[60%] lg:w-[50%] bg-white rounded-md p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h3>コメントを投稿</h3>
-        <button onClick={() => {
+        <h3 className="text-lg py-1">コメントを投稿</h3>
+        <button className="text-xl px-1 cursor-pointer" onClick={() => {
           setNewComment("");
           onClose();
         }}>×</button>
       </div>
-      <div className="w-full">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-md resize-none focus:outline-none"
-          rows={5}
-          placeholder="コメントを入力してください..."
-        />
+      <div className="flex flex-col items-end space-y-2">
+        <div className="w-full m-0">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md resize-none focus:outline-none"
+            rows={5}
+            placeholder="コメントを入力してください..."
+          />
+        </div>
+        {postCommentError && (
+          <MessageBox type={MessageBoxType.ERROR} message={postCommentError} className="mt-1" />
+        )}
+        <GeneralButton
+          className={`
+            bg-primary/60 border-primary mt-1
+            ${!newComment && 'hover:bg-primary/60 pointer-events-none'}`
+          }
+          onClick={handleSubmit}
+          color='primary'
+          disabled={!newComment}
+        >
+          {isPostingComment ? "投稿中..." : "投稿"}
+        </GeneralButton>
       </div>
-      <button
-        className="bg-primary px-4 py-2 rounded-md"
-        onClick={handleSubmit}
-      >
-        投稿
-      </button>
     </div>
   )
 }

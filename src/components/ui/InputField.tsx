@@ -1,4 +1,4 @@
-export default function InputField ({
+export default function InputField({
   value, onChange, placeholder, type="text"
 }: {
   value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string, type?: string

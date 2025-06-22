@@ -73,10 +73,16 @@ async function findCommentsByThread(threadId) {
  * @returns {Promise<Array<Comment>>} Array of comment objects
  */
 async function findCommentsByAuthor(authorId) {
+  console.log("finding comments by author", authorId);
   return await prisma.comment.findMany({
     where: { authorId },
     include: {
       author: true,
+      parent: {
+        include: {
+          author: true
+        }
+      },
       thread: {
         select: {
           id: true,

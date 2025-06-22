@@ -35,7 +35,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
     `}>
       <div className="flex items-center justify-between w-full">
         <UsernameIcon user={replyData.author} />
-        <p className="text-sm">{format(new Date(replyData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
+        <p className="text-xs text-gray-500">{format(new Date(replyData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
       </div>
       <p>{replyData.content}</p>
       <div className="flex items-center justify-between w-full">

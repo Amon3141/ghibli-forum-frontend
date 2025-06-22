@@ -27,7 +27,7 @@ export default function RootLayout({
             flex-1
             flex flex-col items-center
             w-full p-4
-            overflow-y-scroll
+            overflow-y-scroll no-scrollbar
             relative
           ">
             {children}

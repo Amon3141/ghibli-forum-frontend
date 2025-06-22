@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <header className="
-      bg-primary shadow py-8 px-10 z-50
+      bg-primary shadow py-5 px-10 z-50
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between">

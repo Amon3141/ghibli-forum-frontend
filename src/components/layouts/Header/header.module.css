@@ -20,7 +20,7 @@
 
 .nav_link_selected {
   position: relative;
-  padding-block: 0.5rem;
+  padding-block: 0.4rem;
 }
 
 .nav_link_selected::after {

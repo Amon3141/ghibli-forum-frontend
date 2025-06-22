@@ -9,6 +9,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import InputField from '@/components/ui/InputField';
 import GeneralButton from '@/components/ui/GeneralButton';
 import MessageBox from '@/components/ui/MessageBox';
+import { MessageBoxType } from '@/types/interface';
 
 export default function RegisterForm() {
   const [userId, setUserId] = useState<string>("");
@@ -106,7 +107,7 @@ export default function RegisterForm() {
             <GeneralButton type="submit">登録</GeneralButton>
           </div>
         </form>
-        {registerError && <MessageBox type="error" message={registerError} />}
+        {registerError && <MessageBox type={MessageBoxType.ERROR} message={registerError} />}
       </div>
     </div>
   );

@@ -12,25 +12,25 @@ import UsernameIcon from "@/components/features/user/UsernameIcon";
 import { useState, useEffect } from "react";
 
 interface CommentCardProps {
-  commentData: Comment,
+  comment: Comment,
   selectedCommentId: number | null,
   onClickShowReply: () => void,
   onClickTrashButton: (commentId: number) => void
 }
 
 export default function CommentCard({
-  commentData, selectedCommentId, onClickShowReply: handleClickShowReply, onClickTrashButton: handleClickTrashButton
+  comment, selectedCommentId, onClickShowReply: handleClickShowReply, onClickTrashButton: handleClickTrashButton
 }: CommentCardProps) {
   const userDbId = useAuth().user?.id;
-  const [replyCount, setReplyCount] = useState(commentData._count?.replies || 0);
+  const [replyCount, setReplyCount] = useState(comment._count?.replies || 0);
   
   useEffect(() => {
-    setReplyCount(commentData._count?.replies || 0);
-  }, [commentData._count?.replies]);
+    setReplyCount(comment._count?.replies || 0);
+  }, [comment._count?.replies]);
   
   const handleClickLikeButton = (isLike: boolean) => {
     try {
-      api.put(`/comments/${commentData.id}/likes`, {
+      api.put(`/comments/${comment.id}/likes`, {
         increment: isLike
       });
     } catch (err: any) {
@@ -43,14 +43,14 @@ export default function CommentCard({
       rounded-md px-4 py-3 text-left
       flex flex-col items-start gap-2
       group/comment-card
-      ${selectedCommentId === commentData.id ? "bg-primary/70" : "bg-white"}
+      ${selectedCommentId === comment.id ? "bg-primary/70 outline-1 outline-primary" : "bg-white"}
     `}>
       <div className="flex items-center justify-between w-full">
-        <UsernameIcon user={commentData.author} />
-        <p className="text-sm">{format(new Date(commentData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
+        <UsernameIcon user={comment.author} />
+        <p className="text-xs text-gray-500">{format(new Date(comment.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
       </div>
-      <p>{commentData.content}</p>
-      {commentData._count && typeof commentData._count.replies === 'number' && commentData._count.replies > 0 && (
+      <p>{comment.content}</p>
+      {comment._count && typeof comment._count.replies === 'number' && comment._count.replies > 0 && (
         <button onClick={handleClickShowReply}>
           <p className="text-amber-600 underline cursor-pointer">
             {replyCount}件の返信を表示
@@ -60,7 +60,7 @@ export default function CommentCard({
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-3">
           <LikeButton
-            likes={commentData.likes}
+            likes={comment.likes}
             isLiked={false}
             onLike={() => handleClickLikeButton(true)}
             onUnlike={() => handleClickLikeButton(false)}
@@ -70,9 +70,9 @@ export default function CommentCard({
             onClick={handleClickShowReply}
           />
         </div>
-        {commentData.author?.id === userDbId && (
+        {comment.author?.id === userDbId && (
           <div className="opacity-0 group-hover/comment-card:opacity-100">
-            <TrashButton onClick={() => handleClickTrashButton(commentData.id)} />
+            <TrashButton onClick={() => handleClickTrashButton(comment.id)} />
           </div>
         )}
       </div>

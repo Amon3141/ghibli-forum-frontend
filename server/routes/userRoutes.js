@@ -20,17 +20,17 @@ router.delete('/me', verifyToken, userController.deleteCurrentUser);
 
 /* ----- Public routes ----- */
 
-// GET /api/users/:userId - Get user by userId
-router.get('/:userId', userController.getUserByUserId);
+// GET /api/users/:id - Get user by userId
+router.get('/:id', userController.getUserByUserId);
 
 // POST /api/users - Create a new user
 // router.post('/', userController.postUser);
 
-// GET /api/users/:userId/threads - Get all threads by a specific user
-router.get('/:userId/threads', threadController.getThreadsByUser);
+// GET /api/users/:id/threads - Get all threads by a specific user
+router.get('/:id/threads', threadController.getThreadsByUser);
 
-// GET /api/users/:userId/comments - Get all comments by a specific user
-router.get('/:userId/comments', commentController.getCommentsByUser);
+// GET /api/users/:id/comments - Get all comments by a specific user
+router.get('/:id/comments', commentController.getCommentsByUser);
 
 /* ----- Admin routes ----- */
 

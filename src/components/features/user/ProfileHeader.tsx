@@ -4,29 +4,28 @@ import { useEffect, useState } from 'react';
 import useFileUpload from '@/hook/useImageUpload';
 import { api } from '@/lib/api';
 import { MdOutlineAddAPhoto } from "react-icons/md";
+import GeneralButton from '@/components/ui/GeneralButton';
 
 interface ProfileHeaderProps {
   user: User;
-  isEditing: boolean;
-  setIsEditing: (isEditing: boolean) => void;
-  transitionDuration: number;
+  isEditing?: boolean | null;
+  setIsEditing?: (isEditing: boolean) => void;
+  transitionDuration?: number;
 }
 
-export default function ProfileHeader({ user, isEditing, setIsEditing, transitionDuration }: ProfileHeaderProps) {
+export default function ProfileHeader({ 
+  user,
+  isEditing = null,
+  setIsEditing = () => {},
+  transitionDuration = 1000
+}: ProfileHeaderProps) {
   const { logout, setUser } = useAuth();
   const { handleUploadFile } = useFileUpload();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(user.imagePath || null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);
 
-  const optionButtonStyle = `
-    text-xs py-2 px-4 box-border rounded-full
-    bg-gray-50 hover:cursor-pointer
-    border-1 border-gray-200
-    transition-all duration-200
-    hover:bg-gray-100
-  `;
-  const fileType = ['image/png', 'image/jpeg', 'image/jpg'];
+  const profileImageType = ['image/png', 'image/jpeg', 'image/jpg'];
 
   const fetchSasToken = async (): Promise<string | null> => {
     try {
@@ -56,7 +55,7 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
       const result = await handleUploadFile(
         `profiles/${user.userId}/original.jpg`,
         selectedImage,
-        fileType
+        profileImageType
       );
       if (!result) {
         throw new Error("画像のアップロードに失敗しました");
@@ -131,7 +130,7 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
           <input
             type="file"
             className="hidden"
-            accept={fileType.join(', ')}
+            accept={profileImageType.join(', ')}
             onChange={async (e) => {
               if (e.target.files && e.target.files[0]) {
                 const image = e.target.files[0];
@@ -151,18 +150,21 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
       ${isEditing ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}
       transition-all duration-${transitionDuration}
     `}>
-      <button className={`${optionButtonStyle} rounded-md`} onClick={logout}>
+      <GeneralButton
+        className="text-sm"
+        onClick={logout}
+      >
         ログアウト
-      </button>
+      </GeneralButton>
 
-      <button
-        className={optionButtonStyle}
+      <GeneralButton
+      className="text-sm rounded-full"
         onClick={async () => {
           setIsEditing(true);
         }}
       >
         プロフィールを編集
-      </button>
+      </GeneralButton>
     </div>
   );
 
@@ -173,16 +175,16 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
       ${isEditing ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
       transition-all duration-${transitionDuration}
     `}>
-      <button
-        className={optionButtonStyle}
+      <GeneralButton
+        className="text-sm rounded-full"
         onClick={async () => {
           await handleSaveChanges();
         }}
       >
         変更を保存
-      </button>
-      <button
-        className={optionButtonStyle}
+      </GeneralButton>
+      <GeneralButton
+        className="text-sm rounded-full"
         onClick={() => {
           setIsEditing(false);
           setProfileImageUrl(user.imagePath || null);
@@ -190,7 +192,7 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
         }}
       >
         キャンセル
-      </button>
+      </GeneralButton>
     </div>
   );
 
@@ -216,8 +218,12 @@ export default function ProfileHeader({ user, isEditing, setIsEditing, transitio
         </div>
       </div>
       
-      {optionButtonsNormal}
-      {optionButtonsEditing}
+      {isEditing !== null &&
+        <>
+          {optionButtonsNormal}
+          {optionButtonsEditing}
+        </>
+      }
     </div>
   );
 }

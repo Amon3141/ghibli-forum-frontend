@@ -9,7 +9,6 @@ export interface Thread {
   updatedAt?: string;
   description: string;
   likes: number;
-  imagePath?: string;
   movieId: number;
   movie?: Movie;
   creatorId: number;
@@ -17,5 +16,5 @@ export interface Thread {
   comments?: Comment[];
   _count?: {
     comments: number;
-  }
+  };
 };
