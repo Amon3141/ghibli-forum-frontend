@@ -17,6 +17,18 @@
 
 const prisma = require('../utils/PrismaClient');
 
+const reactionInclude = {
+  include: {
+    user: {
+      select: {
+        username: true,
+        userId: true
+      }
+    }
+  },
+  orderBy: { createdAt: 'desc' }
+}
+
 /**
  * Comment model operations
  * @module models/commentModel
@@ -33,6 +45,7 @@ async function findCommentById(id) {
     where: { id },
     include: {
       author: true,
+      reactions: reactionInclude,
       _count: {
         select: {
           replies: true
@@ -56,6 +69,7 @@ async function findCommentsByThread(threadId) {
     },
     include: {
       author: true,
+      reactions: reactionInclude,
       _count: {
         select: {
           replies: true
@@ -77,6 +91,7 @@ async function findCommentsByAuthor(authorId) {
     where: { authorId },
     include: {
       author: true,
+      reactions: reactionInclude,
       parent: {
         include: {
           author: true
@@ -88,6 +103,7 @@ async function findCommentsByAuthor(authorId) {
           title: true
         }
       },
+      reactions: reactionInclude,
       _count: {
         select: {
           replies: true
@@ -111,12 +127,14 @@ async function findRepliesByComment(commentId) {
     },
     include: {
       author: true,
+      reactions: reactionInclude,
       replyTo: {
         select: {
           id: true,
           author: true
         }
-      }
+      },
+      reactions: reactionInclude
     },
     orderBy: { createdAt: 'asc' }
   });
@@ -141,6 +159,7 @@ async function createComment(data) {
     },
     include: {
       author: true,
+      reactions: reactionInclude,
       _count: {
         select: {
           replies: true
@@ -165,6 +184,7 @@ async function updateComment(id, data) {
     data,
     include: {
       author: true,
+      reactions: reactionInclude,
       _count: {
         select: {
           replies: true

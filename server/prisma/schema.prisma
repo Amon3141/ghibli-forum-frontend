@@ -19,6 +19,12 @@ enum ReactionType {
   SAD
 }
 
+// What can be reacted to
+enum ReactableType {
+  COMMENT
+  THREAD
+}
+
 // defines the table structure
 model Movie {
   id          Int      @id @default(autoincrement())
@@ -105,18 +111,20 @@ model Comment {
 
 // Reaction model for extensible like/reaction system
 model Reaction {
-  id           Int          @id @default(autoincrement())
-  type         ReactionType @default(LIKE)
+  id            Int           @id @default(autoincrement())
+  type          ReactionType  @default(LIKE)
+  reactableType ReactableType
+  createdAt     DateTime      @default(now())
   
   // User who made the reaction
-  userId       Int
-  user         User         @relation(fields: [userId], references: [id])
+  userId        Int
+  user          User          @relation(fields: [userId], references: [id])
   
   // Target of reaction (either comment or thread)
-  commentId    Int?
-  comment      Comment?     @relation(fields: [commentId], references: [id])
-  threadId     Int?
-  thread       Thread?      @relation(fields: [threadId], references: [id])
+  commentId     Int?
+  comment       Comment?      @relation(fields: [commentId], references: [id])
+  threadId      Int?
+  thread        Thread?       @relation(fields: [threadId], references: [id])
 
   // Ensure one user can only have one reaction per comment/thread
   @@unique([userId, commentId])
@@ -125,4 +133,5 @@ model Reaction {
   @@index([commentId])
   @@index([threadId])
   @@index([type])
+  @@index([reactableType])
 }

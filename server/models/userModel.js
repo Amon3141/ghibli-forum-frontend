@@ -7,6 +7,7 @@
  * @property {string} email - The user's email address
  * @property {Array<Comment>} comments - The user's comments
  * @property {Array<Thread>} threads - The threads created by the user
+ * @property {Array<Reaction>} reactions - The user's reactions
  */
 
 const prisma = require('../utils/PrismaClient');

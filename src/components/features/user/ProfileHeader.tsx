@@ -2,7 +2,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { User } from '@/types/user';
 import { useEffect, useState } from 'react';
 import useFileUpload from '@/hook/useImageUpload';
-import { api } from '@/lib/api';
+import { api } from '@/utils/api';
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import GeneralButton from '@/components/ui/GeneralButton';
 

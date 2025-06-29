@@ -15,6 +15,18 @@
 
 const prisma = require('../utils/PrismaClient');
 
+const reactionInclude = {
+  include: {
+    user: {
+      select: {
+        username: true,
+        userId: true
+      }
+    }
+  },
+  orderBy: { createdAt: 'desc' }
+}
+
 /**
  * Thread model operations
  * @module models/threadModel
@@ -34,6 +46,7 @@ async function findAllThreads() {
           userId: true
         }
       },
+      reactions: reactionInclude,
       _count: {
         select: {
           comments: true
@@ -61,6 +74,7 @@ async function findThreadById(id) {
         }
       },
       comments: true,
+      reactions: reactionInclude,
       _count: {
         select: {
           comments: true
@@ -86,6 +100,7 @@ async function findThreadsByUser(userId) {
           userId: true
         }
       },
+      reactions: reactionInclude,
       _count: {
         select: {
           comments: true
@@ -112,6 +127,7 @@ async function findThreadsByMovie(movieId) {
           userId: true
         }
       },
+      reactions: reactionInclude,
       _count: {
         select: {
           comments: true

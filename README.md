@@ -23,7 +23,7 @@ brew services stop postgresql
 # execute below commands from /server directory (easiest)
 
 # migrate changes to db
-npx prisma migrate dev --name "add-reactions"
+npx prisma migrate dev --name "change-description"
 
 # --------
 # (for prototyping)

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import GeneralButton from '@/components/ui/GeneralButton';
 import MessageBox from '@/components/ui/MessageBox';
-import { MessageBoxType } from '@/types/interface';
+import { MessageBoxType } from '@/types/MessageBoxType';
 
 interface PostCommentPopupProps {
   onClose: () => void;

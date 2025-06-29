@@ -1,4 +1,4 @@
-import { MessageBoxType } from "@/types/interface";
+import { MessageBoxType } from "@/types/MessageBoxType";
 
 interface MessageBoxProps {
   type: MessageBoxType;

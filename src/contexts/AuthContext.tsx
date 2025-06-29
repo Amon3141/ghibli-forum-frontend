@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
+import { api } from '@/utils/api';
 
 export interface UserInfo {
   id: number;

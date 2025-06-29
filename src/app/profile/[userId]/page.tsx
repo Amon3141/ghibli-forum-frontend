@@ -5,7 +5,7 @@ import ProfileHeader from '@/components/features/user/ProfileHeader';
 import UserContents from '@/components/features/user/userContents';
 import { useParams } from 'next/navigation';
 import { User } from '@/types/user';
-import { api } from '@/lib/api';
+import { api } from '@/utils/api';
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import Link from 'next/link';

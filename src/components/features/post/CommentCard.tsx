@@ -1,7 +1,7 @@
 "use client";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { api } from "@/lib/api";
+import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Comment } from "@/types/comment";
 import { FaRegComment } from "react-icons/fa";

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import { createPortal } from 'react-dom';
-import { api } from "@/lib/api";
+import { api } from "@/utils/api";
 
 import ThreadHeader from "@/components/features/thread/ThreadHeader";
 import CommentCard from "@/components/features/post/CommentCard";
@@ -12,7 +12,7 @@ import ConfirmationPopup from "@/components/ui/ConfirmationPopup";
 import GeneralButton from "@/components/ui/GeneralButton";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MessageBox from "@/components/ui/MessageBox";
-import { MessageBoxType } from '@/types/interface';
+import { MessageBoxType } from '@/types/MessageBoxType';
 
 import { FaComment } from "react-icons/fa6";
 

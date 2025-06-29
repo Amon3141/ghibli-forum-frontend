@@ -1,6 +1,6 @@
 import GeneralButton from './GeneralButton';
 import MessageBox from './MessageBox';
-import { MessageBoxType } from '@/types/interface';
+import { MessageBoxType } from '@/types/MessageBoxType';
 
 interface ConfirmationPopupProps {
   type: 'action' | 'delete';

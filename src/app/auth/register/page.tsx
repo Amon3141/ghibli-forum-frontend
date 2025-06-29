@@ -9,7 +9,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import InputField from '@/components/ui/InputField';
 import GeneralButton from '@/components/ui/GeneralButton';
 import MessageBox from '@/components/ui/MessageBox';
-import { MessageBoxType } from '@/types/interface';
+import { MessageBoxType } from '@/types/MessageBoxType';
 
 export default function RegisterForm() {
   const [userId, setUserId] = useState<string>("");

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, use } from 'react';
-import { api } from '@/lib/api';
+import { api } from '@/utils/api';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Image from 'next/image';
