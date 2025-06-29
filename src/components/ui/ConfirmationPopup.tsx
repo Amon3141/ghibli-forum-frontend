@@ -16,8 +16,8 @@ export default function ConfirmationPopup({
   type, confirmMessage, confirmLabel, onConfirm, onClose, isProcessing, processError
 }: ConfirmationPopupProps) {
   const handleConfirm = async () => {
-    const success = await onConfirm();
-    if (success) {
+    const isSuccess = await onConfirm();
+    if (isSuccess) {
       onClose();
     }
   };

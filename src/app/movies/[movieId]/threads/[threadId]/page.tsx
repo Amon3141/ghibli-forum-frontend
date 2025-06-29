@@ -133,9 +133,10 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     setSelectedCommentId(commentId);
   }
 
-  const handlePostComment = async (comment: string) => {
+  const handlePostComment = async (comment: string): Promise<boolean> => {
     setIsPostingComment(true);
     setPostCommentError(null);
+    let isSuccess = true;
     try {
       const response = await api.post(`/threads/${threadId}/comments`, {
         content: comment
@@ -145,8 +146,10 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメント投稿時にエラーが発生しました', err);
       setPostCommentError(err.response?.data?.error || 'コメント投稿時にエラーが発生しました');
+      isSuccess = false;
     } finally {
       setIsPostingComment(false);
+      return isSuccess;
     }
   }
 
@@ -175,6 +178,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
   const handleDeleteComment = async (commentId: number, isReply: boolean): Promise<boolean> => {
     setIsDeletingComment(true);
     setDeleteCommentError(null);
+    let isSuccess = true;
     try {
       await api.delete(`/comments/${commentId}`);
       if (isReply) {
@@ -186,13 +190,13 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       } else {
         setComments(comments.filter((comment) => comment.id !== commentId));
       }
-      return true; // Success
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメントの削除に失敗しました', err);
       setDeleteCommentError(err.response?.data?.error || 'コメントの削除に失敗しました');
-      return false; // Error occurred
+      isSuccess = false;
     } finally {
       setIsDeletingComment(false);
+      return isSuccess;
     }
   };
 
@@ -406,10 +410,8 @@ export default function ThreadPage({ params } : ThreadPageProps) {
               confirmMessage="コメントを削除しますか？"
               confirmLabel="削除"
               onConfirm={async () => {
-                if (deleteCommentId) {
-                  return await handleDeleteComment(deleteCommentId, isDeleteCommentReply);
-                }
-                return false;
+                if (deleteCommentId === null) return false;
+                return await handleDeleteComment(deleteCommentId, isDeleteCommentReply);
               }}
               onClose={handleCloseDeletePopup}
               isProcessing={isDeletingComment}

@@ -5,7 +5,7 @@ import { MessageBoxType } from '@/types/interface';
 
 interface PostCommentPopupProps {
   onClose: () => void;
-  handlePostComment: (comment: string) => Promise<void>;
+  handlePostComment: (comment: string) => Promise<boolean>;
   isPostingComment: boolean;
   postCommentError: string | null;
 }
@@ -16,8 +16,8 @@ export default function PostCommentPopup({
   const [newComment, setNewComment] = useState<string>("");
 
   const handleSubmit = async () => {
-    await handlePostComment(newComment);
-    if (!postCommentError) {
+    const isSuccess = await handlePostComment(newComment);
+    if (isSuccess) {
       onClose();
       setNewComment("");
     }

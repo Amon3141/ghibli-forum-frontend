@@ -7,8 +7,16 @@ datasource db {
 // defines what to generate (prisma client for js)
 generator client {
   provider = "prisma-client-js"
-  //output   = "../generated/prisma"
   output   = "../../node_modules/.prisma/client"
+}
+
+// Reaction types enum
+enum ReactionType {
+  LIKE
+  LOVE
+  LAUGH
+  ANGRY
+  SAD
 }
 
 // defines the table structure
@@ -19,6 +27,8 @@ model Movie {
   releaseDate DateTime
   imagePath   String?
   threads     Thread[]
+
+  favoriteByUsers User[] @relation("FavoriteMovie")
 
   @@index([releaseDate])
 }
@@ -31,8 +41,17 @@ model User {
   email     String    @unique
   isAdmin   Boolean
   imagePath String?
+  
+  // UserProfile fields
+  bio               String?
+  favoriteCharacter String?
+  favoriteMovieId   Int?
+  favoriteMovie     Movie?  @relation("FavoriteMovie", fields: [favoriteMovieId], references: [id])
+  
+  // Relations
   comments  Comment[]
   threads   Thread[]
+  reactions Reaction[]
 
   @@index([username])
 }
@@ -43,13 +62,13 @@ model Thread {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @default(now())
   description String
-  likes       Int       @default(0)
   imagePath   String?
   movieId     Int
   movie       Movie     @relation(fields: [movieId], references: [id])
   creatorId   Int
   creator     User      @relation(fields: [creatorId], references: [id])
   comments    Comment[]
+  reactions   Reaction[]
 
   @@index([createdAt])
   @@index([movieId])
@@ -59,7 +78,6 @@ model Thread {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  likes     Int
   createdAt DateTime @default(now())
   threadId  Int
   thread    Thread   @relation(fields: [threadId], references: [id])
@@ -76,9 +94,35 @@ model Comment {
   replyTo     Comment?  @relation("CommentMentions", fields: [replyToId], references: [id])
   mentionedBy Comment[] @relation("CommentMentions")
 
-  @@index([likes])
+  // Reactions
+  reactions Reaction[]
+
   @@index([createdAt])
   @@index([threadId])
   @@index([authorId])
   @@index([parentId])
+}
+
+// Reaction model for extensible like/reaction system
+model Reaction {
+  id           Int          @id @default(autoincrement())
+  type         ReactionType @default(LIKE)
+  
+  // User who made the reaction
+  userId       Int
+  user         User         @relation(fields: [userId], references: [id])
+  
+  // Target of reaction (either comment or thread)
+  commentId    Int?
+  comment      Comment?     @relation(fields: [commentId], references: [id])
+  threadId     Int?
+  thread       Thread?      @relation(fields: [threadId], references: [id])
+
+  // Ensure one user can only have one reaction per comment/thread
+  @@unique([userId, commentId])
+  @@unique([userId, threadId])
+  @@index([userId])
+  @@index([commentId])
+  @@index([threadId])
+  @@index([type])
 }

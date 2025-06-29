@@ -20,11 +20,22 @@ brew services stop postgresql
 
 ### Prisma
 ```bash
-# sync schema and db (from root)
+# execute below commands from /server directory (easiest)
+
+# migrate changes to db
+npx prisma migrate dev --name "add-reactions"
+
+# --------
+# (for prototyping)
+# sync schema and db
 npx prisma db push
 
-# generate prisma client (from root)
+# generate prisma client
 npx prisma generate
+# --------
+
+# inspect the database
+npx prisma studio
 ```
 
 ### Test Account Format
