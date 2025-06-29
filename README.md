@@ -27,7 +27,8 @@ npx prisma db push
 npx prisma generate
 ```
 
-### Test Account
-userName: AmonN (N >= 2)
-email:    amonN@email.com
-password: Amon1103
+### Test Account Format
+*If not exists yet, create a new one following the below format*  
+userName: GhibliN (N >= 2)  
+email:    ghibliN@email.com  
+password: ghibliFORUM
