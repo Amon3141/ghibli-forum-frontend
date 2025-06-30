@@ -86,7 +86,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     try {
       const response = await api.get(`/threads/${threadId}/comments`);
       setComments(response.data);
-      console.log('comments:', response.data);
       setIsFetchingComments(false);
       return response.data;
     } catch (err: any) {

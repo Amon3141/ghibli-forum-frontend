@@ -10,9 +10,9 @@ interface UsernameInlineProps {
 export default function UsernameInline({ user = null, textSize = "text-sm" }: UsernameInlineProps) {
   const { user: currentUser } = useAuth();
   return (
-    <Link href={`/profile${currentUser?.userId === user?.userId ? '' : `/${user?.userId}`}`}>
-      <div className={`flex items-center gap-1 ${textSize}`}>
-        <span>投稿者:</span>
+    <div className={`flex items-center gap-1 ${textSize}`}>
+      <span>投稿者:</span>
+      <Link href={`/profile${currentUser?.userId === user?.userId ? '' : `/${user?.userId}`}`}>
         {user ? (
           <span className="flex items-center gap-1">
             <span className="font-bold">{user.username}</span>
@@ -21,7 +21,7 @@ export default function UsernameInline({ user = null, textSize = "text-sm" }: Us
         ) : (
           <span className="font-bold">無名さん</span>
         )}
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

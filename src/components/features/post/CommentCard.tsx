@@ -10,6 +10,7 @@ import LikeButton from "@/components/features/action/LikeButton";
 import TrashButton from "@/components/features/action/TrashButton";
 import UsernameIcon from "@/components/features/user/UsernameIcon";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface CommentCardProps {
   comment: Comment,
@@ -45,10 +46,13 @@ export default function CommentCard({
       group/comment-card
       ${selectedCommentId === comment.id ? "bg-primary/70 outline-1 outline-primary" : "bg-white"}
     `}>
-      <div className="flex items-center justify-between w-full">
+      <Link
+        href={`/profile${user?.userId === comment.author?.userId ? '' : `/${comment.author?.userId}`}`}
+        className="flex items-center justify-between w-full"
+      >
         <UsernameIcon user={comment.author} />
         <p className="text-xs text-gray-500">{format(new Date(comment.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
-      </div>
+      </Link>
       <p>{comment.content}</p>
       {comment._count && typeof comment._count.replies === 'number' && comment._count.replies > 0 && (
         <button onClick={handleClickShowReply}>
