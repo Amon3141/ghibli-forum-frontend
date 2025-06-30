@@ -2,45 +2,46 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
-import { Comment } from '@/types/comment';
 import { User } from '@/types/user';
+import CommentCardInProfilePage from '../post/CommentCardInProfile';
 
 interface UserLikesProps {
   user: User;
 }
 
 export default function UserLikes({ user }: UserLikesProps) {
-  const [likedItems, setLikedItems] = useState<any[]>([]);
+  const [likedComments, setLikedItems] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchLikes = async () => {
-      // TODO: Implement the API endpoint to fetch liked items
-      // try {
-      //   const response = await api.get(`/users/${userId}/likes`);
-      //   setLikedItems(response.data);
-      // } catch (err) {
-      //   setError('いいねした項目の取得に失敗しました。');
-      //   console.error(err);
-      // }
-      setLikedItems([]); // Placeholder
+    const fetchLikedComments = async () => {
+      try {
+        const response = await api.get(`/users/${user.id}/reactions/comments`);
+        setLikedItems(response.data);
+      } catch (err) {
+        setError('いいねした項目の取得に失敗しました。');
+        console.error(err);
+      }
     };
-
-    fetchLikes();
-  }, [user.userId]);
+    fetchLikedComments();
+  }, [user.id]);
 
   if (error) {
     return <p className="text-red-500">{error}</p>;
   }
 
-  if (likedItems.length === 0) {
+  if (likedComments.length === 0) {
     return <p>まだいいねした項目はありません。</p>;
   }
 
   return (
     <div className="space-y-4">
-      {/* TODO: Map over likedItems and render them */}
-      <p>いいね機能は現在開発中です。</p>
+      {likedComments.map((comment) => (
+        <CommentCardInProfilePage
+          key={comment.id}
+          comment={comment}
+        />
+      ))}
     </div>
   );
 }

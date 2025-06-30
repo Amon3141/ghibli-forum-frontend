@@ -1,12 +1,10 @@
 import { api } from "@/utils/api";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { User } from "@/types/user";
 
 interface ProfileIconProps {
-  user: {
-    imagePath?: string;
-    username?: string;
-  };
+  user: User | null;
   size?: number;
   sasToken?: string | null;
   className?: string;
@@ -33,10 +31,12 @@ export default function ProfileIcon({ user, size = 40, sasToken = null, classNam
   }, []);
 
   useEffect(() => {
-    if (user.imagePath && localSasToken) {
+    if (user && user.imagePath && localSasToken) {
       setImageUrl(`${user.imagePath}?${localSasToken}`);
     }
-  }, [user.imagePath, localSasToken]);
+  }, [user?.imagePath, localSasToken]);
+
+  if (!user) return;
 
   return imageUrl ? (
     <Image

@@ -24,7 +24,10 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   return (
     <div className="space-y-2 bg-white rounded-lg p-6">
       <h4 className="text-3xl font-bold">{thread.title}</h4>
-      <UsernameInline user={thread.creator} />
+      <div className="flex items-center gap-1">
+        <span className="text-sm text-textcolor/80">投稿者:</span>
+        <UsernameInline user={thread.creator} />
+      </div>
       <div className="w-full h-[1px] bg-gray-200 my-4"></div>
       <p className="pb-2">{thread.description}</p>
       <LikeButton

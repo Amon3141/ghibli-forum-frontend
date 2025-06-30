@@ -33,13 +33,10 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
       flex flex-col items-start gap-2
       group/reply-card
     `}>
-      <Link
-        href={`/profile${user?.userId === replyData.author?.userId ? '' : `/${replyData.author?.userId}`}`}
-        className="flex items-center justify-between w-full"
-      >
+      <div className="flex items-center justify-between w-full">
         <UsernameIcon user={replyData.author} />
         <p className="text-xs text-gray-500">{format(new Date(replyData.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
-      </Link>
+      </div>
       <p>{replyData.content}</p>
       <div className="flex items-center justify-between w-full">
         <LikeButton

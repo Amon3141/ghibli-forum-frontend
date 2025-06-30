@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
 import { Comment } from '@/types/comment';
 import { User } from '@/types/user';
-import CommentCardInProfile from '../post/CommentCardInProfile';
+import CommentCardInProfilePage from '../post/CommentCardInProfile';
 
 interface UserCommentsProps {
   user: User;
@@ -48,10 +48,9 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
   return (
     <div className="space-y-4">
       {comments.map((comment) => (
-        <CommentCardInProfile
+        <CommentCardInProfilePage
           key={comment.id}
           comment={comment}
-          commentType={commentType}
         />
       ))}
     </div>

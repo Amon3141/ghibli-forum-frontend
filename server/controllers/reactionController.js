@@ -18,11 +18,10 @@ const reactionModel = require('../models/reactionModel');
 async function getReactedCommentsByUser(req, res) {
   try {
     const { id } = req.params;
-    const reactions = await reactionModel.findReactionsByUserAndReactable(Number(id), 'COMMENT');
+    const reactions = await reactionModel.findReactionsByUserAndReactableType(Number(id), 'COMMENT');
     
     // Extract just the comment data from the reactions
-    const comments = reactions.filter(comment => comment !== null);
-    
+    const comments = reactions.map(reaction => reaction.comment);
     res.json(comments);
   } catch (error) {
     console.error('Error fetching reacted comments:', error);
