@@ -2,7 +2,6 @@
  * @typedef {Object} Comment
  * @property {number} id - The unique identifier of the comment
  * @property {string} content - The content of the comment
- * @property {number} likes - The number of likes
  * @property {Date} createdAt - When the comment was created
  * @property {number} threadId - The ID of the associated thread
  * @property {Thread} thread - The associated thread
@@ -153,10 +152,7 @@ async function findRepliesByComment(commentId) {
  */
 async function createComment(data) {
   return await prisma.comment.create({
-    data: {
-      ...data,
-      likes: 0
-    },
+    data: data,
     include: {
       author: true,
       reactions: reactionInclude,
@@ -205,24 +201,6 @@ async function deleteComment(id) {
   return await prisma.comment.delete({ where: { id }});
 }
 
-/**
- * Updates the likes count for a comment
- * @async
- * @param {number} id - The ID of the comment
- * @param {boolean} increment - Whether to increment or decrement the likes count
- * @returns {Promise<Comment>} Updated comment object
- */
-async function updateLikes(id, increment = true) {
-  return await prisma.comment.update({
-    where: { id },
-    data: {
-      likes: {
-        [increment ? 'increment' : 'decrement']: 1
-      }
-    }
-  });
-}
-
 // Read operations
 const readOperations = {
   findCommentsByThread,
@@ -236,7 +214,6 @@ const writeOperations = {
   createComment,
   updateComment,
   deleteComment,
-  updateLikes
 };
 
 module.exports = {

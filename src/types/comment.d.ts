@@ -4,7 +4,6 @@ import { User } from "./user";
 export interface Comment {
   id: number;
   content: string;
-  likes: number;
   createdAt: string;
   threadId: number;
   thread?: Thread;
@@ -15,6 +14,7 @@ export interface Comment {
   replyToId?: number;
   replyTo?: Comment;
   mentionedBy?: Comment[];
+  reactions?: Reaction[];
   _count?: {
     replies: number;
   };

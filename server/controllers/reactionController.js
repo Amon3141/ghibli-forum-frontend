@@ -63,7 +63,7 @@ async function updateReaction(reactableType, req, res) {
       res.status(400).json({ error: 'Reaction type is required' });
     } else if (userReaction) {
       // Update existing reaction
-      if (userReaction.reactionType === reactionType) {
+      if (userReaction.type === reactionType) {
         result = await reactionModel.removeReaction(reactableType, Number(reactableId), userId);
         res.json({ message: 'Reaction removed', reaction: result });
       } else {

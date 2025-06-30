@@ -4,6 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const threadController = require('../controllers/threadController');
 const commentController = require('../controllers/commentController');
+const reactionController = require('../controllers/reactionController');
 
 const { verifyToken, checkAdmin } = require('../middlewares/authMiddleware');
 

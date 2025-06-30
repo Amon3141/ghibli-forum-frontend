@@ -86,6 +86,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     try {
       const response = await api.get(`/threads/${threadId}/comments`);
       setComments(response.data);
+      console.log('comments:', response.data);
       setIsFetchingComments(false);
       return response.data;
     } catch (err: any) {
@@ -260,12 +261,7 @@ export default function ThreadPage({ params } : ThreadPageProps) {
       {!isFetchingThread && (
         <>
           {thread && (
-            <ThreadHeader
-              title={thread.title}
-              creator={thread.creator}
-              summary={thread.description}
-              likes={thread.likes}
-            />
+            <ThreadHeader thread={thread} />
           )}
     
           {fetchThreadError && (
@@ -432,7 +428,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //     time: "14:30",
 //     content: "千尋が最初は無気力だったのが、最後には勇気を持って行動できるようになる成長が素晴らしいですね。",
 //     author: "映画好き",
-//     likes: 12,
 //     replies: [
 //       {
 //         id: 0,
@@ -440,7 +435,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //         time: "15:45",
 //         content: "特に印象的だったのは、ハクのために薬を届けるシーンですね。自分の恐怖を乗り越えて行動する姿に感動しました。",
 //         author: "アニメファン",
-//         likes: 8,
 //         replyTo: null
 //       },
 //       {
@@ -449,7 +443,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //         time: "16:20",
 //         content: "湯屋での労働を通じて、千尋は責任感と自立心を学んでいきます。これは現代の若者にも通じる成長の物語だと思います。",
 //         author: "ジブリ研究家",
-//         likes: 15,
 //         replyTo: "アニメファン"
 //       },
 //       {
@@ -458,7 +451,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //         time: "16:25",
 //         content: "そうですね。千尋の成長は、単なる外見的な変化だけでなく、内面的な強さを獲得していく過程が丁寧に描かれています。特に、最初は泣いてばかりいた彼女が、次第に困難に立ち向かう勇気を身につけていく様子が印象的です。",
 //         author: "じろう2",
-//         likes: 9,
 //         replyTo: "ジブリ研究家"
 //       },
 //       {
@@ -467,7 +459,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //         time: "16:44",
 //         content: "そうですね。また、千尋が湯婆婆との契約を通じて、自分の名前の大切さに気づくシーンも印象的でした。これは自分のアイデンティティを守ることの重要性を示唆していると思います。",
 //         author: "ハウル",
-//         likes: 6,
 //         replyTo: null
 //       }
 //     ]
@@ -478,7 +469,6 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //     time: "17:00",
 //     content: "湯屋の世界観の作り込みが素晴らしいです。特に八百万の神々のデザインが印象的でした。",
 //     author: "アート好き",
-//     likes: 10,
 //     replies: []
 //   }
 // ];
@@ -487,6 +477,5 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 //   title: "千と千尋の神隠しの考察",
 //   creator: "ジブリファン",
 //   summary: "千尋の成長と湯屋での経験について語り合いましょう。",
-//   likes: 24,
 //   comments: commentData
 // };

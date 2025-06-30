@@ -112,8 +112,7 @@ async function postComment(req, res) {
       threadId: Number(threadId),
       authorId: Number(authorId),
       parentId: parentId ? Number(parentId) : null,
-      replyToId: replyToId ? Number(replyToId) : null,
-      likes: 0
+      replyToId: replyToId ? Number(replyToId) : null
     });
     res.status(201).json(comment);
   } catch (error) {

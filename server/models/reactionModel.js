@@ -67,14 +67,22 @@ async function createReaction(reactableType, id, userId, reactionType) {
  * @throws {Error} If reaction not found
  */
 async function removeReaction(reactableType, id, userId) {
-  const whereClause = {
-    userId: userId
-  };
+  let whereClause;
 
   if (reactableType === 'COMMENT') {
-    whereClause.commentId = id;
+    whereClause = {
+      userId_commentId: {
+        userId: userId,
+        commentId: id
+      }
+    };
   } else if (reactableType === 'THREAD') {
-    whereClause.threadId = id;
+    whereClause = {
+      userId_threadId: {
+        userId: userId,
+        threadId: id
+      }
+    };
   } else {
     throw new Error(`Invalid reactable type: ${reactableType}`);
   }
@@ -103,15 +111,23 @@ async function removeReaction(reactableType, id, userId) {
  * @throws {Error} If reaction not found
  */
 async function updateReaction(reactableType, id, userId, reactionType) {
-  const whereClause = {
-    userId: userId
-  };
+  let whereClause;
 
-  // Add the appropriate foreign key condition based on reactable type
+  // Use compound unique key syntax
   if (reactableType === 'COMMENT') {
-    whereClause.commentId = id;
+    whereClause = {
+      userId_commentId: {
+        userId: userId,
+        commentId: id
+      }
+    };
   } else if (reactableType === 'THREAD') {
-    whereClause.threadId = id;
+    whereClause = {
+      userId_threadId: {
+        userId: userId,
+        threadId: id
+      }
+    };
   } else {
     throw new Error(`Invalid reactable type: ${reactableType}`);
   }
@@ -209,8 +225,7 @@ async function findReactionsByUserAndReactableType(userId, reactableType) {
 
 // Read operations
 const readOperations = {
-  findReactionsByUserAndReactableType,
-  getReactionCounts
+  findReactionsByUserAndReactableType
 };
 
 // Write operations

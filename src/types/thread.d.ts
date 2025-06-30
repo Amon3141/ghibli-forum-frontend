@@ -8,12 +8,12 @@ export interface Thread {
   createdAt: string;
   updatedAt?: string;
   description: string;
-  likes: number;
   movieId: number;
   movie?: Movie;
   creatorId: number;
   creator?: User;
   comments?: Comment[];
+  reactions?: Reaction[];
   _count?: {
     comments: number;
   };

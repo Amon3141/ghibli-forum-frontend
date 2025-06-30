@@ -21,17 +21,17 @@ interface CommentCardProps {
 export default function CommentCard({
   comment, selectedCommentId, onClickShowReply: handleClickShowReply, onClickTrashButton: handleClickTrashButton
 }: CommentCardProps) {
-  const userDbId = useAuth().user?.id;
+  const { user } = useAuth();
   const [replyCount, setReplyCount] = useState(comment._count?.replies || 0);
   
   useEffect(() => {
     setReplyCount(comment._count?.replies || 0);
   }, [comment._count?.replies]);
   
-  const handleClickLikeButton = (isLike: boolean) => {
+  const handleClickLikeButton = () => {
     try {
-      api.put(`/comments/${comment.id}/likes`, {
-        increment: isLike
+      api.put(`/comments/${comment.id}/reaction`, {
+        reactionType: 'LIKE'
       });
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
@@ -60,17 +60,18 @@ export default function CommentCard({
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-3">
           <LikeButton
-            likes={comment.likes}
-            isLiked={false}
-            onLike={() => handleClickLikeButton(true)}
-            onUnlike={() => handleClickLikeButton(false)}
+            likes={comment.reactions?.filter((reaction) => reaction.type === 'LIKE').length ?? 0}
+            isLiked={comment.reactions?.some((reaction) => 
+              reaction.user?.userId === user?.userId && reaction.type === 'LIKE'
+            ) ?? false}
+            onClick={() => handleClickLikeButton()}
           />
           <FaRegComment
             className="cursor-pointer"
             onClick={handleClickShowReply}
           />
         </div>
-        {comment.author?.id === userDbId && (
+        {comment.author?.id === user?.id && (
           <div className="opacity-0 group-hover/comment-card:opacity-100">
             <TrashButton onClick={() => handleClickTrashButton(comment.id)} />
           </div>

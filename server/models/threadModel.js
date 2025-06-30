@@ -5,7 +5,6 @@
  * @property {string} description - The description of the thread
  * @property {Date} createdAt - When the thread was created
  * @property {Date} [updatedAt] - When the thread was last updated
- * @property {number} likes - The number of likes
  * @property {number} movieId - The ID of the associated movie
  * @property {Movie} movie - The associated movie
  * @property {number} creatorId - The ID of the thread creator

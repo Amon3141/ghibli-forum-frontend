@@ -15,12 +15,11 @@ interface ReplyCardProps {
 
 export default function ReplyCard({ replyData, onClickTrashButton: handleClickTrashButton }: ReplyCardProps) {
   const { user } = useAuth();
-  const userDBId = user?.id;
   
-  const handleClickLikeButton = (isLike: boolean) => {
+  const handleClickLikeButton = () => {
     try {
-      api.put(`/comments/${replyData.id}/likes`, {
-        increment: isLike
+      api.put(`/comments/${replyData.id}/reaction`, {
+        reactionType: 'LIKE'
       });
     } catch (err: any) {
       console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
@@ -40,12 +39,13 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
       <p>{replyData.content}</p>
       <div className="flex items-center justify-between w-full">
         <LikeButton
-          likes={replyData.likes}
-          isLiked={false}
-          onLike={() => handleClickLikeButton(true)}
-          onUnlike={() => handleClickLikeButton(false)}
+          likes={replyData.reactions?.filter((reaction) => reaction.type === 'LIKE').length ?? 0}
+          isLiked={replyData.reactions?.some(
+            (reaction) => reaction.user?.userId === user?.userId && reaction.type === 'LIKE'
+          ) ?? false}
+          onClick={() => handleClickLikeButton()}
         />
-        {replyData.author?.id === userDBId && (
+        {replyData.author?.id === user?.id && (
           <div className="opacity-0 group-hover/reply-card:opacity-100">
             <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
           </div>

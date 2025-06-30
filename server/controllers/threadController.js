@@ -109,8 +109,7 @@ async function postThread(req, res) {
       title,
       description,
       movieId: Number(movieId),
-      creatorId: Number(creatorId),
-      likes: 0
+      creatorId: Number(creatorId)
     });
     res.status(201).json(thread);
   } catch (error) {

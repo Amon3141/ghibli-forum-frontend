@@ -5,12 +5,11 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 interface LikeButtonProps {
   likes: number;
   isLiked: boolean;
-  onLike: () => void;
-  onUnlike: () => void;
+  onClick: () => void;
 }
 
 export default function LikeButton({
-  likes: initialLikes, isLiked: initialIsLiked, onLike, onUnlike
+  likes: initialLikes, isLiked: initialIsLiked, onClick
 }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -19,12 +18,11 @@ export default function LikeButton({
     if (isLiked) {
       setIsLiked(false);
       setLikes(likes - 1);
-      onUnlike();
     } else {
       setIsLiked(true);
       setLikes(likes + 1);
-      onLike();
     }
+    onClick();
   };
 
   return (

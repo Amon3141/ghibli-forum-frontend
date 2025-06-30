@@ -27,7 +27,7 @@ router.delete('/:id', verifyToken, threadController.deleteThread);
 // POST /api/threads/:id/comments - Create a new comment
 router.post('/:id/comments', verifyToken, commentController.postComment);
 
-// PUT /api/threads/:id/reactions - Update thread reactions
-router.put('/:id/reactions', verifyToken, threadController.updateThreadReactions);
+// PUT /api/threads/:id/reaction - Update thread reaction
+router.put('/:id/reaction', verifyToken, threadController.updateThreadReaction);
 
 module.exports = router; 
