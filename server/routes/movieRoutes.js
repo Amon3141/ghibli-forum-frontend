@@ -16,8 +16,6 @@ router.get('/:id', movieController.getMovieById);
 // GET /api/movies/:id/threads - Get all threads for a specific movie
 router.get('/:id/threads', threadController.getThreadsByMovie);
 
-// hi
-
 /* ----- Protected routes ----- */
 
 // PUT /api/movies/:id - Update a movie
