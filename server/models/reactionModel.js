@@ -182,6 +182,8 @@ const threadInclude = {
   }
 }
 
+
+
 /**
  * Retrieves all reactions made by a specific user for a given reactable type
  * @async
@@ -189,7 +191,7 @@ const threadInclude = {
  * @param {string} reactableType - The reactable type ("COMMENT" or "THREAD")
  * @returns {Promise<Array<Comment|Thread>>} Array of comment or thread objects
  */
-async function findReactionsByUserAndReactable(userId, reactableType) {
+async function findReactionsByUserAndReactableType(userId, reactableType) {
   const reactions = await prisma.reaction.findMany({
     where: { 
       userId,
@@ -207,7 +209,7 @@ async function findReactionsByUserAndReactable(userId, reactableType) {
 
 // Read operations
 const readOperations = {
-  findReactionsByUserAndReactable,
+  findReactionsByUserAndReactableType,
   getReactionCounts
 };
 

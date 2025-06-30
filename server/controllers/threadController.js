@@ -4,6 +4,7 @@
  */
 
 const threadModel = require('../models/threadModel');
+const reactionController = require('./reactionController');
 
 /**
  * Get all threads
@@ -174,6 +175,10 @@ async function deleteThread(req, res) {
   }
 }
 
+async function updateThreadReaction(req, res) {
+  reactionController.updateReaction('THREAD', req, res);
+}
+
 module.exports = {
   getAllThreads,
   getThreadById,
@@ -181,5 +186,6 @@ module.exports = {
   getThreadsByMovie,
   postThread,
   putThread,
-  deleteThread
+  deleteThread,
+  updateThreadReaction
 }; 

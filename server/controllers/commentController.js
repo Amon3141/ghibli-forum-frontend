@@ -4,7 +4,7 @@
  */
 
 const commentModel = require('../models/commentModel');
-
+const reactionController = require('./reactionController');
 /**
  * Get all comments for a thread
  * @async
@@ -173,30 +173,8 @@ async function deleteComment(req, res) {
   }
 }
 
-/**
- * Update likes count for a comment
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Comment ID
- * @param {Object} req.body - Request body
- * @param {boolean} req.body.increment - Whether to increment or decrement likes
- * @returns {Promise<void>} - Returns JSON of the updated comment
- * @throws {Error} Database error or comment not found
- */
-async function updateCommentLikes(req, res) {
-  try {
-    const { id } = req.params;
-    const { increment } = req.body;
-    const comment = await commentModel.updateLikes(Number(id), increment);
-    res.json(comment);
-  } catch (error) {
-    if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Comment not found' });
-    }
-    res.status(500).json({ error: 'Failed to update likes' });
-  }
+async function updateCommentReaction(req, res) {
+  reactionController.updateReaction('COMMENT', req, res);
 }
 
 module.exports = {
@@ -207,5 +185,5 @@ module.exports = {
   postComment,
   putComment,
   deleteComment,
-  updateCommentLikes
+  updateCommentReaction
 }; 

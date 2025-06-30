@@ -18,7 +18,7 @@ router.get('/:id/replies', commentController.getRepliesByComment);
 router.put('/:id', verifyToken, commentController.putComment);
 
 // PUT /api/comments/:id/likes - Update comment likes
-router.put('/:id/likes', verifyToken, commentController.updateCommentLikes);
+router.put('/:id/reactions', verifyToken, commentController.updateCommentReactions);
 
 // DELETE /api/comments/:id - Delete a comment
 router.delete('/:id', verifyToken, commentController.deleteComment);
