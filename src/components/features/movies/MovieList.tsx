@@ -1,17 +1,16 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
 import { useAuth } from '@/contexts/AuthContext';
 
-import MovieCard from "@/components/features/MovieCard";
+import MovieCard from "@/components/features/movies/MovieCard";
 import InputField from '@/components/ui/InputField';
 import GeneralButton from '@/components/ui/GeneralButton';
 
 import { Movie } from '@/types/movie';
 type MovieFormData = Omit<Movie, 'id' | 'threads'>;
 
-export default function Movies() {
+export default function MovieList() {
   const { user } = useAuth();
 
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -49,87 +48,25 @@ export default function Movies() {
     fetchMovies();
   }, []);
 
-  const initialMovies = [
-  {
-    title: "ナウシカ",
-    director: "宮崎駿",
-    releaseDate: "1984-03-11",
-    imagePath: "/images/nausicaa_teto.jpg"
-  },
-  {
-    title: "ラピュタ",
-    director: "宮崎駿",
-    releaseDate: "1986-08-02",
-    imagePath: "/images/laputa_flower.jpg"
-  },
-  {
-    title: "千と千尋の神隠し",
-    director: "宮崎駿",
-    releaseDate: "2001-07-20",
-    imagePath: "/images/chihiro_onigiri.jpg"
-  },
-  {
-    title: "崖の上のポニョ",
-    director: "宮崎駿",
-    releaseDate: "2008-07-19",
-    imagePath: "/images/ponyo_boat.jpg"
-  },
-  {
-    title: "風立ちぬ",
-    director: "宮崎駿",
-    releaseDate: "2013-07-20",
-    imagePath: "/images/kazetachinu_kiss.jpg"
-  },
-  {
-    title: "となりのトトロ",
-    director: "宮崎駿",
-    releaseDate: "1988-04-16",
-    imagePath: "/images/totoro_mei.jpg"
-  },
-  {
-    title: "もののけ姫",
-    director: "宮崎駿",
-    releaseDate: "1997-07-12",
-    imagePath: "/images/mononoke_eboshi.jpg"
-  },
-  {
-    title: "ハウルの動く城",
-    director: "宮崎駿",
-    releaseDate: "2004-11-20",
-    imagePath: "/images/howl_star.jpg"
-  }
-];
-
-const initializeMovies = async () => {
-  try {
-    const newMovies = [];
-    
-    for (const movie of initialMovies) {
-      const response = await api.post('/movies', movie);
-      newMovies.push(response.data.movie);
-    }
-    
-    setMovies([...movies, ...newMovies]);
-  } catch (err: any) {
-    console.error('Failed to initialize movies:', err);
-  }
-};
-
   return (
     <div className="space-y-6 w-full px-2">
-      <div className="space-y-3">
-        <h2 className="text-3xl font-bold py-2">作品一覧</h2>
-        {fetchMoviesError && (
-          <div className="rounded-sm bg-red-100 p-4">
-            <p className="text-textcolor/80">{fetchMoviesError}</p>
+      {movies.length > 0 && (
+        <>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">作品別</h2>
+            {fetchMoviesError && (
+              <div className="rounded-sm bg-red-100 p-4">
+                <p className="text-textcolor/80">{fetchMoviesError}</p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 auto-rows-fr">
+              {movies.map(movie => (
+                <MovieCard key={movie.id} movie={movie}/>
+              ))}
+            </div>
           </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-          {movies.map(movie => (
-            <MovieCard key={movie.id} movie={movie}/>
-          ))}
-        </div>
-      </div>
+        </>
+      )}
 
       {user && user.isAdmin && (
         <>
@@ -165,7 +102,6 @@ const initializeMovies = async () => {
               <GeneralButton type="submit">作成</GeneralButton>
             </form>
           </div>
-          <button onClick={initializeMovies}>初期化</button>
         </>
       )}
     </div>

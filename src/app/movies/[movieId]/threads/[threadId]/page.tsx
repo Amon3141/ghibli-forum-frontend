@@ -12,7 +12,7 @@ import ConfirmationPopup from "@/components/ui/ConfirmationPopup";
 import GeneralButton from "@/components/ui/GeneralButton";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MessageBox from "@/components/ui/MessageBox";
-import { MessageBoxType } from '@/types/MessageBoxType';
+import { MessageBoxType } from "@/types/MessageBoxType";
 
 import { FaComment } from "react-icons/fa6";
 
@@ -419,62 +419,3 @@ export default function ThreadPage({ params } : ThreadPageProps) {
     </div>
   );
 }
-
-// const commentData = [
-//   {
-//     id: 0,
-//     date: "2024-04-15",
-//     time: "14:30",
-//     content: "千尋が最初は無気力だったのが、最後には勇気を持って行動できるようになる成長が素晴らしいですね。",
-//     author: "映画好き",
-//     replies: [
-//       {
-//         id: 0,
-//         date: "2024-04-15",
-//         time: "15:45",
-//         content: "特に印象的だったのは、ハクのために薬を届けるシーンですね。自分の恐怖を乗り越えて行動する姿に感動しました。",
-//         author: "アニメファン",
-//         replyTo: null
-//       },
-//       {
-//         id: 1,
-//         date: "2024-04-15",
-//         time: "16:20",
-//         content: "湯屋での労働を通じて、千尋は責任感と自立心を学んでいきます。これは現代の若者にも通じる成長の物語だと思います。",
-//         author: "ジブリ研究家",
-//         replyTo: "アニメファン"
-//       },
-//       {
-//         id: 2,
-//         date: "2024-04-15",
-//         time: "16:25",
-//         content: "そうですね。千尋の成長は、単なる外見的な変化だけでなく、内面的な強さを獲得していく過程が丁寧に描かれています。特に、最初は泣いてばかりいた彼女が、次第に困難に立ち向かう勇気を身につけていく様子が印象的です。",
-//         author: "じろう2",
-//         replyTo: "ジブリ研究家"
-//       },
-//       {
-//         id: 3,
-//         date: "2024-04-15",
-//         time: "16:44",
-//         content: "そうですね。また、千尋が湯婆婆との契約を通じて、自分の名前の大切さに気づくシーンも印象的でした。これは自分のアイデンティティを守ることの重要性を示唆していると思います。",
-//         author: "ハウル",
-//         replyTo: null
-//       }
-//     ]
-//   }, 
-//   {
-//     id: 1,
-//     date: "2024-04-15",
-//     time: "17:00",
-//     content: "湯屋の世界観の作り込みが素晴らしいです。特に八百万の神々のデザインが印象的でした。",
-//     author: "アート好き",
-//     replies: []
-//   }
-// ];
-
-// const threadData = {
-//   title: "千と千尋の神隠しの考察",
-//   creator: "ジブリファン",
-//   summary: "千尋の成長と湯屋での経験について語り合いましょう。",
-//   comments: commentData
-// };
