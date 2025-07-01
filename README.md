@@ -25,14 +25,14 @@ brew services stop postgresql
 # migrate changes to db
 npx prisma migrate dev --name "change-description"
 
-# --------
+# -----------------------
 # (for prototyping)
 # sync schema and db
 npx prisma db push
 
 # generate prisma client
 npx prisma generate
-# --------
+# -----------------------
 
 # inspect the database
 npx prisma studio
