@@ -59,7 +59,7 @@ export default function MovieList() {
                 <p className="text-textcolor/80">{fetchMoviesError}</p>
               </div>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 auto-rows-fr">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-fr">
               {movies.map(movie => (
                 <MovieCard key={movie.id} movie={movie}/>
               ))}

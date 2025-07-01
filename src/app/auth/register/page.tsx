@@ -44,7 +44,7 @@ export default function RegisterForm() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full">
-      <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto gap-4">
+      <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto gap-4 mb-5">
         <h2 className="text-2xl font-bold">新規登録</h2>
         <form onSubmit={handleRegister} className="space-y-2 w-full">
           <InputField

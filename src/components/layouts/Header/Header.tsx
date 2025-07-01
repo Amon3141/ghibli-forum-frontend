@@ -19,7 +19,7 @@ export default function Header() {
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between">
-        <Link className="font-bold text-2xl" href="/">風の谷の集い</Link>
+        <Link className="font-bold text-2xl tracking-wide" href="/">風の谷の集い</Link>
         <nav className="font-bold flex items-center justify-end gap-8">
           <Link className={pathname === '/' ? styles.nav_link_selected : styles.nav_link} href="/">ホーム</Link>
           {user ? (

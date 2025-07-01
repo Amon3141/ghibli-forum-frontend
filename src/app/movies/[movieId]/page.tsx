@@ -76,7 +76,7 @@ export default function MoviePage({ params }: MoviePageProps) {
   return (
     <div className="min-h-full w-full flex items-center justify-center">
       {/* Background Image */}
-      {movie && movie.imagePath && (
+      {/* {movie && movie.imagePath && (
         <div className="-z-10">
           <Image
             src={movie.imagePath}
@@ -87,7 +87,7 @@ export default function MoviePage({ params }: MoviePageProps) {
           />
           <div className="absolute inset-0 bg-white/75"></div>
         </div>
-      )}
+      )} */}
 
       {/* Content */}
       <div className="w-full h-full">
