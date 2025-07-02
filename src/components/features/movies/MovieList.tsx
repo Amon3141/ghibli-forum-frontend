@@ -52,14 +52,14 @@ export default function MovieList() {
     <div className="space-y-6 w-full px-2">
       {movies.length > 0 && (
         <>
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">作品別</h2>
+          <div className="space-y-2 sm:space-y-3">
+            <h2 className="text-xl sm:text-2xl font-bold">作品別</h2>
             {fetchMoviesError && (
               <div className="rounded-sm bg-red-100 p-4">
                 <p className="text-textcolor/80">{fetchMoviesError}</p>
               </div>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-fr">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr">
               {movies.map(movie => (
                 <MovieCard key={movie.id} movie={movie}/>
               ))}

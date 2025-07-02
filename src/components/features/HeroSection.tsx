@@ -13,7 +13,10 @@ export default function HeroSection() {
         className="brightness-80"
       />
       <div className="relative z-10 flex flex-col justify-center h-full">
-        <h1 className="text-white text-2xl md:text-3xl ml-16 mb-5 text-shadow-sm tracking-wide">
+        <h1 className="
+          text-white text-lg sm:text-2xl 
+          ml-9 sm:ml-16 mb-3 sm:mb-5 text-shadow-sm tracking-wide
+        ">
           ジブリの世界へようこそ
         </h1>
       </div>

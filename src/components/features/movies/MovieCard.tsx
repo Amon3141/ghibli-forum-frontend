@@ -29,11 +29,11 @@ export default function MovieCard({movie}: MovieCardProps) {
           <div className="aspect-[16/9] bg-primary-dark"></div>
         )}
         
-        <div className="flex items-center justify-between py-4 px-3">
-          <div className="font-bold text-lg">{movie.title}</div>
+        <div className="flex items-center justify-between py-3 px-3 h-9 sm:h-12 gap-1">
+          <div className="font-bold text-xs sm:text-base">{movie.title}</div>
           <div className="flex items-center gap-[3px]">
-            <PiYarn className="text-lg"/>
-            <span>{movie._count?.threads ?? 0}</span>
+            <PiYarn className="text-xs sm:text-base"/>
+            <span className="text-[10px] sm:text-sm">{movie._count?.threads ?? 0}</span>
           </div>
         </div>
       </div>

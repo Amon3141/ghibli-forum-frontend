@@ -26,7 +26,7 @@ export default function RootLayout({
           <main className="
             flex-1
             flex flex-col items-center
-            w-full p-4
+            w-full p-2 sm:p-4
             overflow-y-scroll no-scrollbar
             relative
           ">

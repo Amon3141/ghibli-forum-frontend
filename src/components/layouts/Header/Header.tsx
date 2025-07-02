@@ -15,25 +15,25 @@ export default function Header() {
 
   return (
     <header className="
-      bg-primary shadow py-5 px-10 z-50
+      bg-primary shadow py-5 px-6 sm:px-8 z-50
       flex items-center justify-center
     ">
-      <div className="w-full flex items-center justify-between">
-        <Link className="font-bold text-2xl tracking-wide" href="/">風の谷の集い</Link>
-        <nav className="font-bold flex items-center justify-end gap-6">
+      <div className="w-full flex items-center justify-between gap-1">
+        <Link className="font-bold text-xl sm:text-2xl tracking-wide" href="/">風の谷の集い</Link>
+        <nav className="font-bold flex items-center justify-end gap-4 sm:gap-6">
           {/* <Link className={pathname === '/' ? styles.nav_link_selected : styles.nav_link} href="/"> */}
           <Link className={`
-            rounded-full p-2 color-textcolor/90
+            rounded-full p-1.5 sm:p-2 color-textcolor/90
             transition-colors duration-200
             ${pathname === '/' ? 'bg-primary-dark/85' : 'hover:bg-primary-dark/85'
           }`} href="/">
-            <FiHome className="text-xl" />
+            <FiHome className="text-lg sm:text-xl" />
           </Link>
           {user ? (
             <Link href="/profile">
               <ProfileIcon
                 user={user}
-                size={40}
+                size={window.innerWidth < 640 ? 32 : 40}
                 className={`
                   ${pathname.startsWith('/profile') ? 'outline-2 outline-primary-dark' : ''}
                 `}
