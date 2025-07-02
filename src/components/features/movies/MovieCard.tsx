@@ -30,10 +30,10 @@ export default function MovieCard({movie}: MovieCardProps) {
         )}
         
         <div className="flex items-center justify-between py-3 px-3 h-9 sm:h-12 gap-1">
-          <div className="font-bold text-xs sm:text-base">{movie.title}</div>
-          <div className="flex items-center gap-[3px]">
+          <div className="font-bold text-xs sm:text-base truncate">{movie.title}</div>
+          <div className="flex items-center gap-[2px] sm:gap-[3px]">
             <PiYarn className="text-xs sm:text-base"/>
-            <span className="text-[10px] sm:text-sm">{movie._count?.threads ?? 0}</span>
+            <span className="text-[11px] sm:text-sm">{movie._count?.threads ?? 0}</span>
           </div>
         </div>
       </div>

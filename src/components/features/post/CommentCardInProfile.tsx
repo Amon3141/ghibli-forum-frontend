@@ -23,7 +23,7 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
         <p className="text-gray-500 text-sm">
           <Link
             href={getThreadUrlFromComment(comment)}
-            className="text-amber-600 hover:underline"
+            className="underline-link"
           >
             @{comment.thread?.title || '無効なスレッドURL'}
           </Link>
