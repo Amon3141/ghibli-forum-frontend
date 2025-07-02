@@ -48,4 +48,8 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
+
+  .underline-link {
+    @apply text-amber-600 underline cursor-pointer
+  }
 }

@@ -72,6 +72,12 @@ async function findThreadById(id) {
           userId: true
         }
       },
+      movie: {
+        select: {
+          id: true,
+          title: true
+        }
+      },
       comments: true,
       reactions: reactionInclude,
       _count: {

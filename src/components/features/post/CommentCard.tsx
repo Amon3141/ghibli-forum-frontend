@@ -53,7 +53,7 @@ export default function CommentCard({
       <p>{comment.content}</p>
       {comment._count && typeof comment._count.replies === 'number' && comment._count.replies > 0 && (
         <button onClick={handleClickShowReply}>
-          <p className="text-amber-600 underline cursor-pointer">
+          <p className="underline-link">
             {replyCount}件の返信を表示
           </p>
         </button>

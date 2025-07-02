@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="flex flex-col w-full">
       <HeroSection />
-      <div className="text-center pt-2 mt-3">
+      <div className="text-center pt-2 mt-3 mb-1">
         <h2 className="text-[1.5rem] text-textcolor/90">
           スペース一覧
         </h2>

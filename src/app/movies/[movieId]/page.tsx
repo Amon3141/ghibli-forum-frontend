@@ -1,10 +1,6 @@
-'use client'
-
+'use client';
 import { useState, useEffect, use } from 'react';
 import { api } from '@/utils/api';
-import { format } from 'date-fns';
-import { ja } from 'date-fns/locale';
-import Image from 'next/image';
 
 import ThreadCard from "@/components/features/thread/ThreadCard";
 import InputField from "@/components/ui/InputField";
@@ -133,7 +129,7 @@ export default function MoviePage({ params }: MoviePageProps) {
                   placeholder="概要"
                 />
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-end items-center gap-2">
                 <GeneralButton type="button" onClick={resetThreadForm} color="default">キャンセル</GeneralButton>
                 <GeneralButton type="submit" color="primary">作成</GeneralButton>
               </div>

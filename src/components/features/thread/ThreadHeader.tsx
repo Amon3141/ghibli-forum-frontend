@@ -3,15 +3,17 @@ import UsernameInline from "../user/UsernameInline";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/utils/api";
 import { Thread } from "@/types/thread";
+import Link from "next/link";
 
 interface ThreadHeaderProps {
-  thread: Thread
+  thread: Thread;
 }
 
 export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   const { user } = useAuth();
   
   const handleClickLikeButton = () => {
+    console.log(thread.movie);
     try {
       api.put(`/threads/${thread.id}/reaction`, {
         reactionType: 'LIKE'
@@ -24,6 +26,12 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   return (
     <div className="space-y-2 bg-white rounded-lg p-6">
       <h4 className="text-3xl font-bold">{thread.title}</h4>
+      <div className="flex items-center gap-1 text-sm text-textcolor/80">
+        <span>映画:</span>
+        <Link href={`/movies/${thread.movieId}`}>
+          <span className="underline-link">{thread.movie?.title}</span>
+        </Link>
+      </div>
       <div className="flex items-center gap-1">
         <span className="text-sm text-textcolor/80">投稿者:</span>
         <UsernameInline user={thread.creator} />

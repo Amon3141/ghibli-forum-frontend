@@ -13,9 +13,9 @@ export default function UsernameInline({ user = null, textSize = "text-sm" }: Us
       className={`flex items-center gap-1 ${textSize}`}
     >
       {user ? (
-        <span className="flex items-center font-bold gap-1">
-          <span>{user.username}</span>
-          <span>@{user.userId}</span>
+        <span className="flex items-center gap-[2px]">
+          <span className="font-bold">{user.username}</span>
+          <span className="font-bold">@{user.userId}</span>
         </span>
       ) : (
         <span className="font-bold">無名さん</span>

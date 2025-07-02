@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect, use } from 'react';
 import { createPortal } from 'react-dom';
 import { api } from "@/utils/api";
@@ -216,11 +215,9 @@ export default function ThreadPage({ params } : ThreadPageProps) {
 
   useEffect(() => {
     if (refreshComment.refreshCount == 0) return;
-    console.log('refreshComment:', refreshComment);
     const updateComment = async () => {
       const updatedComment = await fetchCommentById(refreshComment.commentId);
       if (updatedComment) {
-        console.log('updatedComment:', updatedComment);
         setComments(prevComments =>
           prevComments.map(comment =>
             comment.id === updatedComment.id ? updatedComment : comment
