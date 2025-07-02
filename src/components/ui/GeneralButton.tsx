@@ -24,7 +24,8 @@ export default function GeneralButton({
 
   return (
     <button className={`
-      py-1.5 px-4 box-border rounded
+      text-xs sm:text-sm
+      py-1.5 sm:py-1.5 px-3 sm:px-3.5 box-border rounded
       border-1 hover:cursor-pointer
       transition-all duration-200
       ${buttonStyle}

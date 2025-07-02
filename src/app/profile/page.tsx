@@ -50,7 +50,7 @@ export default function ProfilePage() {
     return (
       <div className="flex justify-center items-center h-full">
         <div className="flex flex-col gap-4 items-start">
-          <h1>ログインしてください</h1>
+          <h1 className="text-sm sm:text-base">ログインしてください</h1>
           <GeneralButton>
             <Link href="/auth/login">ログイン</Link>
           </GeneralButton>

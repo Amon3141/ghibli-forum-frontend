@@ -42,72 +42,70 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-full">
-      <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto gap-4 mb-5">
-        <h2 className="text-2xl font-bold">新規登録</h2>
-        <form onSubmit={handleRegister} className="space-y-2 w-full">
+    <div className="flex flex-col items-center justify-center h-screen w-full max-w-sm mx-auto gap-4 mb-5 p-2">
+      <h2 className="text-xl sm:text-2xl font-bold">新規登録</h2>
+      <form onSubmit={handleRegister} className="space-y-2 w-full">
+        <InputField
+          value={username}
+          onChange={(e)=>setUsername(e.target.value)}
+          placeholder="ユーザー名"
+        />
+        <InputField
+          value={userId}
+          onChange={(e)=>setUserId(e.target.value)}
+          placeholder="ユーザーID"
+        />
+        <InputField
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
+          placeholder="メールアドレス"
+        />
+        <div className="relative w-full">
           <InputField
-            value={username}
-            onChange={(e)=>setUsername(e.target.value)}
-            placeholder="ユーザー名を入力"
+            type={isPasswordVisible ? "text" : "password"}
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            placeholder="パスワード"
           />
-          <InputField
-            value={userId}
-            onChange={(e)=>setUserId(e.target.value)}
-            placeholder="ユーザーIDを入力"
-          />
-          <InputField
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-            placeholder="メールアドレスを入力"
-          />
-          <div className="relative w-full">
-            <InputField
-              type={isPasswordVisible ? "text" : "password"}
-              value={password}
-              onChange={(e)=>setPassword(e.target.value)}
-              placeholder="パスワードを入力"
-            />
-            <span
-              className="absolute inset-y-0 right-2 flex items-center px-1 cursor-pointer text-textcolor/80"
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              role="button"
-              aria-label={isPasswordVisible ? "パスワードを非表示" : "パスワードを表示"}
-            >
-              {isPasswordVisible ? <IoEye /> : <IoEyeOff />}
-            </span>
-          </div>
+          <span
+            className="absolute inset-y-0 right-2 flex items-center px-1 cursor-pointer text-textcolor/80"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            role="button"
+            aria-label={isPasswordVisible ? "パスワードを非表示" : "パスワードを表示"}
+          >
+            {isPasswordVisible ? <IoEye /> : <IoEyeOff />}
+          </span>
+        </div>
 
-          <div className="relative w-full">
-            <InputField
-              type={isConfirmPasswordVisible ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e)=>setConfirmPassword(e.target.value)}
-              placeholder="パスワード（確認用）を入力"
-            />
-            <span
-              className="absolute inset-y-0 right-2 flex items-center px-1 cursor-pointer text-textcolor/80"
-              onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
-              role="button"
-              aria-label={isConfirmPasswordVisible ? "パスワードを非表示" : "パスワードを表示"}
-            >
-              {isConfirmPasswordVisible ? <IoEye /> : <IoEyeOff />}
-            </span>
-          </div>
-          
-          <div className="flex justify-between items-center mt-2.5">
-            <button
-              type="button"
-              onClick={handleGoToLogin}
-              className="text-sm text-indigo-500 underline hover:text-indigo-700"
-            >
-              すでにアカウントをお持ちですか？
-            </button>
-            <GeneralButton type="submit">登録</GeneralButton>
-          </div>
-        </form>
-        {registerError && <MessageBox type={MessageBoxType.ERROR} message={registerError} />}
-      </div>
+        <div className="relative w-full">
+          <InputField
+            type={isConfirmPasswordVisible ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e)=>setConfirmPassword(e.target.value)}
+            placeholder="パスワード（確認用）)"
+          />
+          <span
+            className="absolute inset-y-0 right-2 flex items-center px-1 cursor-pointer text-textcolor/80"
+            onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+            role="button"
+            aria-label={isConfirmPasswordVisible ? "パスワードを非表示" : "パスワードを表示"}
+          >
+            {isConfirmPasswordVisible ? <IoEye /> : <IoEyeOff />}
+          </span>
+        </div>
+        
+        <div className="flex justify-between items-center mt-2.5">
+          <button
+            type="button"
+            onClick={handleGoToLogin}
+            className="text-xs sm:text-sm text-indigo-500 underline hover:text-indigo-700"
+          >
+            すでにアカウントをお持ちですか？
+          </button>
+          <GeneralButton type="submit">登録</GeneralButton>
+        </div>
+      </form>
+      {registerError && <MessageBox type={MessageBoxType.ERROR} message={registerError} />}
     </div>
   );
 }

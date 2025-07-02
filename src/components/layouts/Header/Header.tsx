@@ -19,8 +19,11 @@ export default function Header() {
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between gap-1">
-        <Link className="font-bold text-xl sm:text-2xl tracking-wide" href="/">風の谷の集い</Link>
-        <nav className="font-bold flex items-center justify-end gap-4 sm:gap-6">
+        <Link className="font-bold text-lg sm:text-xl tracking-wide" href="/">風の谷の集い</Link>
+        <nav className={`
+          ${user ? 'gap-4 sm:gap-6' : 'gap-2 sm:gap-4'}
+          font-bold flex items-center justify-end
+        `}>
           {/* <Link className={pathname === '/' ? styles.nav_link_selected : styles.nav_link} href="/"> */}
           <Link className={`
             rounded-full p-1.5 sm:p-2 color-textcolor/90
@@ -35,13 +38,13 @@ export default function Header() {
                 user={user}
                 size={window.innerWidth < 640 ? 32 : 40}
                 className={`
-                  ${pathname.startsWith('/profile') ? 'outline-2 outline-primary-dark' : ''}
+                  ${pathname.startsWith('/profile') ? 'outline-2 outline-primary-dark/85' : ''}
                 `}
               />
             </Link>
           ) : (
-            <GeneralButton className="bg-primary hover:bg-textcolor/90 hover:border-textcolor/90 border-textcolor/70 font-normal group">
-              <Link href="/auth/login" className="group-hover:text-primary group-hover:font-normal transition-colors duration-200">ログイン</Link>
+            <GeneralButton className="bg-primary hover:bg-textcolor/90 hover:border-textcolor/90 border-textcolor/70 group">
+              <Link href="/auth/login" className="group-hover:text-primary transition-colors duration-200">ログイン</Link>
             </GeneralButton>
           )}
         </nav>
