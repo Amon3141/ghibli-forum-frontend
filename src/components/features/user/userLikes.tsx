@@ -12,6 +12,7 @@ interface UserLikesProps {
 export default function UserLikes({ user }: UserLikesProps) {
   const [likedComments, setLikedItems] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const fetchLikedComments = async () => {
@@ -26,6 +27,14 @@ export default function UserLikes({ user }: UserLikesProps) {
     fetchLikedComments();
   }, [user.id]);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
+
   if (error) {
     return <p className="text-red-500">{error}</p>;
   }
@@ -36,12 +45,16 @@ export default function UserLikes({ user }: UserLikesProps) {
 
   return (
     <div className="space-y-4">
-      {likedComments.map((comment) => (
-        <CommentCardInProfilePage
-          key={comment.id}
-          comment={comment}
-        />
-      ))}
+      {likedComments.map((comment) => {
+        if (comment) {
+          return (
+            <CommentCardInProfilePage
+              key={comment.id}
+              comment={comment}
+            />
+          );
+        }
+      })}
     </div>
   );
 }

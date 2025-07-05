@@ -69,11 +69,16 @@ export default function PrivateProfilePageClient() {
         style={{ transitionDuration: `${headerTransitionDuration}ms` }}
         onTransitionEnd={handleHeaderTransitionEnd}
       >
-        <ProfileHeader user={user} isEditing={isEditing && showHeaderInCenter} setIsEditing={setIsEditing} transitionDuration={headerTransitionDuration} />
+        <ProfileHeader
+          user={user}
+          isEditing={isEditing && showHeaderInCenter} 
+          setIsEditing={setIsEditing}
+          transitionDuration={headerTransitionDuration}
+        />
       </div>
       <div 
         className={`
-          transition-all ease-in-out mt-8
+          transition-all ease-in-out mt-8 pb-6
           ${showMainContent ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
         style={{ transitionDuration: `${mainContentTransitionDuration}ms` }}

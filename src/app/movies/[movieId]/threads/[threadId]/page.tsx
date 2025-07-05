@@ -1,7 +1,7 @@
 import ThreadPageClient from "./ThreadPageClient";
 import { api } from "@/utils/api";
 import { Thread } from "@/types/database/thread";
-import { Comment } from "@/types/comment";
+import { Comment } from "@/types/database/comment";
 import { LoadedData, LoadedDataForThreadPage } from "@/types/loadedData";
 
 interface ThreadPageProps {

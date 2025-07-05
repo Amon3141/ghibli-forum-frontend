@@ -47,12 +47,15 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
 
   return (
     <div className="space-y-4">
-      {comments.map((comment) => (
-        <CommentCardInProfilePage
-          key={comment.id}
-          comment={comment}
-        />
-      ))}
+      {comments.map((comment) => {
+        if (comment) {
+          return (
+            <CommentCardInProfilePage
+              key={comment.id}
+              comment={comment}
+          />
+        )}
+      })}
     </div>
   );
 }
