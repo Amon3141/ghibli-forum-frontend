@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PiYarn } from "react-icons/pi";
 
-import { Movie } from "@/types/movie";
+import { Movie } from "@/types/database/movie";
 
 interface MovieCardProps {
   movie: Movie;

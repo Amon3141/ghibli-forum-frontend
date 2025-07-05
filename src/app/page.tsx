@@ -1,17 +1,20 @@
-import HeroSection from '@/components/features/HeroSection';
-import MovieList from '@/components/features/movies/MovieList';
+import HomeClient from "./HomeClient";
+import { api } from "@/utils/api";
+import { Movie } from "@/types/database/movie";
+import { LoadedData } from "@/types/loadedData";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col w-full">
-      <HeroSection />
-      <div className="text-center pt-2 mt-2 sm:mt-3 mb-1">
-        <h2 className="text-[1.2rem] sm:text-[1.5rem] text-textcolor/90">
-          スペース一覧
-        </h2>
-        <div className="w-26 sm:w-30 h-[2px] sm:h-[2.5px] rounded-full bg-primary mx-auto mt-1.5 sm:mt-2"></div>
-      </div>
-      <MovieList />
-    </div>
-  );
+const fetchMovies = async (): Promise<LoadedData<Movie[]>> => {
+  try {
+    const response = await api.get<Movie[]>('/movies');
+    return { data: response.data, error: null };
+  } catch (err: any) {
+    const errorMessage = err.response?.data?.error || '映画取得時にエラーが発生しました';
+    console.error(errorMessage, err);
+    return { data: null, error: errorMessage };
+  }
+};
+
+export default async function Home() {
+  const fetchedMovies = await fetchMovies();
+  return <HomeClient loadedMovies={fetchedMovies} />;
 }

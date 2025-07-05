@@ -8,7 +8,7 @@ import LoadingScreen from '@/components/ui/LoadingScreen';
 import ProfileHeader from '@/components/features/user/ProfileHeader';
 import UserContents from '@/components/features/user/userContents';
 
-export default function ProfilePage() {
+export default function PrivateProfilePageClient() {
   const { user, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FaRegComments } from "react-icons/fa6";
 
-import { Thread } from '@/types/thread';
+import { Thread } from '@/types/database/thread';
 
 interface ThreadCardProps {
   movieId: number,

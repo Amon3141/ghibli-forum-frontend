@@ -1,7 +1,7 @@
 import { api } from "@/utils/api";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { User } from "@/types/user";
+import { User } from "@/types/database/user";
 
 interface ProfileIconProps {
   user: User | null;

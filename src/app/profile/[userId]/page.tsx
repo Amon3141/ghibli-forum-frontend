@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import ProfileHeader from '@/components/features/user/ProfileHeader';
 import UserContents from '@/components/features/user/userContents';
 import { useParams } from 'next/navigation';
-import { User } from '@/types/user';
+import { User } from '@/types/database/user';
 import { api } from '@/utils/api';
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import Link from 'next/link';
 
-export default function ProfilePage() {
+export default function PublicProfilePage() {
   const { userId } = useParams();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);

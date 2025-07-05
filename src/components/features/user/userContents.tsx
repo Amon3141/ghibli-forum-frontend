@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import UserComments from './userComments';
 import UserLikes from './userLikes';
-import { User } from '@/types/user';
+import { User } from '@/types/database/user';
 
 interface UserContentsProps {
   user: User;

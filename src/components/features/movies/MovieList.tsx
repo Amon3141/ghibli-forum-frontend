@@ -7,29 +7,30 @@ import MovieCard from "@/components/features/movies/MovieCard";
 import InputField from '@/components/ui/InputField';
 import GeneralButton from '@/components/ui/GeneralButton';
 
-import { Movie } from '@/types/movie';
+import { LoadedData } from '@/types/loadedData';
+import { Movie } from '@/types/database/movie';
 type MovieFormData = Omit<Movie, 'id' | 'threads'>;
 
-export default function MovieList() {
+interface MovieListProps {
+  movies: LoadedData<Movie[]>;
+}
+
+export default function MovieList({ movies: loadedMovies }: MovieListProps) {
   const { user } = useAuth();
 
   const [movies, setMovies] = useState<Movie[]>([]);
   const [fetchMoviesError, setFetchMoviesError] = useState<string | null>(null);
 
   const [newMovie, setNewMovie] = useState<MovieFormData>({
-    title: '',
-    director: '',
-    releaseDate: ''
+    title: '', director: '', releaseDate: ''
   });
   const [createMovieError, setCreateMovieError] = useState<string | null>(null);
 
-  const fetchMovies = async () => {
-    try {
-      const response = await api.get<Movie[]>('/movies');
-      setMovies(response.data);
-    } catch (err: any) {
-      console.error('Failed to fetch movies:', err);
-      setFetchMoviesError(err.response?.data?.error || '映画取得時にエラーが発生しました');
+  const initializeMovies = async () => {
+    if (loadedMovies.data) {
+      setMovies(loadedMovies.data);
+    } else if (loadedMovies.error) {
+      setFetchMoviesError(loadedMovies.error);
     }
   };
 
@@ -45,7 +46,7 @@ export default function MovieList() {
   };
 
   useEffect(() => {
-    fetchMovies();
+    initializeMovies();
   }, []);
 
   return (

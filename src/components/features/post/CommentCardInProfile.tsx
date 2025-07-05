@@ -2,7 +2,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
-import { Comment } from "@/types/comment";
+import { Comment } from "@/types/database/comment";
 import ProfileIcon from "@/components/features/user/ProfileIcon";
 import UsernameInline from "@/components/features/user/UsernameInline";
 

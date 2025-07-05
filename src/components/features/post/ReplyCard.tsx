@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { Comment } from "@/types/comment";
+import { Comment } from "@/types/database/comment";
 
 import LikeButton from "@/components/features/action/LikeButton";
 import TrashButton from "@/components/features/action/TrashButton";

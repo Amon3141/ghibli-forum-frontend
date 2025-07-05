@@ -1,4 +1,4 @@
-import { Movie } from "./movie";
+import { Movie } from "../movie";
 import { User } from "./user";
 import { Comment } from "./comment";
 

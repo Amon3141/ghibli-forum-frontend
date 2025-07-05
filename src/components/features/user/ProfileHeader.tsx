@@ -1,5 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
-import { User } from '@/types/user';
+import { User } from '@/types/database/user';
 import { useEffect, useState } from 'react';
 import useFileUpload from '@/hook/useImageUpload';
 import { api } from '@/utils/api';
