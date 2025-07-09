@@ -10,12 +10,12 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 /* ----- Route Imports ----- */
-const movieRoutes = require('./routes/movieRoutes');    // Handles /api/movies/*
-const userRoutes = require('./routes/userRoutes');      // Handles /api/users/*
-const threadRoutes = require('./routes/threadRoutes');  // Handles /api/threads/*
-const commentRoutes = require('./routes/commentRoutes'); // Handles /api/comments/*
-const authRoutes = require('./routes/authRoutes');      // Handles /api/auth/*
-const sasRoutes = require('./routes/sasRoutes');        // Handles /api/sas/*
+const movieRoutes = require('./routes/movieRoutes');    // api/movies/*
+const userRoutes = require('./routes/userRoutes');      // api/users/*
+const threadRoutes = require('./routes/threadRoutes');  // api/threads/*
+const commentRoutes = require('./routes/commentRoutes'); // api/comments/*
+const authRoutes = require('./routes/authRoutes');      // api/auth/*
+const sasRoutes = require('./routes/sasRoutes');        // api/sas/*
 
 app.prepare().then(() => {
   const server = express();

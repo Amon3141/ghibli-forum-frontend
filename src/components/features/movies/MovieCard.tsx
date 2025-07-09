@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PiYarn } from "react-icons/pi";
+import { useMemo } from "react";
 
 import { Movie } from "@/types/database/movie";
 
