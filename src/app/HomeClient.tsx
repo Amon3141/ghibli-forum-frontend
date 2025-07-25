@@ -32,7 +32,7 @@ export default function HomeClient({ loadedMovies }: HomeClientProps) {
         />
       )}
       {showMainContent && (
-        <div className="flex flex-col w-full animate-fade-in">
+        <div className="flex flex-col w-full">
           <HeroSection />
           <div className="text-center pt-2 mt-2 sm:mt-3 mb-1">
             <h2 className="text-[1.2rem] sm:text-[1.5rem] text-textcolor/90">

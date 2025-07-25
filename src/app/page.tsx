@@ -3,6 +3,8 @@ import { api } from "@/utils/api";
 import { Movie } from "@/types/database/movie";
 import { LoadedData } from "@/types/loadedData";
 
+export const dynamic = 'force-dynamic';
+
 const fetchMovies = async (): Promise<LoadedData<Movie[]>> => {
   try {
     const response = await api.get<Movie[]>('/movies');

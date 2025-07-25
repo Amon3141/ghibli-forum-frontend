@@ -37,7 +37,6 @@ export default function useFileUpload(): UseFileUploadReturn {
         }
       });
       setUploadMessage(`Successfully uploaded ${file.name}`);
-      console.log("uploadResponse: ", uploadResponse);
 
       setSelectedFile(null);
       return {blobUrl, sasToken};

@@ -13,7 +13,6 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   const { user } = useAuth();
   
   const handleClickLikeButton = () => {
-    console.log(thread.movie);
     try {
       api.put(`/threads/${thread.id}/reaction`, {
         reactionType: 'LIKE'

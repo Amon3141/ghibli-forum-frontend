@@ -216,7 +216,6 @@ export default function ThreadPageClient({
   // SSRで取得したデータをstateにセット
   useEffect(() => {
     initializeData();
-    console.log('initialData', initialData);
   }, [initialData]);
 
   // 選択コメントが変更されたらそのコメントへの返信を取得

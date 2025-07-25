@@ -50,7 +50,6 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { identifier, password } = req.body;
-  console.log(`identifier: ${identifier}, password: ${password}`);
 
   if (!identifier || !password) {
     return res.status(400).json({ error: '全ての項目を入力してください' });

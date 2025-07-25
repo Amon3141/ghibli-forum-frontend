@@ -41,7 +41,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(response.data.user as UserInfo);
     } catch (err: any) {
       setUser(null);
-      console.log(err.response?.data?.error);
       throw err;
     } finally {
       setIsLoading(false);
@@ -58,7 +57,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(response.data.user);
     } catch (err: any) {
       setUser(null);
-      console.log(err.response?.data?.error);
       throw err;
     } finally {
       setIsLoading(false);
@@ -73,7 +71,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     } catch (err: any) {
       setUser(null);
-      console.log(err.response?.data?.error);
       throw err;
     } finally {
       setIsLoading(false);

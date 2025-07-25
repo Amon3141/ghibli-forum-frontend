@@ -39,6 +39,6 @@ app.prepare().then(() => {
   const port = process.env.PORT || 3000;
   server.listen(port, (err) => {
     if (err) throw err;
-    if (dev) console.log(`> Server is running on http://localhost:${port}`);
+    console.log(`> Server is running on http://localhost:${port}`);
   });
 });

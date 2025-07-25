@@ -36,7 +36,6 @@ export default function MovieList({ movies: loadedMovies }: MovieListProps) {
 
   const handleCreateMovie = async () => {
     try {
-      console.log("Request headers:", api.defaults.headers); // test
       const response = await api.post('/movies', newMovie);
       setMovies([...movies, response.data.movie]);
     } catch (err: any) {
