@@ -5,10 +5,6 @@ const express = require('express');
 const next = require('next');
 const cookieParser = require('cookie-parser');
 
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
 /* ----- Route Imports ----- */
 const movieRoutes = require('./routes/movieRoutes');    // api/movies/*
 const userRoutes = require('./routes/userRoutes');      // api/users/*
@@ -16,6 +12,10 @@ const threadRoutes = require('./routes/threadRoutes');  // api/threads/*
 const commentRoutes = require('./routes/commentRoutes'); // api/comments/*
 const authRoutes = require('./routes/authRoutes');      // api/auth/*
 const sasRoutes = require('./routes/sasRoutes');        // api/sas/*
+
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = express();

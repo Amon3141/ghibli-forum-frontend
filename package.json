@@ -1,12 +1,11 @@
 {
-  "main": "server/server.js",
   "name": "ghibli-forum",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "nodemon server/server.js",
     "build": "next build",
-    "start": "node server/server.js",
+    "start": "NODE_ENV=production node server/server.js",
     "lint": "next lint"
   },
   "dependencies": {
