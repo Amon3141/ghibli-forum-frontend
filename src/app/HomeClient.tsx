@@ -11,8 +11,8 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ loadedMovies }: HomeClientProps) {
-  const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(true);
-  const [showMainContent, setShowMainContent] = useState(false);
+  const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false);
+  const [showMainContent, setShowMainContent] = useState(true);
 
   const handleAnimationComplete = () => {
     setShowWelcomeAnimation(false);
