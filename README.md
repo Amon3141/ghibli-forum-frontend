@@ -25,8 +25,13 @@ brew services stop postgresql
 # migrate changes to db
 npx prisma migrate dev --name "change-description"
 
+# create custom migration
+npx prisma migrate dev --create-only --name "change-description"
+# edit the migration file (server/prisma/migrations/timestamp_name/migration.sql)
+npx prisma migrate dev
+
 # -----------------------
-# (for prototyping)
+# (for prototyping, this will not create migration script)
 # sync schema and db
 npx prisma db push
 

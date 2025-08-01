@@ -27,13 +27,16 @@ enum ReactableType {
 
 // defines the table structure
 model Movie {
-  id          Int      @id @default(autoincrement())
-  title       String   @unique
+  id          Int       @id @default(autoincrement())
+  title       String    @unique
   director    String
   releaseDate DateTime
   imagePath   String?
   threads     Thread[]
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
 
+  // Relations
   favoriteByUsers User[] @relation("FavoriteMovie")
 
   @@index([releaseDate])
@@ -47,13 +50,15 @@ model User {
   email     String    @unique
   isAdmin   Boolean
   imagePath String?
-  
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
   // UserProfile fields
   bio               String?
   favoriteCharacter String?
   favoriteMovieId   Int?
-  favoriteMovie     Movie?  @relation("FavoriteMovie", fields: [favoriteMovieId], references: [id])
-  
+  favoriteMovie     Movie?  @relation("FavoriteMovie", fields: [favoriteMovieId], references: [id], onDelete: SetNull)
+
   // Relations
   comments  Comment[]
   threads   Thread[]
@@ -69,12 +74,16 @@ model Thread {
   updatedAt   DateTime? @default(now())
   description String
   imagePath   String?
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
   movieId     Int
-  movie       Movie     @relation(fields: [movieId], references: [id])
+  movie       Movie     @relation(fields: [movieId], references: [id], onDelete: Restrict)
   creatorId   Int
-  creator     User      @relation(fields: [creatorId], references: [id])
-  comments    Comment[]
-  reactions   Reaction[]
+  creator     User      @relation(fields: [creatorId], references: [id], onDelete: Restrict)
+
+  // Relations
+  comments  Comment[]
+  reactions Reaction[]
 
   @@index([createdAt])
   @@index([movieId])
@@ -85,25 +94,28 @@ model Comment {
   id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
-  threadId  Int
-  thread    Thread   @relation(fields: [threadId], references: [id])
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
+  level     Int      @default(1) // 1 = top-level, 2 = reply, 3 = reply to reply
+
+  threadId Int
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Restrict)
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Restrict)
 
   // コメント階層
-  parentId Int? /// トップレベル→null, サブレベル→親コメントID
-  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  replies  Comment[] @relation("CommentReplies")
+  parentId Int? // トップレベル→null, サブレベル→親コメントID
+  parent   Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: SetNull)
 
   // サブレベルコメント同士の返信関係
-  replyToId   Int? /// 返信先のサブコメントID or null
-  replyTo     Comment?  @relation("CommentMentions", fields: [replyToId], references: [id])
-  mentionedBy Comment[] @relation("CommentMentions")
+  replyToId Int? // 返信先のサブコメントID or null
+  replyTo   Comment? @relation("CommentMentions", fields: [replyToId], references: [id], onDelete: SetNull)
 
-  // Reactions
-  reactions Reaction[]
+  // Relations
+  replies     Comment[]  @relation("CommentReplies")
+  mentionedBy Comment[]  @relation("CommentMentions")
+  reactions   Reaction[]
 
   @@index([createdAt])
+  @@index([level])
   @@index([threadId])
   @@index([authorId])
   @@index([parentId])
@@ -115,18 +127,16 @@ model Reaction {
   type          ReactionType  @default(LIKE)
   reactableType ReactableType
   createdAt     DateTime      @default(now())
-  
-  // User who made the reaction
-  userId        Int
-  user          User          @relation(fields: [userId], references: [id])
-  
-  // Target of reaction (either comment or thread)
-  commentId     Int?
-  comment       Comment?      @relation(fields: [commentId], references: [id])
-  threadId      Int?
-  thread        Thread?       @relation(fields: [threadId], references: [id])
 
-  // Ensure one user can only have one reaction per comment/thread
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Target of reaction (either comment or thread)
+  commentId Int?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  threadId  Int?
+  thread    Thread?  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
   @@unique([userId, commentId])
   @@unique([userId, threadId])
   @@index([userId])
