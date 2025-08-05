@@ -11,7 +11,7 @@
  */
 
 const prisma = require('../utils/PrismaClient');
-const secureSelection = {
+const userWithoutPassword = {
   id: true,
   userId: true,
   username: true,
@@ -41,7 +41,7 @@ async function findUserWithPasswordByUserId(userId) {
   return await prisma.user.findUnique({ 
     where: { userId },
     select: {
-      ...secureSelection,
+      ...userWithoutPassword,
       password: true
     }
   });
@@ -58,7 +58,7 @@ async function findUserWithPasswordByEmail(email) {
   return await prisma.user.findUnique({ 
     where: { email },
     select: {
-      ...secureSelection,
+      ...userWithoutPassword,
       password: true
     }
   });
@@ -74,7 +74,7 @@ async function findUserWithPasswordByEmail(email) {
  */
 async function findAllUsers() {
   return await prisma.user.findMany({
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -88,7 +88,7 @@ async function findAllUsers() {
 async function findUserById(id) {
   return await prisma.user.findUnique({
     where: { id },
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -102,7 +102,7 @@ async function findUserById(id) {
 async function findUserByUserId(userId) {
   return await prisma.user.findUnique({
     where: { userId },
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -116,7 +116,7 @@ async function findUserByUserId(userId) {
 async function findUserByEmail(email) {
   return await prisma.user.findUnique({
     where: { email },
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -135,7 +135,7 @@ async function findUserByEmail(email) {
 async function createUser(data) {
   return await prisma.user.create({
     data,
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -157,7 +157,7 @@ async function updateUser(id, data) {
   return await prisma.user.update({
     where: { id },
     data,
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 
@@ -172,7 +172,7 @@ async function updateUser(id, data) {
 async function deleteUser(id) {
   return await prisma.user.delete({
     where: { id },
-    select: secureSelection
+    select: userWithoutPassword
   });
 }
 

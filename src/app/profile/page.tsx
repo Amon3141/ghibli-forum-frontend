@@ -5,8 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
-import ProfileHeader from '@/components/features/user/ProfileHeader';
-import UserContents from '@/components/features/user/UserContents';
+import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
+import UserContents from '@/components/features/user/profilePage/UserContents';
 
 export default function PrivateProfilePageClient() {
   const { user, isLoading } = useAuth();

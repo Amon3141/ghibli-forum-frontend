@@ -72,13 +72,13 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'ユーザーIDまたはパスワードが正しくありません' });
     }
 
+    const tokenPayload = {
+      id: user.id,
+      isAdmin: user.isAdmin,
+    }
+
     const token = jwt.sign(
-      {
-        id: user.id,
-        userId: user.userId,
-        username: user.username,
-        isAdmin: user.isAdmin
-      },
+      tokenPayload,
       secretKey,
       { expiresIn: '3h' }
     );
@@ -92,7 +92,7 @@ const loginUser = async (req, res) => {
 
     return res.status(200).json({
       message: 'ログインに成功しました',
-      user: { id: user.id, userId: user.userId, username: user.username, email: user.email, isAdmin: user.isAdmin, imagePath: user.imagePath }
+      user: tokenPayload
     })
   } catch (err) {
     return res.status(500).json({ error: 'ログイン中にエラーが発生しました' });

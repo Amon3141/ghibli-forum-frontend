@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
 import { Comment } from '@/types/database/comment';
 import { User } from '@/types/database/user';
-import CommentCardInProfilePage from '../post/CommentCardInProfile';
+import CommentCardInProfilePage from '@/components/features/post/CommentCardInProfilePage';
 
 interface UserCommentsProps {
   user: User;

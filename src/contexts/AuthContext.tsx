@@ -2,24 +2,16 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/utils/api';
-
-export interface UserInfo {
-  id: number;
-  userId: string;
-  username: string;
-  email: string;
-  isAdmin: boolean;
-  imagePath?: string;
-}
+import { User } from '@/types/database/user';
 
 interface AuthContextType {
-  user: UserInfo | null;
+  user: User | null;
   isLoading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
   register: (userId: string, username: string, password: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
-  setUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 interface AuthProviderProps {
@@ -29,7 +21,7 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<UserInfo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
@@ -38,7 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await api.get('/users/me');
-      setUser(response.data.user as UserInfo);
+      setUser(response.data.user as User);
     } catch (err: any) {
       setUser(null);
       throw err;
@@ -50,11 +42,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (identifier: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await api.post('/auth/login', {
+      await api.post('/auth/login', {
         identifier,
         password
       });
-      setUser(response.data.user);
+      await checkAuth();
     } catch (err: any) {
       setUser(null);
       throw err;
@@ -66,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (userId: string, username: string, password: string, email: string) => {
     setIsLoading(true);
     try {
-      const response = await api.post('/auth/register', {
+      await api.post('/auth/register', {
         userId, username, password, email
       });
     } catch (err: any) {

@@ -1,8 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react';
 
-import ProfileHeader from '@/components/features/user/ProfileHeader';
-import UserContents from '@/components/features/user/userContents';
+import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
+import UserContents from '@/components/features/user/profilePage/UserContents';
 import { useParams } from 'next/navigation';
 import { User } from '@/types/database/user';
 import { api } from '@/utils/api';
@@ -46,7 +46,7 @@ export default function PublicProfilePage() {
 
   return (
     <div className="flex flex-col w-full h-full py-6 px-8 space-y-8">
-      <ProfileHeader user={user} />
+      <ProfileHeader user={user} isEditing={false} setIsEditing={() => {}} />
       <UserContents user={user} />
     </div>
   )
