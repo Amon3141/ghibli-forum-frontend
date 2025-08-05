@@ -7,11 +7,6 @@ const reactionModel = require('../models/reactionModel');
 
 /**
  * Get all comments that a user has reacted to
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - User Database ID
  * @returns {Promise<void>} - Returns JSON array of comments the user has reacted to
  * @throws {Error} Database error
  */
@@ -33,14 +28,6 @@ async function getReactedCommentsByUser(req, res) {
  * Update reactions for a reactable (create, update, or remove)
  * // body.reactionType === current reactionType -> remove reaction
  * // otherwise, change reaction
- * @async
- * @param {string} reactableType - Type of reactable (COMMENT, THREAD, etc)
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Reactable ID
- * @param {Object} req.body - Request body
- * @param {string|null} req.body.reactionType - Reaction type (LIKE, LOVE, LAUGH, ANGRY, SAD) or null to remove
  * @returns {Promise<void>} - Returns JSON of the reaction operation result
  * @throws {Error} Database error
  */

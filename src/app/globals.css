@@ -30,6 +30,14 @@
   h1, h2, h3, h4, h5, h6, p, a {
     @apply text-textcolor;
   }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  a, select, input[type="checkbox"], input[type="radio"] {
+    @apply cursor-pointer;
+  }
 }
 
 @layer components {
@@ -51,7 +59,7 @@
   }
 
   .underline-link {
-    @apply text-amber-600 underline cursor-pointer
+    @apply text-amber-600 underline cursor-pointer;
   }
 }
 

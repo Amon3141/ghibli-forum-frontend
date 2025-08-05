@@ -8,7 +8,8 @@ import useFileUpload from '@/hook/useImageUpload';
 
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
-import UserProfileNormal from './UserProfileNormal';
+import BasicProfileNormal from './BasicProfileNormal';
+import BasicProfileEditing from './BasicProfileEditing';
 
 interface ProfileHeaderProps {
   user: User;
@@ -23,11 +24,12 @@ export default function ProfileHeader({
   setIsEditing,
   transitionDuration = 1000
 }: ProfileHeaderProps) {
-  const { logout, setUser, isLoading } = useAuth();
+  const { logout, setUser } = useAuth();
   const { handleUploadFile } = useFileUpload();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(user.imagePath || null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);
+  const [editingUser, setEditingUser] = useState<Partial<User>>({});
 
   const profileImageType = ['image/png', 'image/jpeg', 'image/jpg'];
 
@@ -49,35 +51,34 @@ export default function ProfileHeader({
   }, []);
 
   const handleSaveChanges = async () => {
-    if (!selectedImage) {
-      setIsEditing(false);
-      return;
-    }
-
     try {
       // 画像をAzure Storageにアップロード
-      const result = await handleUploadFile(
-        `profiles/${user.userId}/original.jpg`,
-        selectedImage,
-        profileImageType
-      );
-      if (!result) {
-        throw new Error("画像のアップロードに失敗しました");
+      if (selectedImage) {
+        const result = await handleUploadFile(
+          `profiles/${user.userId}/original.jpg`,
+          selectedImage,
+          profileImageType
+        );
+        if (!result) {
+          throw new Error("画像のアップロードに失敗しました");
+        }
+        const { blobUrl, sasToken } = result;
+        setSasToken(sasToken);
+        editingUser.imagePath = blobUrl || '';
       }
-      const { blobUrl, sasToken } = result;
-      setSasToken(sasToken);
 
       // データベースのユーザー情報を更新
-      const response = await api.put('/users/me', {
-        imagePath: blobUrl || ''
-      });
+      const response = await api.put('/users/me', editingUser);
 
-      if (response.data?.imagePath) {
-        user.imagePath = response.data.imagePath;
-        setUser({ ...user, imagePath: response.data.imagePath});
-        setProfileImageUrl(response.data.imagePath);
+      if (response.data) {
+        const updatedUser = { ...user, ...response.data };
+        setUser(updatedUser);
+        if (response.data.imagePath) {
+          setProfileImageUrl(response.data.imagePath);
+        }
       }
       setSelectedImage(null);
+      setEditingUser({});
     } catch (error) {
       console.error("変更の保存に失敗しました: ", error);
       throw new Error(`変更の保存に失敗しました: ${error}`);
@@ -151,75 +152,61 @@ export default function ProfileHeader({
 
   return (
     <div>
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-8">
         {/* Profile Image */}
         <div className="
-          flex-shrink-0 w-25 h-25 sm:w-33 sm:h-33
+          flex-shrink-0 w-27 h-27 sm:w-30 sm:h-30
           rounded-full bg-gray-200 overflow-hidden relative
         ">
           {profileImageIcon()}
           {selectImageOverlay()}
         </div>
         
-        {isEditing ? (
-          <UserProfileNormal user={user} />
-        ) : (
-          <UserProfileNormal user={user} />
-        )}
+        <div className='flex-1 w-full'>
+          {isEditing ? (
+            <BasicProfileEditing 
+              user={user} 
+              onUserUpdate={setEditingUser}
+              onSave={handleSaveChanges}
+              onCancel={() => {
+                setIsEditing(false);
+                setProfileImageUrl(user.imagePath || null);
+                setSelectedImage(null);
+                setEditingUser({});
+              }}
+            />
+          ) : (
+            <BasicProfileNormal user={user} />
+          )}
+        </div>
       </div>
 
       {/* Option Button Dropdown */}
-      <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-white shadow p-2">
-        <BsThreeDots className="text-lg"/>
-        <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-white/95 mt-2 font-bold text-textcolor">
-          {!isEditing ? (
-            <>
-              <li>
-                <button 
-                  onClick={async () => {
-                    setIsEditing(true);
-                  }}
-                >
-                  プロフィールを編集
-                </button>
-              </li>
-              <li className="border-t border-gray-100 my-1"></li>
-              <li>
-                <button 
-                  onClick={logout}
-                  className="text-red-700"
-                >
-                  ログアウト
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <button 
-                  onClick={async () => {
-                    await handleSaveChanges();
-                  }}
-                >
-                  変更を保存
-                </button>
-              </li>
-              <li className="border-t border-gray-100 my-1"></li>
-              <li>
-                <button 
-                  onClick={() => {
-                    setIsEditing(false);
-                    setProfileImageUrl(user.imagePath || null);
-                    setSelectedImage(null);
-                  }}
-                >
-                  キャンセル
-                </button>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
+      {!isEditing && (
+        <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-white shadow p-2 cursor-pointer">
+          <BsThreeDots className="text-lg"/>
+          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-white/95 mt-2 font-bold text-textcolor">
+            <li>
+              <button 
+                onClick={async () => {
+                  setIsEditing(true);
+                }}
+              >
+                プロフィールを編集
+              </button>
+            </li>
+            <li className="border-t border-gray-100 my-1"></li>
+            <li>
+              <button 
+                onClick={logout}
+                className="text-red-700"
+              >
+                ログアウト
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

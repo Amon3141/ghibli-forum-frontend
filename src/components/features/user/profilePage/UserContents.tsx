@@ -22,7 +22,7 @@ export default function UserContents({ user }: UserContentsProps) {
 
   return (
     <div className="w-full">
-      <div className="flex border-b border-gray-200 space-x-4">
+      <div className="flex border-b border-gray-200 space-x-4 text-sm">
         <button
           className={`${tabButtonStyle} ${activeTab === 'comments' ? activeTabButtonStyle : inactiveTabButtonStyle}`}
           onClick={() => setActiveTab('comments')}

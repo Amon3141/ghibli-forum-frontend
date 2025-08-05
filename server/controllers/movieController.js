@@ -7,9 +7,6 @@ const movieModel = require('../models/movieModel');
 
 /**
  * Get all movies
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
  * @returns {Promise<void>} - Returns JSON array of all movies
  * @throws {Error} Database error
  */
@@ -24,11 +21,6 @@ async function getAllMovies(req, res) {
 
 /**
  * Get a movie by its ID
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Movie ID
  * @returns {Promise<void>} - Returns JSON of the requested movie or 404
  * @throws {Error} Database error or movie not found
  */
@@ -47,14 +39,6 @@ async function getMovieById(req, res) {
 
 /**
  * Create a new movie
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.body - Request body
- * @param {string} req.body.title - Movie title
- * @param {string} req.body.director - Movie director
- * @param {string} req.body.releaseDate - Movie release date (YYYY-MM-DD)
- * @param {string} [req.body.imagePath] - Movie image path
  * @returns {Promise<void>} - Returns JSON of the created movie
  * @throws {Error} Database error or validation error
  */
@@ -90,16 +74,6 @@ async function postMovie(req, res) {
 
 /**
  * Update an existing movie
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Movie ID
- * @param {Object} req.body - Request body
- * @param {string} [req.body.title] - Updated movie title
- * @param {string} [req.body.director] - Updated movie director
- * @param {string} [req.body.releaseDate] - Updated release date (YYYY-MM-DD)
- * @param {string} [req.body.imagePath] - Updated image path
  * @returns {Promise<void>} - Returns JSON of the updated movie
  * @throws {Error} Database error, movie not found, or validation error
  */
@@ -153,11 +127,6 @@ function validateDate(releaseDate) {
 
 /**
  * Delete a movie
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Movie ID
  * @returns {Promise<void>} - Returns 204 No Content on success
  * @throws {Error} Database error or movie not found
  */

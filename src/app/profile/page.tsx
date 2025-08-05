@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { isScreenSmOrLarger } from '@/utils/screenSize';
 
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
@@ -12,29 +13,42 @@ export default function PrivateProfilePageClient() {
   const { user, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
+  const [showEditingHeader, setShowEditingHeader] = useState(false);
   const [showMainContent, setShowMainContent] = useState(true);
   const prevIsEditing = useRef(isEditing);
-  const headerTransitionDuration = 1000;
+  const headerTransitionDuration = 100;
   const mainContentTransitionDuration = 100;
 
   const handleMainContentTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     if (isEditing && e.propertyName == 'opacity') {
       setShowHeaderInCenter(true);
+      if (!isScreenSmOrLarger()) { // for mobile
+        setShowEditingHeader(true);
+      }
     }
   }
 
   const handleHeaderTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (!isEditing && e.propertyName == 'translate') {
-      setShowMainContent(true);
+    if (!isScreenSmOrLarger()) return;
+    if (e.propertyName == 'translate') {
+      if (isEditing) { // enter editing mode
+        setShowEditingHeader(true);
+      } else { // exit editing mode
+        setShowMainContent(true);
+      }
     }
   }
 
   useEffect(() => {
     if (prevIsEditing.current !== isEditing) {
-      if (isEditing) {
+      if (isEditing) { // enter editing mode
         setShowMainContent(false);
-      } else {
+      } else { // exit editing mode
         setShowHeaderInCenter(false);
+        setShowEditingHeader(false);
+        if (!isScreenSmOrLarger()) { // for mobile
+          setShowMainContent(true);
+        }
       }
       prevIsEditing.current = isEditing;
     }
@@ -64,14 +78,16 @@ export default function PrivateProfilePageClient() {
       <div 
         className={`
           transition-all ease-in-out
-          ${showHeaderInCenter ? 'translate-y-[calc(30vh-50%)]' : 'translate-y-0'}
+          ${showHeaderInCenter ? 'translate-y-0 sm:translate-y-[calc(30vh-50%)]' : 'translate-y-0'}
         `}
         style={{ transitionDuration: `${headerTransitionDuration}ms` }}
         onTransitionEnd={handleHeaderTransitionEnd}
       >
         <ProfileHeader
           user={user}
-          isEditing={isEditing && showHeaderInCenter} 
+          isEditing={isEditing && showHeaderInCenter}
+          // showEditingHeader: switch to editing UI after translation is done
+          // showHeaderInCenter: switch to editing UI when translation begins
           setIsEditing={setIsEditing}
           transitionDuration={headerTransitionDuration}
         />

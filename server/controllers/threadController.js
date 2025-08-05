@@ -8,9 +8,6 @@ const reactionController = require('./reactionController');
 
 /**
  * Get all threads
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
  * @returns {Promise<void>} - Returns JSON array of all threads
  * @throws {Error} Database error
  */
@@ -25,11 +22,6 @@ async function getAllThreads(req, res) {
 
 /**
  * Get a thread by its ID
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Thread ID
  * @returns {Promise<void>} - Returns JSON of the requested thread or 404
  * @throws {Error} Database error or thread not found
  */
@@ -48,11 +40,6 @@ async function getThreadById(req, res) {
 
 /**
  * Get all threads by a specific user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - User ID
  * @returns {Promise<void>} - Returns JSON array of threads
  * @throws {Error} Database error
  */
@@ -68,11 +55,6 @@ async function getThreadsByUser(req, res) {
 
 /**
  * Get all threads for a specific movie
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Movie ID
  * @returns {Promise<void>} - Returns JSON array of threads
  * @throws {Error} Database error
  */
@@ -88,14 +70,6 @@ async function getThreadsByMovie(req, res) {
 
 /**
  * Create a new thread
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.body - Request body
- * @param {string} req.body.title - Thread title
- * @param {string} req.body.description - Thread description
- * @param {number} req.body.movieId - Associated movie ID
- * @param {number} req.body.creatorId - Creator's user ID
  * @returns {Promise<void>} - Returns JSON of the created thread
  * @throws {Error} Database error or validation error
  */
@@ -122,14 +96,6 @@ async function postThread(req, res) {
 
 /**
  * Update an existing thread
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Thread ID
- * @param {Object} req.body - Request body
- * @param {string} [req.body.title] - Updated title
- * @param {string} [req.body.description] - Updated description
  * @returns {Promise<void>} - Returns JSON of the updated thread
  * @throws {Error} Database error or thread not found
  */
@@ -153,11 +119,6 @@ async function putThread(req, res) {
 
 /**
  * Delete a thread
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Thread ID
  * @returns {Promise<void>} - Returns 204 No Content on success
  * @throws {Error} Database error or thread not found
  */

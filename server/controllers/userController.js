@@ -9,11 +9,6 @@ const userModel = require('../models/userModel');
 
 /**
  * Get a user by their public userId
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.userId - Public userId (string)
  * @returns {Promise<void>} - Returns JSON of the requested user or 404
  * @throws {Error} Database error or user not found
  */
@@ -33,14 +28,6 @@ async function getUserByUserId(req, res) {
 
 /**
  * Create a new user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.body - Request body
- * @param {string} req.body.userId - Public userId (string)
- * @param {string} req.body.username - Username
- * @param {string} req.body.password - Password (will be hashed)
- * @param {string} req.body.email - User's email
  * @returns {Promise<void>} - Returns JSON of the created user
  * @throws {Error} Database error or validation error
  */
@@ -68,9 +55,6 @@ async function postUser(req, res) {
 
 /**
  * Get the current user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
  * @returns {Promise<void>} - Returns JSON of the current user
  */
 const getCurrentUser = async (req, res) => {
@@ -83,33 +67,13 @@ const getCurrentUser = async (req, res) => {
 
 /**
  * Update an existing user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * 
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Database ID (numeric)
- * 
- * @param {Object} req.body - Request body
- * @param {string} [req.body.username] - Updated username
- * @param {string} [req.body.password] - Updated password
- * @param {string} [req.body.email] - Updated email
- * @param {boolean} [req.body.isAdmin] - Updated admin status
- * @param {string} [req.body.imagePath] - Updated image path
- * 
  * @returns {Promise<void>} - Returns JSON of the updated user
  * @throws {Error} Database error, user not found, or validation error
  */
 async function putCurrentUser(req, res) {
   try {
-    const { username, password, email, isAdmin, imagePath } = req.body;
-    const updatedUser = await userModel.updateUser(req.user.id, {
-      username,
-      password,
-      email,
-      isAdmin,
-      imagePath
-    });
+    const updateInfo = req.body;
+    const updatedUser = await userModel.updateUser(req.user.id, updateInfo);
     res.json(updatedUser);
   } catch (error) {
     if (error.code === 'P2025') {
@@ -125,11 +89,6 @@ async function putCurrentUser(req, res) {
 
 /**
  * Delete a user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Database ID (numeric)
  * @returns {Promise<void>} - Returns 204 No Content on success
  * @throws {Error} Database error or user not found
  */
@@ -152,9 +111,6 @@ async function deleteCurrentUser(req, res) {
 
 /**
  * Get all users (for admin use only)
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
  * @returns {Promise<void>} - Returns JSON of all users
  */
 async function getAllUsers(req, res) {
@@ -168,11 +124,6 @@ async function getAllUsers(req, res) {
 
 /**
  * Get a user by their database ID (for admin use only)
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Database ID (numeric)
  * @returns {Promise<void>} - Returns JSON of the requested user or 404
  * @throws {Error} Database error or user not found
  */

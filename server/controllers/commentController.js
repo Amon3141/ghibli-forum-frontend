@@ -7,11 +7,6 @@ const commentModel = require('../models/commentModel');
 const reactionController = require('./reactionController');
 /**
  * Get all comments for a thread
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Thread ID
  * @returns {Promise<void>} - Returns JSON array of comments
  * @throws {Error} Database error
  */
@@ -27,11 +22,6 @@ async function getCommentsByThread(req, res) {
 
 /**
  * Get all replies for a comment
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Comment ID
  * @returns {Promise<void>} - Returns JSON array of replies
  * @throws {Error} Database error
  */
@@ -47,11 +37,6 @@ async function getRepliesByComment(req, res) {
 
 /**
  * Get a specific comment by ID
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Comment ID
  * @returns {Promise<void>} - Returns JSON of the requested comment or 404
  * @throws {Error} Database error or comment not found
  */
@@ -70,11 +55,6 @@ async function getCommentById(req, res) {
 
 /**
  * Get all comments by a specific user
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - User ID
  * @returns {Promise<void>} - Returns JSON array of comments
  * @throws {Error} Database error
  */
@@ -90,15 +70,6 @@ async function getCommentsByUser(req, res) {
 
 /**
  * Create a new comment
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.body - Request body
- * @param {string} req.body.content - Comment content
- * @param {number} req.body.threadId - Associated thread ID
- * @param {number} req.body.authorId - Author's user ID
- * @param {number} [req.body.parentId] - Parent comment ID (for replies)
- * @param {number} [req.body.replyToId] - ID of the comment being replied to
  * @returns {Promise<void>} - Returns JSON of the created comment
  * @throws {Error} Database error or validation error
  */
@@ -125,13 +96,6 @@ async function postComment(req, res) {
 
 /**
  * Update an existing comment
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Comment ID
- * @param {Object} req.body - Request body
- * @param {string} req.body.content - Updated content
  * @returns {Promise<void>} - Returns JSON of the updated comment
  * @throws {Error} Database error or comment not found
  */
@@ -151,11 +115,6 @@ async function putComment(req, res) {
 
 /**
  * Delete a comment
- * @async
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- * @param {Object} req.params - URL parameters
- * @param {string} req.params.id - Comment ID
  * @returns {Promise<void>} - Returns 204 No Content on success
  * @throws {Error} Database error or comment not found
  */
