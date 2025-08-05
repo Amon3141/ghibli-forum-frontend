@@ -24,7 +24,7 @@ export default function GeneralButton({
 
   return (
     <button className={`
-      text-xs sm:text-sm
+      small-text
       py-1.5 sm:py-1.5 px-3 sm:px-3.5 box-border rounded
       border-1 hover:cursor-pointer
       transition-all duration-200
@@ -36,3 +36,4 @@ export default function GeneralButton({
     >{children}</button>
   );
 }
+

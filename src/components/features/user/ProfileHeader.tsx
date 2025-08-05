@@ -1,10 +1,17 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { User } from '@/types/database/user';
 import { useEffect, useState } from 'react';
-import useFileUpload from '@/hook/useImageUpload';
+import Image from 'next/image';
 import { api } from '@/utils/api';
-import { MdOutlineAddAPhoto } from "react-icons/md";
+import { User } from '@/types/database/user';
+
+import { useAuth } from '@/contexts/AuthContext';
+import useFileUpload from '@/hook/useImageUpload';
+
 import GeneralButton from '@/components/ui/GeneralButton';
+import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
+import ProfileItemCard, { ItemCardColor } from "@/components/features/user/ProfileItemCard";
+
+import { MdOutlineAddAPhoto } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
 
 interface ProfileHeaderProps {
   user: User;
@@ -19,7 +26,7 @@ export default function ProfileHeader({
   setIsEditing = () => {},
   transitionDuration = 1000
 }: ProfileHeaderProps) {
-  const { logout, setUser } = useAuth();
+  const { logout, setUser, isLoading } = useAuth();
   const { handleUploadFile } = useFileUpload();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(user.imagePath || null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -87,26 +94,28 @@ export default function ProfileHeader({
     if (isEditing && selectedImage) {
       const temporaryImageUrl = URL.createObjectURL(selectedImage);
       return (
-        <img 
-          src={temporaryImageUrl} 
+        <Image 
+          src={temporaryImageUrl}
           alt={user.username}
-          className="w-full h-full bg-gray-200 object-cover"
+          fill
+          className="bg-gray-200 object-contain"
         />
       )
     }
     // 通常時
     if (profileImageUrl && sasToken) {
       return (
-        <img 
+        <Image
           src={`${profileImageUrl}?${sasToken}`} 
           alt={user.username}
-          className="w-full h-full bg-gray-200 object-cover"
+          fill
+          className="bg-gray-200 object-contain"
         />
       )
     }
     return (
-      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-        <span className="text-gray-500 text-3xl">
+      <div className="w-full bg-gray-200 flex items-center justify-center">
+        <span className="w-full h-full text-gray-500 text-3xl">
           {user.username?.[0]?.toUpperCase() ?? '?'}
         </span>
       </div>
@@ -143,87 +152,121 @@ export default function ProfileHeader({
     );
   }
 
-  const optionButtonsNormal = (
-    <div className={`
-      absolute right-0
-      flex flex-col items-end gap-8
-      ${isEditing ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}
-      transition-all duration-${transitionDuration}
-    `}>
-      <GeneralButton
-        className="text-sm"
-        onClick={logout}
-      >
-        ログアウト
-      </GeneralButton>
-
-      <GeneralButton
-      className="text-sm rounded-full"
-        onClick={async () => {
-          setIsEditing(true);
-        }}
-      >
-        プロフィールを編集
-      </GeneralButton>
-    </div>
-  );
-
-  const optionButtonsEditing = (
-    <div className={`
-      absolute right-0
-      flex items-center gap-2
-      ${isEditing ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-      transition-all duration-${transitionDuration}
-    `}>
-      <GeneralButton
-        className="text-sm rounded-full"
-        onClick={async () => {
-          await handleSaveChanges();
-        }}
-      >
-        変更を保存
-      </GeneralButton>
-      <GeneralButton
-        className="text-sm rounded-full"
-        onClick={() => {
-          setIsEditing(false);
-          setProfileImageUrl(user.imagePath || null);
-          setSelectedImage(null);
-        }}
-      >
-        キャンセル
-      </GeneralButton>
-    </div>
-  );
-
   return (
-    <div className="flex items-center justify-between relative">
-      <div className="flex items-center gap-5">
-        <div className="w-23 h-23 rounded-full bg-gray-200 overflow-hidden relative">
+    <div>
+      <div className="flex items-center gap-6">
+        {/* Profile Image */}
+        <div className="
+          flex-shrink-0 w-25 h-25 sm:w-33 sm:h-33
+          rounded-full bg-gray-200 overflow-hidden relative
+        ">
           {profileImageIcon()}
           {selectImageOverlay()}
         </div>
-        <div className="flex flex-col items-start gap-1">
-          <div className="flex items-end gap-2">
-            <p className="text-3xl">{user.username ?? '無名さん'}</p>
-            {user.isAdmin && (
-              <div className="
-                px-1.5 py-0.5 mb-1.25 rounded-sm
-                text-[0.7rem] text-white bg-textcolor/85
-                flex items-center justify-center
-              ">管理者</div>
+        {/* User Basic Info */}
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex items-center gap-4">
+            {/* Username */}
+            <div className="flex flex-col gap-0.5 sm:gap-1">
+              <div className="flex items-end gap-2">
+                <p className="text-2xl sm:text-3xl">{user.username ?? '無名さん'}</p>
+                {user.isAdmin && (
+                  <div className="
+                    px-1 sm:px-1.5 py-0.5 mb-1.25 rounded-sm
+                    text-[0.6rem] sm:text-[0.7rem] text-white bg-textcolor/85 whitespace-nowrap
+                    flex items-center justify-center
+                  ">管理者</div>
+                )}
+              </div>
+              <p className="text-textcolor/80 small-text">@{user.userId ?? '不明'}</p>
+            </div>
+
+            {/* Favourites */}
+            {(user.favoriteCharacter || user.favoriteMovie) && (
+              <div className="flex gap-2">
+                {user.favoriteMovie && (
+                  <ProfileItemCard
+                    title = "好きな作品"
+                    item = {user.favoriteMovie.title}
+                    itemUrl = {`/movies/${user.favoriteMovie.id}`}
+                    itemCardColor = {ItemCardColor.Amber}
+                  />
+                )}
+
+                {user.favoriteCharacter && (
+                  <ProfileItemCard
+                    title = "好きなキャラクター"
+                    item = {user.favoriteCharacter}
+                    itemCardColor = {ItemCardColor.Orange}
+                  />
+                )}
+              </div>
             )}
           </div>
-          <p className="text-textcolor/80 text-sm">@{user.userId ?? '不明'}</p>
+
+          {/* Bio */}
+          {user.bio && (
+            <p className="text-textcolor/90 small-text leading-relaxed">
+              {user.bio}
+            </p>
+          )}
         </div>
       </div>
-      
-      {isEditing !== null &&
-        <>
-          {optionButtonsNormal}
-          {optionButtonsEditing}
-        </>
-      }
+
+      {/* DaisyUI Dropdown */}
+      {isEditing !== null && (
+        <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-white shadow p-2">
+          <BsThreeDots className="text-lg"/>
+          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-white/95 mt-2 font-bold text-textcolor">
+            {!isEditing ? (
+              <>
+                <li>
+                  <button 
+                    onClick={async () => {
+                      setIsEditing(true);
+                    }}
+                  >
+                    プロフィールを編集
+                  </button>
+                </li>
+                <li className="border-t border-gray-100 my-1"></li>
+                <li>
+                  <button 
+                    onClick={logout}
+                    className="text-red-700"
+                  >
+                    ログアウト
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <button 
+                    onClick={async () => {
+                      await handleSaveChanges();
+                    }}
+                  >
+                    変更を保存
+                  </button>
+                </li>
+                <li className="border-t border-gray-100 my-1"></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      setIsEditing(false);
+                      setProfileImageUrl(user.imagePath || null);
+                      setSelectedImage(null);
+                    }}
+                  >
+                    キャンセル
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

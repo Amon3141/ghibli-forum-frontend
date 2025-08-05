@@ -19,9 +19,9 @@ export default function Header() {
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between gap-1">
-        <Link className="font-bold text-lg sm:text-xl tracking-wide" href="/">風の谷の集い</Link>
+        <Link className="font-bold text-lg sm:text-xl tracking-wide" href="/">ジブリ掲示板</Link>
         <nav className={`
-          ${user ? 'gap-4 sm:gap-6' : 'gap-2 sm:gap-4'}
+          ${user ? 'gap-5 sm:gap-6' : 'gap-3 sm:gap-4'}
           font-bold flex items-center justify-end
         `}>
           {/* <Link className={pathname === '/' ? styles.nav_link_selected : styles.nav_link} href="/"> */}
@@ -36,7 +36,7 @@ export default function Header() {
             <Link href="/profile">
               <ProfileIcon
                 user={user}
-                size={window.innerWidth < 640 ? 32 : 40}
+                size={40}
                 className={`
                   ${pathname.startsWith('/profile') ? 'outline-2 outline-primary-dark/85' : ''}
                 `}

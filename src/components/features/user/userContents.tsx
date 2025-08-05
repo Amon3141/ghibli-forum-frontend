@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import UserComments from './userComments';
-import UserLikes from './userLikes';
+import UserComments from './UserComments';
+import UserLikes from './UserLikes';
 import { User } from '@/types/database/user';
 
 interface UserContentsProps {

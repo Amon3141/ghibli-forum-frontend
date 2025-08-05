@@ -34,8 +34,10 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
       }
     };
 
-    fetchComments();
-  }, [user.userId]);
+    if (user.id) {
+      fetchComments();
+    }
+  }, [user.id, commentType]);
 
   if (error) {
     return <p className="text-red-500">{error}</p>;

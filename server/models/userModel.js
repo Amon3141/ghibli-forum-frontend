@@ -17,7 +17,10 @@ const secureSelection = {
   username: true,
   email: true,
   isAdmin: true,
-  imagePath: true
+  imagePath: true,
+  bio: true,
+  favoriteCharacter: true,
+  favoriteMovie: true
 };
 
 /**

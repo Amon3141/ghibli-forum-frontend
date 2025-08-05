@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 import InputField from '@/components/ui/InputField';
-import GeneralButton from '@/components/ui/GeneralButton';
+import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
 import MessageBox from '@/components/ui/MessageBox';
 import { MessageBoxType } from '@/types/MessageBoxType';
 
@@ -17,7 +17,7 @@ export default function LoginForm() {
   const [loginError, setLoginError] = useState<string>("");
 
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -67,11 +67,16 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={handleGoToRegister}
-            className="text-xs sm:text-sm text-indigo-500 underline hover:text-indigo-700"
+            className="small-text text-indigo-500 underline hover:text-indigo-700"
           >
             アカウント作成
           </button>
-          <GeneralButton type="submit" onClick={()=>{}}>ログイン</GeneralButton>
+          <GeneralAsyncButton
+            type="submit"
+            mainText="ログイン"
+            loadingText="ログイン中..."
+            isLoading={isLoading}
+          />
         </div>
       </form>
       {loginError && <MessageBox type={MessageBoxType.ERROR} message={loginError} />}

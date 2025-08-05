@@ -18,9 +18,9 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
     return '/';
   }
   return (
-    <div className="p-4 bg-white rounded-md shadow-sm">
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-gray-500 text-sm">
+    <div className="px-3 sm:px-4 pt-3 pb-4 sm:pb-5 bg-white rounded-md shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-gray-500 small-text">
           <Link
             href={getThreadUrlFromComment(comment)}
             className="underline-link"
@@ -28,7 +28,7 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
             @{comment.thread?.title || '無効なスレッドURL'}
           </Link>
           {comment.parent && (
-            <span className="text-sm text-textcolor/90 font-bold"> (返信先: {comment.parent?.author?.username} @{comment.parent?.author?.userId})</span>
+            <span className="small-text text-textcolor/90 font-bold"> (返信先: {comment.parent?.author?.username} @{comment.parent?.author?.userId})</span>
           )}
         </p>
         <p className="text-xs text-gray-400">
@@ -39,7 +39,7 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
         <ProfileIcon user={comment.author ?? null} size={38} className="mt-0.5" />
         <div>
           <UsernameInline user={comment.author} />
-          <p>{comment.content}</p>
+          <p className="small-text">{comment.content}</p>
         </div>
       </div>
     </div>

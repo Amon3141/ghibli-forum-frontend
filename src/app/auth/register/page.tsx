@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 import InputField from '@/components/ui/InputField';
-import GeneralButton from '@/components/ui/GeneralButton';
+import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
 import MessageBox from '@/components/ui/MessageBox';
 import { MessageBoxType } from '@/types/MessageBoxType';
 
@@ -21,7 +21,7 @@ export default function RegisterForm() {
   const [registerError, setRegisterError] = useState<string>("");
 
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, isLoading } = useAuth();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,11 +98,16 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={handleGoToLogin}
-            className="text-xs sm:text-sm text-indigo-500 underline hover:text-indigo-700"
+            className="small-text text-indigo-500 underline hover:text-indigo-700"
           >
             すでにアカウントをお持ちですか？
           </button>
-          <GeneralButton type="submit">登録</GeneralButton>
+          <GeneralAsyncButton
+            type="submit"
+            mainText="登録"
+            loadingText="登録中..."
+            isLoading={isLoading}
+          />
         </div>
       </form>
       {registerError && <MessageBox type={MessageBoxType.ERROR} message={registerError} />}

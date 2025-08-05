@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import ProfileHeader from '@/components/features/user/ProfileHeader';
-import UserContents from '@/components/features/user/userContents';
+import UserContents from '@/components/features/user/UserContents';
 
 export default function PrivateProfilePageClient() {
   const { user, isLoading } = useAuth();
@@ -60,7 +60,7 @@ export default function PrivateProfilePageClient() {
   }
 
   return (
-    <div className="flex flex-col w-full h-full py-6 px-8">
+    <div className="flex flex-col w-full h-full py-3 px-2">
       <div 
         className={`
           transition-all ease-in-out
