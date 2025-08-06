@@ -4,8 +4,8 @@ import Header from "@/components/layouts/Header/Header";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "風の谷の集い",
-  description: "ジブリフォーラム",
+  title: "ジブリ掲示板",
+  description: "ジブリ掲示板",
 };
 
 export default function RootLayout({
