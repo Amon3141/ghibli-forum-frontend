@@ -24,7 +24,7 @@ export default function ProfileItemCard(props: ProfileItemCardProps) {
     }
   }
   return (
-    <div className={`flex flex-col ${getItemCardColor(props.itemCardColor)} border border-stone-200/60 rounded-lg gap-0.5 shadow-xs px-1.5 sm:px-2 pb-1 min-w-[80px] sm:min-w-[100px]`}>
+    <div className={`flex flex-col ${getItemCardColor(props.itemCardColor)} border border-stone-200/60 rounded-lg gap-0.5 shadow-xs px-2 pb-1.5 min-w-[80px] sm:min-w-[100px]`}>
       <div className="flex items-center pt-1">
         <div className="text-stone-500 text-[0.5rem] sm:text-[0.6rem] font-bold whitespace-nowrap">{props.title}</div>
       </div>

@@ -21,7 +21,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Yomogi&family=Sawarabi+Mincho&family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
       </head>
       <AuthProvider>
-        <body className="h-full flex flex-col relative">
+        <body
+          className="h-full flex flex-col relative"
+          suppressHydrationWarning={true}
+        >
           <Header />
           <main className="
             flex-1

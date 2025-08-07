@@ -21,15 +21,17 @@ interface BasicProfileEditingProps {
 export default function BasicProfileEditing({
   user, onUserUpdate, onSave, onCancel
 }: BasicProfileEditingProps) {
+  const bioMaxLength = 200;
   const defaultFormData = {
     username: user.username || '',
     bio: user.bio || '',
     favoriteCharacter: user.favoriteCharacter || '',
-    favoriteMovieId: user.favoriteMovieId || undefined
+    favoriteMovieId: user.favoriteMovie?.id || undefined
   }
 
   const [formData, setFormData] = useState(defaultFormData);
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setFormData(defaultFormData);
@@ -48,11 +50,6 @@ export default function BasicProfileEditing({
   }, []);
 
   const handleInputChange = (field: string, value: string) => {
-    // For bio field, limit to 200 characters
-    if (field === 'bio' && value.length > 200) {
-      return;
-    }
-    
     const updatedData = { ...formData, [field]: value };
     setFormData(updatedData);
     onUserUpdate?.(updatedData);
@@ -63,6 +60,16 @@ export default function BasicProfileEditing({
     setFormData(updatedData);
     onUserUpdate?.(updatedData);
   };
+
+  const handleSaveEdit = async () => {
+    console.log("clicked");
+    setIsSaving(true);
+    if (formData.bio.length > bioMaxLength) {
+      return;
+    }
+    await onSave?.();
+    setIsSaving(false);
+  }
 
   return (
     <div className="flex flex-col items-start gap-3">
@@ -85,7 +92,13 @@ export default function BasicProfileEditing({
             プロフィール文
           </label>
           <span className="small-text">
-            <span className={`${formData.bio.length > 160 ? 'text-red-700' : 'text-textcolor/60'} mr-0.5`}>{formData.bio.length}</span>/160
+            <span className={`
+              ${formData.bio.length > bioMaxLength ? 'text-red-700' : 'text-textcolor/60'} mr-0.5
+            `}>
+              {formData.bio.length}
+            </span>
+            /
+            <span className="ml-0.5">{bioMaxLength}</span>
           </span>
         </div>
         <textarea
@@ -95,14 +108,19 @@ export default function BasicProfileEditing({
           className="
             w-full resize-none rounded-md
             border-1 border-gray-300 bg-gray-50
-            text-textcolor/90 small-text leading-relaxed 
-            py-1.5 sm:py-2 px-2 sm:px-3
+            small-text leading-relaxed 
+            py-1.5 sm:py-2 px-2 sm:px-2.5
             focus:outline-none focus:ring-0
             block
           "
           rows={3}
-          maxLength={200}
+          maxLength={bioMaxLength + 50}
         />
+        {formData.bio.length > bioMaxLength && (
+          <div className="text-right text-xs text-textcolor/80 mt-1">
+            プロフィール文が長すぎます
+          </div>
+        )}
       </div>
 
       {/* Favorite Character Input */}
@@ -146,7 +164,15 @@ export default function BasicProfileEditing({
         <GeneralButton onClick={onCancel}>
           キャンセル
         </GeneralButton>
-        <GeneralButton color="primary" onClick={onSave} className="bg-primary/80 border-primary/80">
+        <GeneralButton 
+          color="primary" 
+          onClick={handleSaveEdit} 
+          disabled={formData.bio?.length > bioMaxLength}
+          className={`
+            bg-primary/80 border-primary/80
+            ${formData.bio?.length > bioMaxLength ? 'opacity-60 cursor-not-allowed' : ''}
+          `}
+        >
           変更を保存
         </GeneralButton>
       </div>

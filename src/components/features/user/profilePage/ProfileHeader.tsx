@@ -8,6 +8,7 @@ import useFileUpload from '@/hook/useImageUpload';
 
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import BasicProfileNormal from './BasicProfileNormal';
 import BasicProfileEditing from './BasicProfileEditing';
 import ProfileItemCard, { ItemCardColor } from './ProfileItemCard';
@@ -31,6 +32,7 @@ export default function ProfileHeader({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);
   const [editingUser, setEditingUser] = useState<Partial<User>>({});
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const profileImageType = ['image/png', 'image/jpeg', 'image/jpg'];
 
@@ -97,6 +99,7 @@ export default function ProfileHeader({
           src={temporaryImageUrl}
           alt={user.username}
           fill
+          sizes="100vw"
           className="bg-gray-200 object-contain"
         />
       )
@@ -108,6 +111,7 @@ export default function ProfileHeader({
           src={`${profileImageUrl}?${sasToken}`} 
           alt={user.username}
           fill
+          sizes="100vw"
           className="bg-gray-200 object-contain"
         />
       )
@@ -134,15 +138,26 @@ export default function ProfileHeader({
           cursor-pointer p-2.5 rounded-full
           bg-black/40 hover:bg-black/30 transition-all duration-200
         ">
-          <MdOutlineAddAPhoto className="text-white/95 text-lg" />
+          {isLoadingImage ? (
+            <AiOutlineLoading3Quarters className="text-white/95 text-lg animate-spin" />
+          ) : (
+            <MdOutlineAddAPhoto className="text-white/95 text-lg" />
+          )}
           <input
             type="file"
             className="hidden"
             accept={profileImageType.join(', ')}
+            disabled={isLoadingImage}
             onChange={async (e) => {
               if (e.target.files && e.target.files[0]) {
+                setIsLoadingImage(true);
                 const image = e.target.files[0];
-                setSelectedImage(image);
+                
+                // Small delay to show the loading state
+                setTimeout(() => {
+                  setSelectedImage(image);
+                  setIsLoadingImage(false);
+                }, 2000);
               }
             }}
           />
@@ -153,10 +168,10 @@ export default function ProfileHeader({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-7">
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-7">
         {/* Profile Image */}
         <div className="
-          flex-shrink-0 w-27 h-27 sm:w-30 sm:h-30
+          flex-shrink-0 w-28 h-28 sm:w-30 sm:h-30
           rounded-full bg-gray-200 overflow-hidden relative
         ">
           {profileImageIcon()}
@@ -174,6 +189,7 @@ export default function ProfileHeader({
                 setProfileImageUrl(user.imagePath || null);
                 setSelectedImage(null);
                 setEditingUser({});
+                setIsLoadingImage(false);
               }}
             />
           ) : (
@@ -184,7 +200,7 @@ export default function ProfileHeader({
       
       {/* Favourites */}
       {!isEditing && (
-        <div className="flex gap-2.5 mt-5 sm:mt-7">
+        <div className="flex gap-2.5 mt-4 sm:mt-5 sm:mt-7">
           {user.favoriteMovie && (
             <ProfileItemCard
               title = "好きな作品"
