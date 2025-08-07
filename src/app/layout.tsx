@@ -18,7 +18,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Yomogi&family=Sawarabi+Mincho&family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
       </head>
       <AuthProvider>
         <body className="h-full flex flex-col relative">

@@ -27,28 +27,6 @@ export default function BasicProfileNormal({ user }: BasicProfileNormalProps) {
           </div>
           <p className="text-textcolor/80 small-text">@{user.userId ?? '不明'}</p>
         </div>
-
-        {/* Favourites */}
-        {(user.favoriteCharacter || user.favoriteMovie) && (
-          <div className="flex gap-2">
-            {user.favoriteMovie && (
-              <ProfileItemCard
-                title = "好きな作品"
-                item = {user.favoriteMovie.title}
-                itemUrl = {`/movies/${user.favoriteMovie.id}`}
-                itemCardColor = {ItemCardColor.Amber}
-              />
-            )}
-
-            {user.favoriteCharacter && (
-              <ProfileItemCard
-                title = "好きなキャラクター"
-                item = {user.favoriteCharacter}
-                itemCardColor = {ItemCardColor.Orange}
-              />
-            )}
-          </div>
-        )}
       </div>
 
       {/* Bio */}

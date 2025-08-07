@@ -10,6 +10,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import BasicProfileNormal from './BasicProfileNormal';
 import BasicProfileEditing from './BasicProfileEditing';
+import ProfileItemCard, { ItemCardColor } from './ProfileItemCard';
 
 interface ProfileHeaderProps {
   user: User;
@@ -152,7 +153,7 @@ export default function ProfileHeader({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-8">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-7">
         {/* Profile Image */}
         <div className="
           flex-shrink-0 w-27 h-27 sm:w-30 sm:h-30
@@ -180,6 +181,28 @@ export default function ProfileHeader({
           )}
         </div>
       </div>
+      
+      {/* Favourites */}
+      {!isEditing && (
+        <div className="flex gap-2.5 mt-5 sm:mt-7">
+          {user.favoriteMovie && (
+            <ProfileItemCard
+              title = "好きな作品"
+              item = {user.favoriteMovie.title}
+              itemUrl = {`/movies/${user.favoriteMovie.id}`}
+              itemCardColor = {ItemCardColor.Amber}
+            />
+          )}
+
+          {user.favoriteCharacter && (
+            <ProfileItemCard
+              title = "好きなキャラクター"
+              item = {user.favoriteCharacter}
+              itemCardColor = {ItemCardColor.Orange}
+            />
+          )}
+        </div>
+      )}
 
       {/* Option Button Dropdown */}
       {!isEditing && (
