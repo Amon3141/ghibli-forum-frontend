@@ -5,12 +5,12 @@ import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Comment } from "@/types/database/comment";
 import { FaRegComment } from "react-icons/fa";
+import { useIsSm } from "@/hook/useIsScreenWidth";
 
 import LikeButton from "@/components/features/action/LikeButton";
 import TrashButton from "@/components/features/action/TrashButton";
 import UsernameIcon from "@/components/features/user/UsernameIcon";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 
 interface CommentCardProps {
   comment: Comment,
@@ -22,6 +22,7 @@ interface CommentCardProps {
 export default function CommentCard({
   comment, selectedCommentId, onClickShowReply: handleClickShowReply, onClickTrashButton: handleClickTrashButton
 }: CommentCardProps) {
+  const isSm = useIsSm();
   const { user } = useAuth();
   const [replyCount, setReplyCount] = useState(comment._count?.replies || 0);
   
@@ -54,6 +55,7 @@ export default function CommentCard({
       {comment._count && typeof comment._count.replies === 'number' && comment._count.replies > 0 && (
         <button onClick={handleClickShowReply}>
           <p className="underline-link">
+            {/* {(!isSm && selectedCommentId === comment.id) ? "返信を閉じる" : `${replyCount}件の返信を表示`} */}
             {replyCount}件の返信を表示
           </p>
         </button>
