@@ -45,8 +45,12 @@ export default function PublicProfilePage() {
   }
 
   return (
-    <div className="flex flex-col w-full h-full py-6 px-8 space-y-8">
-      <ProfileHeader user={user} isEditing={false} setIsEditing={() => {}} />
+    <div className="flex flex-col w-full max-w-[1000px] h-full py-6 px-8 space-y-8">
+      <ProfileHeader
+        user={user}
+        isEditing={false}
+        isPublicProfile={true}
+      />
       <UserContents user={user} />
     </div>
   )

@@ -17,7 +17,7 @@ export default function PrivateProfilePageClient() {
   const [showMainContent, setShowMainContent] = useState(true);
   const prevIsEditing = useRef(isEditing);
   const headerTransitionDuration = 100;
-  const mainContentTransitionDuration = 100;
+  const mainContentTransitionDuration = 500;
 
   const handleMainContentTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     if (isEditing && e.propertyName == 'opacity') {
@@ -74,7 +74,7 @@ export default function PrivateProfilePageClient() {
   }
 
   return (
-    <div className="flex flex-col w-full h-full p-3">
+    <div className="flex flex-col w-full max-w-[1000px] h-full p-3">
       <div 
         className={`
           transition-all ease-in-out
@@ -86,8 +86,7 @@ export default function PrivateProfilePageClient() {
         <ProfileHeader
           user={user}
           isEditing={isEditing && showHeaderInCenter}
-          // showEditingHeader: switch to editing UI after translation is done
-          // showHeaderInCenter: switch to editing UI when translation begins
+          isPublicProfile={false}
           setIsEditing={setIsEditing}
           transitionDuration={headerTransitionDuration}
         />

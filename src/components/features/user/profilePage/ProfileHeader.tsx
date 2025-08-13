@@ -16,14 +16,16 @@ import ProfileItemCard, { ItemCardColor } from './ProfileItemCard';
 interface ProfileHeaderProps {
   user: User;
   isEditing: boolean;
-  setIsEditing: (isEditing: boolean) => void;
+  isPublicProfile: boolean;
+  setIsEditing?: (isEditing: boolean) => void;
   transitionDuration?: number;
 }
 
 export default function ProfileHeader({ 
   user,
-  isEditing = false,
-  setIsEditing,
+  isEditing,
+  isPublicProfile,
+  setIsEditing = () => {},
   transitionDuration = 1000
 }: ProfileHeaderProps) {
   const { logout, setUser } = useAuth();
@@ -221,7 +223,7 @@ export default function ProfileHeader({
       )}
 
       {/* Option Button Dropdown */}
-      {!isEditing && (
+      {!isPublicProfile && !isEditing && (
         <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-white shadow p-2 cursor-pointer">
           <BsThreeDots className="text-lg"/>
           <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-white/95 mt-2 font-bold text-textcolor">
