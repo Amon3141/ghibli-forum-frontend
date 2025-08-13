@@ -49,11 +49,10 @@ export default function MovieList({ movies: loadedMovies }: MovieListProps) {
   }, []);
 
   return (
-    <div className="space-y-6 w-full px-2">
+    <div className="space-y-6 w-full">
       {movies.length > 0 && (
         <>
           <div className="space-y-2 sm:space-y-3">
-            <h2 className="text-xl sm:text-2xl font-bold">作品別</h2>
             {fetchMoviesError && (
               <div className="rounded-sm bg-red-100 p-4">
                 <p className="text-textcolor/80">{fetchMoviesError}</p>

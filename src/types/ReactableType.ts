@@ -1,4 +1,4 @@
 export enum ReactableType {
-  COMMENT = "COMMENT",
-  THREAD = "THREAD",
+  Comment = "comment",
+  Thread = "thread",
 }

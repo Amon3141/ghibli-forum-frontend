@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { FaRegComments } from "react-icons/fa6";
 
 import { Thread } from '@/types/database/thread';
+import UsernameInline from '../user/UsernameInline';
 
 interface ThreadCardProps {
   movieId: number,
@@ -15,28 +16,21 @@ export default function ThreadCard({
     <div>
       <Link href={`/movies/${movieId}/threads/${thread.id}`}>
         <div className="
-          clickable-card px-4 py-4 bg-white rounded-lg
-          flex flex-col items-start gap-1.5
+          clickable-card p-3 sm:p-3.5 bg-white rounded-lg
+          flex flex-col items-start gap-1.5 small-text
         ">
           <div className="flex items-center justify-between w-full">
-            <h4 className="text-lg font-bold">{thread.title}</h4>
+            <h4 className="text-base sm:text-lg font-bold">{thread.title}</h4>
             <div className="flex items-center gap-1">
-              <FaRegComments className="text-lg"/>
+              <FaRegComments className="text-sm sm:text-base"/>
               <span>{thread._count?.comments ?? 0}</span>
             </div>
           </div>
-          <p className="flex items-center gap-1 text-sm">
-            <span className="text-sm">投稿者:</span>
-            {thread.creator ? (
-              <span className="flex items-center gap-1">
-                <span className="font-bold text-sm">{thread.creator.username}</span>
-                <span className="text-textcolor/80 text-sm">@{thread.creator.userId}</span>
-              </span>
-            ) : (
-              <span className="font-bold text-sm">無名さん</span>
-            )}
+          <p className="flex items-center gap-1 text-xs">
+            <span>投稿者:</span>
+            <UsernameInline user={thread.creator} textSize="text-xs" />
           </p>
-          <p className="text-sm">{thread.description}</p>
+          <p className="mt-1">{thread.description}</p>
         </div>
       </Link>
     </div>

@@ -76,33 +76,18 @@ export default function MoviePageClient({
   }
   
   return (
-    <div className="min-h-full w-full flex items-center justify-center">
-      {/* Background Image */}
-      {/* {movie && movie.imagePath && (
-        <div className="-z-10">
-          <Image
-            src={movie.imagePath}
-            alt={`${movie?.title} background`}
-            fill
-            className="absolute inset-0 object-cover opacity-30"
-            priority
-          />
-          <div className="absolute inset-0 bg-white/75"></div>
-        </div>
-      )} */}
-
-      {/* Content */}
-      <div className="w-full h-full">
-        <div className="space-y-3">
-          {createThreadMessage && (
-            <div className="rounded-sm bg-green-100 p-4">
-              <p className="text-textcolor/80">{createThreadMessage}</p>
-            </div>
-          )}
-        </div>
-        <div className="space-y-3 px-2">
-          <div className="flex items-center gap-6">
-            <h3 className="text-2xl font-bold py-1">{movie && movie.title && `${movie.title}の`}スレッド</h3>
+    <div className="min-h-full w-full max-w-[1000px]">
+      <div className="space-y-6">
+        {createThreadMessage && (
+          <div className="rounded-sm bg-green-100 p-4">
+            <p className="text-textcolor/80">{createThreadMessage}</p>
+          </div>
+        )}
+      </div>
+      <div className="space-y-6 sm:space-y-8 px-2 my-1">
+        <div className="flex flex-col gap-1">
+          <div className="flex-col sm:flex-row items-start sm:items-center">
+            <h3 className="text-lg sm:text-xl font-bold py-2 sm:py-3">{movie && movie.title && `${movie.title}の`}スレッド</h3>
             {!showThreadForm && (
               <GeneralButton
                 onClick={() => {
@@ -110,19 +95,23 @@ export default function MoviePageClient({
                   setCreateThreadMessage(null);
                 }}
                 color="primary"
+                className="mt-1"
               >
                 <span>  + スレッドを作成</span>
               </GeneralButton>
             )}
           </div>
           {showThreadForm && (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              handleCreateThread();
-            }} className="
-              bg-gray-50 rounded-md border-1 border-gray-200 w-2/3 p-5 space-y-3
-            ">
-              <h3 className="text-xl font-bold text-textcolor/90">新しいスレッドを作成</h3>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreateThread();
+              }}
+              className="
+                bg-gray-50 rounded-md border-1 border-gray-200 w-2/3 p-3 sm:p-4 space-y-3
+              "
+            >
+              <h3 className="text-base sm:text-lg font-bold text-textcolor/90">新しいスレッドを作成</h3>
               <div className="flex flex-col items-start space-y-3 mb-4">
                 <InputField
                   value={newThread.title}
@@ -146,6 +135,8 @@ export default function MoviePageClient({
               )}
             </form>
           )}
+        </div>
+        <div className="space-y-3">
           {threads.map((thread) => (
             <ThreadCard
               key={thread.id}

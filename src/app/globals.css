@@ -38,7 +38,7 @@
     @apply text-textcolor;
   }
 
-  button {
+  button:not([disabled]):not(.disabled) {
     @apply cursor-pointer;
   }
 
@@ -73,5 +73,13 @@
 @layer utilities {
   .small-text {
     @apply text-xs sm:text-sm
+  }
+
+  .popup-element {
+    @apply hover:scale-110 transition-all duration-200;
+  }
+
+  .popup-element-small {
+    @apply hover:scale-105 transition-all duration-200;
   }
 }

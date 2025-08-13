@@ -2,12 +2,13 @@ interface GeneralButtonProps {
   children: React.ReactNode,
   color?: 'default' | 'primary' | 'delete'
   onClick?: () => void,
+  disabled?: boolean,
   className?: string,
   [key: string]: any
 }
 
 export default function GeneralButton({
-  onClick: clickHandler, children, className = "", color = 'default', ...rest
+  onClick: clickHandler, disabled, children, className = "", color = 'default', ...rest
 }: GeneralButtonProps) {
   let buttonStyle: string;
   switch (color) {
@@ -23,16 +24,21 @@ export default function GeneralButton({
   }
 
   return (
-    <button className={`
-      small-text box-border rounded border-1
-      py-1.5 sm:py-1.5 px-3 sm:px-3.5
-      transition-all duration-200
-      ${buttonStyle}
-      ${className}
-    `}
-      {...rest}
+    <button
+      disabled={disabled}
+      className={`
+        small-text box-border rounded border-1
+        py-1.5 sm:py-1.5 px-3 sm:px-3.5
+        transition-all duration-200
+        ${!disabled ? "popup-element-small" : ""}
+        ${buttonStyle}
+        ${className}
+      `}
       onClick={clickHandler}
-    >{children}</button>
+      {...rest}
+    >
+      {children}
+    </button>
   );
 }
 

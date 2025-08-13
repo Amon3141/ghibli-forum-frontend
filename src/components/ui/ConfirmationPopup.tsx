@@ -26,7 +26,7 @@ export default function ConfirmationPopup({
     <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
       <p className="text-lg mb-3">{confirmMessage}</p>
       {processError && (
-        <MessageBox type={MessageBoxType.ERROR} message={processError} />
+        <MessageBox type={MessageBoxType.Error} message={processError} />
       )}
       <div className="flex justify-end gap-4 mt-3">
         <GeneralButton

@@ -11,7 +11,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import MessageBox from "@/components/ui/MessageBox";
 import { MessageBoxType } from "@/types/MessageBoxType";
 import { LoadedDataForThreadPage } from '@/types/loadedData';
-import RepliesBox from "@/components/features/post/RepliesBox";
+import RepliesBox, { RepliesBoxType } from "@/components/features/post/RepliesBox";
 import CommentsBox from "@/components/features/post/CommentsBox";
 
 import { FaComment } from "react-icons/fa6";
@@ -72,18 +72,18 @@ export default function ThreadPageClient({
 
     if (initialData.comments.data && initialData.comments.data.length > 0) {
       setComments(initialData.comments.data);
-      setSelectedCommentId(initialData.comments.data[0].id);
+      handleChangeSelectedComment(initialData.comments.data[0].id);
     } else if (initialData.comments.error) {
       setFetchCommentsError(initialData.comments.error);
     }
     setIsFetchingComments(false);
   };
 
-  const handleChangeSelectedComment = (commentId: number) => {
-    if (!isFetchingReplies) {
+  const handleChangeSelectedComment = (newCommentId: number) => {
+    if (!isFetchingReplies && newCommentId !== selectedCommentId) {
       setFetchRepliesError(null);
-      fetchReplies(commentId);
-      setSelectedCommentId(commentId);
+      fetchReplies(newCommentId);
+      setSelectedCommentId(newCommentId);
     }
   }
 
@@ -110,7 +110,6 @@ export default function ThreadPageClient({
       setIsFetchingReplies(false);
       return response.data;
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'コメント取得時にエラーが発生しました', err);
       setFetchCommentsError(err.response?.data?.error || 'コメント取得時にエラーが発生しました');
       setIsFetchingComments(false);
     }
@@ -123,7 +122,6 @@ export default function ThreadPageClient({
       const response = await api.get(`/comments/${commentId}/replies`);
       setReplies(response.data);
     } catch (err: any) {
-      console.error(err.response?.data?.error || '返信取得時にエラーが発生しました', err);
       setFetchRepliesError(err.response?.data?.error || '返信取得時にエラーが発生しました');
     } finally {
       setIsFetchingReplies(false);
@@ -152,7 +150,6 @@ export default function ThreadPageClient({
       setComments([response.data, ...comments]);
       handleChangeSelectedComment(response.data.id);
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'コメント投稿時にエラーが発生しました', err);
       setPostCommentError(err.response?.data?.error || 'コメント投稿時にエラーが発生しました');
       isSuccess = false;
     } finally {
@@ -177,7 +174,6 @@ export default function ThreadPageClient({
         setComments(comments.filter((comment) => comment.id !== commentId));
       }
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'コメントの削除に失敗しました', err);
       setDeleteCommentError(err.response?.data?.error || 'コメントの削除に失敗しました');
       isSuccess = false;
     } finally {
@@ -192,9 +188,10 @@ export default function ThreadPageClient({
     setIsDeletePopupOpen(true);
   }
 
-  const renderRepliesBox = (commentId: number) => {
+  const renderRepliesBox = (commentId: number, type: RepliesBoxType) => {
     return (
       <RepliesBox
+        type={type}
         threadId={threadId}
         replies={replies}
         setReplies={setReplies}
@@ -225,50 +222,49 @@ export default function ThreadPageClient({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[1000px] my-3">
       {!isFetchingThread && (
         <>
           {thread && (
             <ThreadHeader thread={thread} />
           )}
-    
           {fetchThreadError && (
-            <MessageBox type={MessageBoxType.ERROR} message={fetchThreadError} className="my-3" />
+            <MessageBox type={MessageBoxType.Error} message={fetchThreadError} className="my-3" />
           )}
         </>
       )}
 
       <div className={`
         flex justify-start items-start gap-4 mt-4
-        transition-all duration-300 w-full
+        transition-all duration-300
       `}>
         {!isFetchingComments && (
-          <CommentsBox
-            comments={comments}
-            selectedCommentId={selectedCommentId}
-            fetchCommentsError={fetchCommentsError}
-            handleChangeSelectedComment={handleChangeSelectedComment}
-            onClickCommentTrashButton={onClickCommentTrashButton}
-            renderRepliesBox={renderRepliesBox}
-          />
+          <div className={isSm ? "w-[50%]" : "w-full"}>
+            <CommentsBox
+              comments={comments}
+              selectedCommentId={selectedCommentId}
+              fetchCommentsError={fetchCommentsError}
+              handleChangeSelectedComment={handleChangeSelectedComment}
+              onClickCommentTrashButton={onClickCommentTrashButton}
+              renderRepliesBox={renderRepliesBox}
+            />
+          </div>
         )}
 
         {isSm && (selectedCommentId != null && !isFetchingReplies) && (
-          <div className="w-[50%]">
-            {renderRepliesBox(selectedCommentId)}
+          <div className="flex-1 sticky top-0">
+            {renderRepliesBox(selectedCommentId, RepliesBoxType.Side)}
           </div>
         )}
       </div>
       <button
         className="
           fixed bottom-4 left-4
-          w-16 h-16
+          w-16 h-16 z-30
           bg-primary text-textcolor
           rounded-full shadow-md
           flex items-center justify-center
-          hover:scale-110
-          transition-all duration-200
-          z-30
+          popup-element
         "
         onClick={() =>setIsCommentPopupOpen(true)}
       >

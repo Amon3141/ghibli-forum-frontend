@@ -43,7 +43,7 @@ export default function PostCommentPopup({
           />
         </div>
         {postCommentError && (
-          <MessageBox type={MessageBoxType.ERROR} message={postCommentError} className="mt-1" />
+          <MessageBox type={MessageBoxType.Error} message={postCommentError} className="mt-1" />
         )}
         <GeneralButton
           className={`

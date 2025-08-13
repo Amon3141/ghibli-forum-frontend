@@ -6,19 +6,19 @@ interface UsernameInlineProps {
   textSize?: string;
 }
 
-export default function UsernameInline({ user = null, textSize = "text-sm" }: UsernameInlineProps) {
+export default function UsernameInline({ user = null, textSize = "" }: UsernameInlineProps) {
   return (
     <Link
       href={`/profile/${user?.userId}`}
-      className={`flex items-center gap-1 ${textSize}`}
+      className={`flex items-center gap-1 text-small ${textSize}`}
     >
       {user ? (
-        <span className="flex items-center small-text gap-[2px]">
-          <span className="font-bold">{user.username}</span>
-          <span className="font-bold">@{user.userId}</span>
+        <span className="flex items-center gap-[2px]">
+          <span>{user.username}</span>
+          <span>@{user.userId}</span>
         </span>
       ) : (
-        <span className="font-bold small-text">無名さん</span>
+        <span>無名さん</span>
       )}
     </Link>
   );

@@ -79,7 +79,7 @@ export default function LoginForm() {
           />
         </div>
       </form>
-      {loginError && <MessageBox type={MessageBoxType.ERROR} message={loginError} />}
+      {loginError && <MessageBox type={MessageBoxType.Error} message={loginError} />}
     </div>
   );
 }

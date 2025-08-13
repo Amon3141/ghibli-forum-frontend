@@ -27,7 +27,7 @@ export default function LikeButton({
 
   return (
     <div className="flex items-center gap-1">
-      <button onClick={handleClick} className="cursor-pointer">
+      <button onClick={handleClick} className="popup-element">
         {isLiked ? <FaHeart /> : <FaRegHeart />}
       </button>
       <p>{likes}</p>

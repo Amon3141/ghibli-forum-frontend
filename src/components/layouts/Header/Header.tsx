@@ -25,11 +25,13 @@ export default function Header() {
         `}>
           {/* <Link className={pathname === '/' ? styles.nav_link_selected : styles.nav_link} href="/"> */}
           <Link className={`
-            rounded-full p-1.5 sm:p-2 color-textcolor/90
-            transition-colors duration-200
+            rounded-full p-2.5 sm:p-3 color-textcolor/90
+            transition-all duration-200
             ${pathname === '/' ? 'bg-primary-dark/85' : 'hover:bg-primary-dark/85'
           }`} href="/">
-            <FiHome className="text-lg sm:text-xl" />
+            <FiHome className="
+              text-base sm:text-lg
+            " />
           </Link>
           {user ? (
             <Link href="/profile">

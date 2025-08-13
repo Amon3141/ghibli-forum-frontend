@@ -5,6 +5,7 @@ import { Comment } from "@/types/database/comment";
 
 import MessageBox from "@/components/ui/MessageBox";
 import CommentCard from "@/components/features/post/CommentCard";
+import { RepliesBoxType } from "@/components/features/post/RepliesBox";
 
 interface CommentsBoxProps {
   comments: Comment[];
@@ -12,7 +13,7 @@ interface CommentsBoxProps {
   fetchCommentsError: string | null;
   handleChangeSelectedComment: (commentId: number) => void;
   onClickCommentTrashButton: (commentId: number) => void;
-  renderRepliesBox: (commentId: number) => React.ReactNode;
+  renderRepliesBox: (commentId: number, type: RepliesBoxType) => React.ReactNode;
 }
 
 export default function CommentsBox({
@@ -26,9 +27,9 @@ export default function CommentsBox({
   const isSm = useIsSm();
 
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-2">
       {fetchCommentsError && (
-        <MessageBox type={MessageBoxType.ERROR} message={fetchCommentsError} />
+        <MessageBox type={MessageBoxType.Error} message={fetchCommentsError} className="mb-2" />
       )}
 
       {comments && comments.map((comment) => (
@@ -44,9 +45,7 @@ export default function CommentsBox({
             }}
           />
           {!isSm && selectedCommentId === comment.id && (
-            <div className="mb-4">
-              {renderRepliesBox(comment.id)}
-            </div>
+            renderRepliesBox(comment.id, RepliesBoxType.Below)
           )}
         </div>
       ))}

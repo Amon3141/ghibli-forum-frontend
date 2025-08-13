@@ -23,20 +23,17 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   }
 
   return (
-    <div className="space-y-2 bg-white rounded-lg p-6">
-      <h4 className="text-3xl font-bold">{thread.title}</h4>
-      <div className="flex items-center gap-1 text-sm text-textcolor/80">
-        <span>映画:</span>
+    <div className="space-y-2 bg-white rounded-lg p-4 sm:p-5 small-text">
+      <h4 className="text-xl font-bold">{thread.title}</h4>
+      <div className="flex items-center gap-1">
+        <span className="text-textcolor/80">投稿者:</span>
+        <UsernameInline user={thread.creator} /> →
         <Link href={`/movies/${thread.movieId}`}>
           <span className="underline-link">{thread.movie?.title}</span>
         </Link>
       </div>
-      <div className="flex items-center gap-1">
-        <span className="text-sm text-textcolor/80">投稿者:</span>
-        <UsernameInline user={thread.creator} />
-      </div>
-      <div className="w-full h-[1px] bg-gray-200 my-4"></div>
-      <p className="pb-2">{thread.description}</p>
+      <div className="w-full h-[1px] bg-gray-200 mt-4 mb-2.5"></div>
+      <p className="mb-3">{thread.description}</p>
       <LikeButton
         likes={thread.reactions?.filter((reaction) => reaction.type === 'LIKE').length ?? 0}
         isLiked={thread.reactions?.some(

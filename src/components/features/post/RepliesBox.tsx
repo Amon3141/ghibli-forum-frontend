@@ -1,13 +1,21 @@
 'use client';
+import { useEffect, useRef, useState } from "react";
 import { Comment } from "@/types/database/comment";
 import MessageBox from "@/components/ui/MessageBox";
 import { MessageBoxType } from "@/types/MessageBoxType";
 import ReplyCard from "@/components/features/post/ReplyCard";
 import GeneralButton from "@/components/ui/GeneralButton";
-import { useEffect, useState } from "react";
+import { IoSend } from "react-icons/io5";
 import { api } from "@/utils/api";
+import { useIsSm } from "@/hook/useIsScreenWidth";
 
-interface ReplyBoxProps {
+export enum RepliesBoxType {
+  Side = 'side',
+  Below = 'below'
+}
+
+interface RepliesBoxProps {
+  type: RepliesBoxType;
   threadId: number;
   replies: Comment[];
   setReplies: React.Dispatch<React.SetStateAction<Comment[]>>;
@@ -21,7 +29,8 @@ interface ReplyBoxProps {
   setIsFetchingReplies: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ReplyBox({
+export default function RepliesBox({
+  type,
   threadId,
   replies,
   setReplies,
@@ -29,12 +38,16 @@ export default function ReplyBox({
   setRefreshComment,
   fetchRepliesError,
   onClickCommentTrashButton
-}: ReplyBoxProps) {
+}: RepliesBoxProps) {
+  const isSm = useIsSm();
   const [newReply, setNewReply] = useState<string>("");
   const [replyToId, setReplyToId] = useState<number | null>(null);
 
   const [isPostingReply, setIsPostingReply] = useState<boolean>(false);
   const [postReplyError, setPostReplyError] = useState<string | null>(null);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isBelow = (type === RepliesBoxType.Below);
 
   const handlePostReply = async (reply: string, parentId: number, replyToId: number | null) => {
     setIsPostingReply(true);
@@ -65,23 +78,39 @@ export default function ReplyBox({
       setPostReplyError(null);
       setIsPostingReply(false);
     }
-  }, [selectedCommentId])
+  }, [selectedCommentId]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      console.log(textareaRef.current.scrollHeight);
+    }
+  }, [newReply]);
 
   return (
     <div className={`
-      w-full
-      bg-white rounded-md p-4
+      relative w-full bg-white rounded-md py-3 px-3
       flex flex-col
-      sticky top-0
+      ${type === RepliesBoxType.Below 
+        ? "rounded-t-none pt-0 pl-8" 
+        : ""
+      }
+      ${type === RepliesBoxType.Below && isSm ? "outline-1 outline-primary" : ""}
     `}>
-      <div className="flex items-center justify-between w-full">
-        <h3 className="font-bold text-lg">返信</h3>
-      </div>
-      <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
-      {fetchRepliesError && (
-        <MessageBox type={MessageBoxType.ERROR} message={fetchRepliesError} className="mt-3" />
+      {!isBelow && (
+        <>
+          <h3 className="font-bold text-md">返信</h3>
+          <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
+        </>
       )}
-      <div className="flex-1 max-h-[56vh] overflow-y-scroll no-scrollbar">
+      {fetchRepliesError && (
+        <MessageBox type={MessageBoxType.Error} message={fetchRepliesError} className="mt-3" />
+      )}
+      <div className={`
+        flex-1 overflow-y-scroll no-scrollbar
+        ${isBelow ? "max-h-[40vh]" : "max-h-[57vh]"}
+      `}>
         <div className="flex flex-col mt-3">
           {replies && replies.map((reply) => (
             <div key={reply.id}>
@@ -91,37 +120,51 @@ export default function ReplyBox({
                   onClickCommentTrashButton(reply.id);
                 }}
               />
+              <div className="w-full h-px bg-gray-200 mt-1.5 mb-2.5"></div>
             </div>
           ))}
         </div>
       </div>
-      <div className="flex flex-col items-end gap-3 mt-1">
+      <div className="
+        relative flex items-end gap-2 pt-3 rounded-none
+      ">
         <textarea
+          ref={textareaRef}
           className={`
             w-full p-3 border border-gray-300 rounded-md
-            resize-none focus:outline-none
+            resize-none focus:outline-none max-h-[140px]
+            overflow-y-auto small-text
           `}
           value={newReply}
           onChange={(e) => setNewReply(e.target.value)}
-          rows={3}
           placeholder="返信を入力してください..."
         />
         {postReplyError && (
-          <MessageBox type={MessageBoxType.ERROR} message={postReplyError} />
+          <MessageBox type={MessageBoxType.Error} message={postReplyError} />
         )}
-        <GeneralButton
-          className={`
-            text-sm font-semibold bg-primary/60 border-primary
-            ${!newReply && 'hover:bg-primary/60 pointer-events-none'}
-          `}
-          onClick={async () => {
-            await handlePostReply(newReply, selectedCommentId, replyToId);
-            setNewReply("");
-          }}
-          color="primary"
-        >
-          {isPostingReply ? "返信中..." : "返信"}
-        </GeneralButton>
+        <div className="absolute bottom-2.5 right-2.5">
+          <GeneralButton
+            className={`
+              !p-2 rounded-full text-sm font-semibold
+              bg-primary/60 backdrop-blur-sm border-primary
+              ${newReply !== ""
+                ? 'hover:bg-primary/80 popup-element'
+                : 'hover:bg-primary/60'
+              }
+            `}
+            onClick={async () => {
+              await handlePostReply(newReply, selectedCommentId, replyToId);
+              setNewReply("");
+            }}
+            disabled={newReply === ""}
+            color="primary"
+          >
+            {isPostingReply 
+              ? <IoSend className="animate-spin" />
+              : <IoSend />
+            }
+          </GeneralButton>
+        </div>
       </div>
     </div>
   );

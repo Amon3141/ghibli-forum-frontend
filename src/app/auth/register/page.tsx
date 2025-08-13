@@ -110,7 +110,7 @@ export default function RegisterForm() {
           />
         </div>
       </form>
-      {registerError && <MessageBox type={MessageBoxType.ERROR} message={registerError} />}
+      {registerError && <MessageBox type={MessageBoxType.Error} message={registerError} />}
     </div>
   );
 }
