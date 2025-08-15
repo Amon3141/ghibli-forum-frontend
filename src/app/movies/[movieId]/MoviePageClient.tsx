@@ -70,14 +70,12 @@ export default function MoviePageClient({
   
   return (
     <div className="min-h-full w-full max-w-[1000px]">
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-3 px-2 my-1">
         {createThreadMessage && (
           <div className="rounded-sm bg-green-100 p-4">
             <p className="text-textcolor/80">{createThreadMessage}</p>
           </div>
         )}
-      </div>
-      <div className="space-y-4 sm:space-y-3 px-2 my-1">
         <div className="space-y-3 sm:space-y-2">
           <div className="flex flex-col gap-1">
             <div className="w-full flex flex-col items-start gap-1.5 sm:flex-row sm:justify-between sm:items-center pb-2">
