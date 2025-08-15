@@ -6,11 +6,11 @@ interface UsernameInlineProps {
   textSize?: string;
 }
 
-export default function UsernameInline({ user = null, textSize = "" }: UsernameInlineProps) {
+export default function UsernameInline({ user = null, textSize = "small-text" }: UsernameInlineProps) {
   return (
     <Link
       href={`/profile/${user?.userId}`}
-      className={`flex items-center gap-1 small-text ${textSize}`}
+      className={`flex items-center gap-1 ${textSize}`}
     >
       {user ? (
         <span className="flex items-center gap-[2px]">

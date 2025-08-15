@@ -34,7 +34,7 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
       <div className="flex items-start gap-2.5">
         <ProfileIcon user={comment.author ?? null} size={38} className="mt-0.5" />
         <div className="space-y-1">
-          <UsernameInline user={comment.author} />
+          <UsernameInline user={comment.author} textSize="small-text" />
           <p className="small-text">{comment.content}</p>
         </div>
       </div>
