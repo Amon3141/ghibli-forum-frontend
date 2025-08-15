@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className="
-      bg-primary shadow py-5 px-6 sm:px-8 z-50
+      bg-primary py-5 px-6 sm:px-8 z-50
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between gap-1">

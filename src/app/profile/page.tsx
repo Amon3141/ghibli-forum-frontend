@@ -2,14 +2,15 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { isScreenSmOrLarger } from '@/utils/screenSize';
+import { useIsSm } from '@/hook/useIsScreenWidth';
 
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
 import UserContents from '@/components/features/user/profilePage/UserContents';
 
-export default function PrivateProfilePageClient() {
+export default function PrivateProfilePage() {
+  const isSm = useIsSm();
   const { user, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
@@ -22,14 +23,14 @@ export default function PrivateProfilePageClient() {
   const handleMainContentTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     if (isEditing && e.propertyName == 'opacity') {
       setShowHeaderInCenter(true);
-      if (!isScreenSmOrLarger()) { // for mobile
+      if (!isSm) { // for mobile
         setShowEditingHeader(true);
       }
     }
   }
 
   const handleHeaderTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (!isScreenSmOrLarger()) return;
+    if (!isSm) return;
     if (e.propertyName == 'translate') {
       if (isEditing) { // enter editing mode
         setShowEditingHeader(true);
@@ -46,7 +47,7 @@ export default function PrivateProfilePageClient() {
       } else { // exit editing mode
         setShowHeaderInCenter(false);
         setShowEditingHeader(false);
-        if (!isScreenSmOrLarger()) { // for mobile
+        if (!isSm) { // for mobile
           setShowMainContent(true);
         }
       }

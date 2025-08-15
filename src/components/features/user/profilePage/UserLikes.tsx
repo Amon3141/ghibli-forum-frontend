@@ -44,7 +44,7 @@ export default function UserLikes({ user }: UserLikesProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {likedComments.map((comment) => {
         if (comment) {
           return (

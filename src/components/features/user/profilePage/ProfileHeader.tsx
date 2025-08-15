@@ -224,9 +224,9 @@ export default function ProfileHeader({
 
       {/* Option Button Dropdown */}
       {!isPublicProfile && !isEditing && (
-        <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-white shadow p-2 cursor-pointer">
+        <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-custom-white shadow p-2 cursor-pointer">
           <BsThreeDots className="text-lg"/>
-          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-white/95 mt-2 font-bold text-textcolor">
+          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-custom-white/95 mt-2 font-bold text-textcolor">
             <li>
               <button 
                 onClick={async () => {

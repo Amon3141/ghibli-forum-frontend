@@ -90,7 +90,7 @@ export default function RepliesBox({
 
   return (
     <div className={`
-      relative w-full bg-white rounded-md py-3 px-3
+      relative w-full bg-custom-white rounded-md py-3 px-3
       flex flex-col
       ${type === RepliesBoxType.Below 
         ? "rounded-t-none pt-0 pl-8" 
@@ -101,7 +101,9 @@ export default function RepliesBox({
       {!isBelow && (
         <>
           <h3 className="font-bold text-md">返信</h3>
-          <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
+          <div className={`
+            w-full h-[1px] bg-gray-200 mt-3 ${replies.length === 0 ? "mb-1" : ""}
+          `}></div>
         </>
       )}
       {fetchRepliesError && (
@@ -111,27 +113,27 @@ export default function RepliesBox({
         flex-1 overflow-y-scroll no-scrollbar
         ${isBelow ? "max-h-[40vh]" : "max-h-[57vh]"}
       `}>
-        <div className="flex flex-col mt-3">
+        <div className="flex flex-col">
           {replies && replies.map((reply) => (
-            <div key={reply.id}>
+            <div key={reply.id} className="mt-3">
               <ReplyCard
                 replyData={reply}
                 onClickTrashButton={() => {
                   onClickCommentTrashButton(reply.id);
                 }}
               />
-              <div className="w-full h-px bg-gray-200 mt-1.5 mb-2.5"></div>
+              <div className="w-full h-px bg-gray-200 mt-1.5"></div>
             </div>
           ))}
         </div>
       </div>
       <div className="
-        relative flex items-end gap-2 pt-3 rounded-none
+        relative flex items-end gap-2 pt-2 rounded-none
       ">
         <textarea
           ref={textareaRef}
           className={`
-            w-full p-3 border border-gray-300 rounded-md
+            w-full p-2 sm:p-2.5 border border-gray-300 rounded-md
             resize-none focus:outline-none max-h-[140px]
             overflow-y-auto small-text
           `}

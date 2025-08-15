@@ -84,10 +84,10 @@ export default function MoviePageClient({
           </div>
         )}
       </div>
-      <div className="space-y-6 sm:space-y-8 px-2 my-1">
+      <div className="space-y-4 sm:space-y-3 px-2 my-1">
         <div className="flex flex-col gap-1">
-          <div className="flex-col sm:flex-row items-start sm:items-center">
-            <h3 className="text-lg sm:text-xl font-bold py-2 sm:py-3">{movie && movie.title && `${movie.title}の`}スレッド</h3>
+          <div className="w-full flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:items-center py-2">
+            <h3 className="text-lg sm:text-xl font-bold">{movie && movie.title && `${movie.title}の`}スレッド</h3>
             {!showThreadForm && (
               <GeneralButton
                 onClick={() => {

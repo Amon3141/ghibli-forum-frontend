@@ -24,7 +24,7 @@ export default function PostCommentPopup({
   }
 
   return (
-    <div className="w-[90%] md:w-[60%] lg:w-[50%] bg-white rounded-md p-4 space-y-3">
+    <div className="w-[90%] md:w-[60%] lg:w-[50%] bg-custom-white rounded-md p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-lg py-1">コメントを投稿</h3>
         <button className="text-xl px-1 cursor-pointer" onClick={() => {

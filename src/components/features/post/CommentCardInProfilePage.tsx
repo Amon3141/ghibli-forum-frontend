@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
-
 import { Comment } from "@/types/database/comment";
 import ProfileIcon from "@/components/features/user/ProfileIcon";
 import UsernameInline from "@/components/features/user/UsernameInline";
+import { getSemanticDateString } from "@/utils/dateHelpers";
 
 interface CommentCardInProfileProps {
   comment: Comment;
@@ -18,7 +16,7 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
     return '/';
   }
   return (
-    <div className="px-3 sm:px-4 pt-3 pb-4 sm:pb-5 bg-white rounded-md shadow-sm">
+    <div className="px-2.5 sm:px-3 pt-2.5 pb-3 sm:pb-4 bg-custom-white rounded-md shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <p className="text-gray-500 small-text">
           <Link
@@ -31,13 +29,11 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
             <span className="small-text text-textcolor/90 font-bold"> (返信先: {comment.parent?.author?.username} @{comment.parent?.author?.userId})</span>
           )}
         </p>
-        <p className="text-xs text-gray-400">
-          {format(new Date(comment.createdAt), 'yyyy/MM/dd HH:mm', { locale: ja })}
-        </p>
+        <p className="text-xs text-gray-400">{getSemanticDateString(comment.createdAt)}</p>
       </div>
       <div className="flex items-start gap-2.5">
         <ProfileIcon user={comment.author ?? null} size={38} className="mt-0.5" />
-        <div>
+        <div className="space-y-1">
           <UsernameInline user={comment.author} />
           <p className="small-text">{comment.content}</p>
         </div>

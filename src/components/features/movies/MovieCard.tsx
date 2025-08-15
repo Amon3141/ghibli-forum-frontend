@@ -14,7 +14,7 @@ export default function MovieCard({movie}: MovieCardProps) {
     <Link href={`/movies/${movie.id}`}>
       <div className="
         clickable-card-lg
-        w-full bg-white rounded-lg overflow-hidden
+        w-full bg-custom-white rounded-lg overflow-hidden
       ">
         {movie.imagePath ? (
           <div className="relative aspect-[16/9]">

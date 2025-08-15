@@ -48,7 +48,7 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {comments.map((comment) => {
         if (comment) {
           return (

@@ -222,7 +222,7 @@ export default function ThreadPageClient({
   }
 
   return (
-    <div className="w-full max-w-[1000px] my-3">
+    <div className="w-full max-w-[1000px] mb-2">
       {!isFetchingThread && (
         <>
           {thread && (
@@ -235,7 +235,7 @@ export default function ThreadPageClient({
       )}
 
       <div className={`
-        flex justify-start items-start gap-4 mt-4
+        flex justify-start items-start gap-3 mt-2 sm:mt-3
         transition-all duration-300
       `}>
         {!isFetchingComments && (

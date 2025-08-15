@@ -16,7 +16,7 @@ export default function ThreadCard({
     <div>
       <Link href={`/movies/${movieId}/threads/${thread.id}`}>
         <div className="
-          clickable-card p-3 sm:p-3.5 bg-white rounded-lg
+          clickable-card p-3 sm:p-3.5 bg-custom-white rounded-lg
           flex flex-col items-start gap-1.5 small-text
         ">
           <div className="flex items-center justify-between w-full">

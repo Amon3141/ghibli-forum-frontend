@@ -10,7 +10,7 @@ export default function UsernameInline({ user = null, textSize = "" }: UsernameI
   return (
     <Link
       href={`/profile/${user?.userId}`}
-      className={`flex items-center gap-1 text-small ${textSize}`}
+      className={`flex items-center gap-1 small-text ${textSize}`}
     >
       {user ? (
         <span className="flex items-center gap-[2px]">

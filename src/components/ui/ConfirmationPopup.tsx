@@ -23,7 +23,7 @@ export default function ConfirmationPopup({
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+    <div className="bg-custom-white rounded-lg p-6 max-w-md w-full mx-4">
       <p className="text-lg mb-3">{confirmMessage}</p>
       {processError && (
         <MessageBox type={MessageBoxType.Error} message={processError} />

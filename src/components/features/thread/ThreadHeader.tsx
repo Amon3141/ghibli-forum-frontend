@@ -23,7 +23,7 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   }
 
   return (
-    <div className="space-y-2 bg-white rounded-lg p-4 sm:p-5 small-text">
+    <div className="space-y-2 bg-custom-white rounded-lg p-4 sm:p-5 small-text border-1 border-gray-100">
       <h4 className="text-xl font-bold">{thread.title}</h4>
       <div className="flex items-center gap-1">
         <span className="text-textcolor/80">投稿者:</span>

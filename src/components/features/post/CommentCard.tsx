@@ -1,7 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
 import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Comment } from "@/types/database/comment";
@@ -11,6 +9,7 @@ import LikeButton from "@/components/features/action/LikeButton";
 import TrashButton from "@/components/features/action/TrashButton";
 import UsernameIcon from "@/components/features/user/UsernameIcon";
 import { useIsSm } from "@/hook/useIsScreenWidth";
+import { getSemanticDateString } from "@/utils/dateHelpers";
 
 interface CommentCardProps {
   comment: Comment,
@@ -46,14 +45,14 @@ export default function CommentCard({
       flex flex-col items-start gap-1.5 sm:gap-2
       group/comment-card small-text
       ${selectedCommentId === comment.id 
-        ? "bg-gradient-to-b from-primary/70 to-white"
-        : "bg-white"
+        ? "bg-gradient-to-b from-primary/50 to-white"
+        : "bg-custom-white"
       }
       ${!isSm ? "rounded-b-none" : ""}
     `}>
       <div className="flex items-start justify-between w-full">
         <UsernameIcon user={comment.author} size={isSm ? 38 : 35} />
-        <p className="text-xs text-gray-500">{format(new Date(comment.createdAt), "yyyy/MM/dd HH:mm", { locale: ja })}</p>
+        <p className="text-xs text-gray-500">{getSemanticDateString(comment.createdAt)}</p>
       </div>
       <p>{comment.content}</p>
       <div className="w-full flex justify-between items-end">
