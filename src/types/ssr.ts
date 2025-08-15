@@ -1,8 +1,7 @@
-import { Movie } from "./database/movie";
-import { Thread } from "./database/thread";
-import { Comment } from "./database/comment";
+import { Thread } from "./database";
+import { Comment } from "./database";
 
-// クライアントに渡す初期データ構造
+// SSRでクライアントに渡す初期データ構造
 export interface LoadedData<T> {
   data: T | null;
   error: string | null;

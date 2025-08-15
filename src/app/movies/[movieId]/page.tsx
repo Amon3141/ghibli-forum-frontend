@@ -1,7 +1,7 @@
-import { Movie } from "@/types/database/movie";
+import { Movie } from "@/types/database";
 import { api } from "@/utils/api";
 import MoviePageClient from "./MoviePageClient";
-import { LoadedData } from "@/types/loadedData";
+import { LoadedData } from "@/types/ssr";
 
 interface MoviePageProps {
   params: Promise<{

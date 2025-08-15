@@ -1,4 +1,4 @@
-import { User } from '@/types/database/user';
+import { User } from '@/types/database';
 import ProfileIcon from './ProfileIcon';
 import Link from 'next/link';
 

@@ -3,8 +3,8 @@ import { useState } from 'react';
 import HeroSection from '@/components/features/HeroSection';
 import MovieList from '@/components/features/movies/MovieList';
 import KikiWelcomeAnimation from '@/components/features/KikiWelcomeAnimation';
-import { LoadedData } from '@/types/loadedData';
-import { Movie } from '@/types/database/movie';
+import { LoadedData } from '@/types/ssr';
+import { Movie } from '@/types/database';
 
 interface HomeClientProps {
   loadedMovies: LoadedData<Movie[]>;

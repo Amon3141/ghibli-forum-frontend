@@ -1,4 +1,4 @@
-import { User } from "@/types/database/user";
+import { User } from "@/types/database";
 import Link from "next/link";
 
 interface UsernameInlineProps {

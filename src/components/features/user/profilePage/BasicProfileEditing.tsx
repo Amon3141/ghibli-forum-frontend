@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { api } from "@/utils/api";
 
-import { User } from "@/types/database/user";
-import { Movie } from "@/types/database/movie";
+import { User } from "@/types/database";
+import { Movie } from "@/types/database";
 import { ItemCardColor } from "./ProfileItemCard";
 
 import InputField from "@/components/ui/InputField";

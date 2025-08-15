@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
-import { Comment } from "@/types/database/comment";
+import { Comment } from "@/types/database";
 import MessageBox from "@/components/ui/MessageBox";
-import { MessageBoxType } from "@/types/MessageBoxType";
+import { MessageBoxType } from "@/types/types";
 import ReplyCard from "@/components/features/post/ReplyCard";
 import GeneralButton from "@/components/ui/GeneralButton";
 import { IoSend } from "react-icons/io5";

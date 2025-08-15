@@ -1,7 +1,7 @@
 import HomeClient from "./HomeClient";
 import { api } from "@/utils/api";
-import { Movie } from "@/types/database/movie";
-import { LoadedData } from "@/types/loadedData";
+import { Movie } from "@/types/database";
+import { LoadedData } from "@/types/ssr";
 
 export const dynamic = 'force-dynamic';
 

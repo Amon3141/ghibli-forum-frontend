@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Comment } from "@/types/database/comment";
+import { Comment } from "@/types/database";
 import ProfileIcon from "@/components/features/user/ProfileIcon";
 import UsernameInline from "@/components/features/user/UsernameInline";
 import { getSemanticDateString } from "@/utils/dateHelpers";

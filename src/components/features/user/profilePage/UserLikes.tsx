@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
-import { User } from '@/types/database/user';
+import { User } from '@/types/database';
 import CommentCardInProfilePage from '@/components/features/post/CommentCardInProfilePage';
 
 interface UserLikesProps {

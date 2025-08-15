@@ -2,7 +2,7 @@ import LikeButton from "@/components/features/action/LikeButton";
 import UsernameInline from "../user/UsernameInline";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/utils/api";
-import { Thread } from "@/types/database/thread";
+import { Thread } from "@/types/database";
 import Link from "next/link";
 
 interface ThreadHeaderProps {

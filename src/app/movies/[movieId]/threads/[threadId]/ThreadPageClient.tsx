@@ -9,15 +9,15 @@ import PostCommentPopup from "@/components/features/post/CommentPopup";
 import ConfirmationPopup from "@/components/ui/ConfirmationPopup";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MessageBox from "@/components/ui/MessageBox";
-import { MessageBoxType } from "@/types/MessageBoxType";
-import { LoadedDataForThreadPage } from '@/types/loadedData';
+import { MessageBoxType } from "@/types/types";
+import { LoadedDataForThreadPage } from '@/types/ssr';
 import RepliesBox, { RepliesBoxType } from "@/components/features/post/RepliesBox";
 import CommentsBox from "@/components/features/post/CommentsBox";
 
 import { FaComment } from "react-icons/fa6";
 
-import { Thread } from "@/types/database/thread";
-import { Comment } from "@/types/database/comment";
+import { Thread } from "@/types/database";
+import { Comment } from "@/types/database";
 
 interface ThreadPageClientProps {
   threadId: number;

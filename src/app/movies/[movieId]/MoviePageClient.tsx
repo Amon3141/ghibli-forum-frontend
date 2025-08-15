@@ -1,25 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { api } from '@/utils/api';
 
 import ThreadCard from "@/components/features/thread/ThreadCard";
-import InputField from "@/components/ui/InputField";
 import GeneralButton from "@/components/ui/GeneralButton";
-
-import { Movie } from '@/types/database/movie';
-import { Thread } from '@/types/database/thread';
-import { LoadedData } from '@/types/loadedData';
+import ThreadCreateForm from "@/components/features/thread/ThreadCreateForm";
 import LoadingScreen from '@/components/ui/LoadingScreen';
+
+import { Movie } from '@/types/database';
+import { Thread } from '@/types/database';
+import { LoadedData } from '@/types/ssr';
+import { ThreadSortType, SortDirection } from '@/types/sort';
+
+import { getSortedThreads } from '@/utils/sortHelpers';
+import ThreadSortButton from '@/components/features/thread/ThreadSortButton';
 
 interface MoviePageProps {
   movieId: number;
   loadedMovie: LoadedData<Movie>;
 }
-
-interface ThreadFormData {
-  title: string;
-  description: string
-};
 
 export default function MoviePageClient({
   movieId, loadedMovie
@@ -29,42 +27,37 @@ export default function MoviePageClient({
   
   const [isFetchingMovie, setIsFetchingMovie] = useState(true);
   const [showThreadForm, setShowThreadForm] = useState(false);
-  const [newThread, setNewThread] = useState<ThreadFormData>({
-    title: '',
-    description: ''
-  });
-  const [createThreadError, setCreateThreadError] = useState<string | null>(null);
   const [createThreadMessage, setCreateThreadMessage] = useState<string | null>(null);
 
-  const resetThreadForm = () => {
-    setNewThread({
-      title: '',
-      description: ''
-    });
-    setCreateThreadError(null);
-    setShowThreadForm(false);
-  }
-
-  const handleCreateThread = async () => {
-    try {
-      const response = await api.post(`/movies/${movieId}/threads`, newThread);
-      setThreads([response.data, ...threads]);
-      setCreateThreadMessage('スレッドが作成されました');
-      resetThreadForm();
-    } catch (err: any) {
-      console.error('スレッド作成時にエラーが発生しました', err);
-      setCreateThreadError(err.response?.data?.error || 'スレッドの作成に失敗しました');
-    }
-  }
+  const [sortType, setSortType] = useState<ThreadSortType>(ThreadSortType.date);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.desc);
 
   const initializeData = async () => {
     if (loadedMovie.data) {
       setMovie(loadedMovie.data);
-      setThreads(loadedMovie.data.threads ?? []);
+      const sortedThreads = getSortedThreads(loadedMovie.data.threads ?? [], sortType, sortDirection);
+      setThreads(sortedThreads);
     } else if (loadedMovie.error) {
       // TODO: エラーメッセージを表示
     }
     setIsFetchingMovie(false);
+  }
+
+  const handleSortThreads = (newSortType: ThreadSortType) => {
+    let newSortDirection: SortDirection;
+    if (newSortType === sortType) {
+      newSortDirection = sortDirection === SortDirection.asc ? SortDirection.desc : SortDirection.asc;
+    } else {
+      newSortDirection = SortDirection.desc;
+    }
+
+    setSortType(newSortType);
+    setSortDirection(newSortDirection);
+
+    const sortedThreads = getSortedThreads(threads, newSortType, newSortDirection);
+    setThreads(sortedThreads);
+
+    console.log(sortedThreads);
   }
 
   useEffect(() => {
@@ -85,65 +78,75 @@ export default function MoviePageClient({
         )}
       </div>
       <div className="space-y-4 sm:space-y-3 px-2 my-1">
-        <div className="flex flex-col gap-1">
-          <div className="w-full flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:items-center py-2">
-            <h3 className="text-lg sm:text-xl font-bold">{movie && movie.title && `${movie.title}の`}スレッド</h3>
-            {!showThreadForm && (
-              <GeneralButton
-                onClick={() => {
-                  setShowThreadForm(true);
-                  setCreateThreadMessage(null);
-                }}
-                color="primary"
-                className="mt-1"
-              >
-                <span>  + スレッドを作成</span>
-              </GeneralButton>
+        <div className="space-y-3 sm:space-y-2">
+          <div className="flex flex-col gap-1">
+            <div className="w-full flex flex-col items-start gap-1.5 sm:flex-row sm:justify-between sm:items-center pb-2">
+              <h3 className="text-lg sm:text-xl font-bold mb-1">{movie && movie.title && `${movie.title}の`}スレッド</h3>
+              {!showThreadForm && (
+                <GeneralButton
+                  onClick={() => {
+                    setShowThreadForm(true);
+                    setCreateThreadMessage(null);
+                  }}
+                  color="primary"
+                >
+                  <span>  + スレッドを作成</span>
+                </GeneralButton>
+              )}
+            </div>
+            {showThreadForm && (
+              <div className="mb-2">
+                <ThreadCreateForm
+                  movieId={movieId}
+                  setShowThreadForm={setShowThreadForm}
+                  onCreateThread={(newThread: Thread) => {
+                    setThreads([newThread, ...threads]);
+                    setCreateThreadMessage('スレッドが作成されました');
+                  }}
+                />
+              </div>
             )}
           </div>
-          {showThreadForm && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleCreateThread();
-              }}
-              className="
-                bg-gray-50 rounded-md border-1 border-gray-200 w-2/3 p-3 sm:p-4 space-y-3
-              "
-            >
-              <h3 className="text-base sm:text-lg font-bold text-textcolor/90">新しいスレッドを作成</h3>
-              <div className="flex flex-col items-start space-y-3 mb-4">
-                <InputField
-                  value={newThread.title}
-                  onChange={(e) => setNewThread({ ...newThread, title: e.target.value })}
-                  placeholder="タイトル"
-                />
-                <InputField
-                  value={newThread.description}
-                  onChange={(e) => setNewThread({ ...newThread, description: e.target.value })}
-                  placeholder="概要"
-                />
-              </div>
-              <div className="flex justify-end items-center gap-2">
-                <GeneralButton type="button" onClick={resetThreadForm} color="default">キャンセル</GeneralButton>
-                <GeneralButton type="submit" color="primary">作成</GeneralButton>
-              </div>
-              {createThreadError && (
-                <div className="rounded-sm bg-red-100 p-4">
-                  <p className="text-textcolor/80">{createThreadError}</p>
-                </div>
-              )}
-            </form>
-          )}
-        </div>
-        <div className="space-y-3">
-          {threads.map((thread) => (
-            <ThreadCard
-              key={thread.id}
-              movieId={movieId}
-              thread={thread}
+
+          {/* Sorting Controls */}
+          <div className="flex items-center gap-4 small-text text-gray-600 border-b border-gray-200 pb-2">
+            <ThreadSortButton
+              label="投稿日"
+              sortType={ThreadSortType.date}
+              sortDirection={sortDirection}
+              globalSortType={sortType}
+              handleSortThreads={handleSortThreads}
             />
-          ))}
+            <ThreadSortButton
+              label="コメント数"
+              sortType={ThreadSortType.comments}
+              sortDirection={sortDirection}
+              globalSortType={sortType}
+              handleSortThreads={handleSortThreads}
+            />
+            <ThreadSortButton
+              label="いいね数"
+              sortType={ThreadSortType.likes}
+              sortDirection={sortDirection}
+              globalSortType={sortType}
+              handleSortThreads={handleSortThreads}
+            />
+          </div>
+        </div>
+
+        {/* Threads */}
+        <div className="space-y-3">
+          {threads.length > 0 ? (
+            threads.map((thread) => (
+              <ThreadCard
+                key={thread.id}
+                movieId={movieId}
+                thread={thread}
+              />
+            ))
+          ) : (
+            <p className="text-center small-text text-gray-500 py-3">まだスレッドがありません</p>
+          )}
         </div>
       </div>
     </div>

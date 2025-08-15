@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
-import { Comment } from '@/types/database/comment';
-import { User } from '@/types/database/user';
+import { Comment } from '@/types/database';
+import { User } from '@/types/database';
 import CommentCardInProfilePage from '@/components/features/post/CommentCardInProfilePage';
 
 interface UserCommentsProps {

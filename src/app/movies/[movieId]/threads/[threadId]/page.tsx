@@ -1,8 +1,8 @@
 import ThreadPageClient from "./ThreadPageClient";
 import { api } from "@/utils/api";
-import { Thread } from "@/types/database/thread";
-import { Comment } from "@/types/database/comment";
-import { LoadedData, LoadedDataForThreadPage } from "@/types/loadedData";
+import { Thread } from "@/types/database";
+import { Comment } from "@/types/database";
+import { LoadedData, LoadedDataForThreadPage } from "@/types/ssr";
 
 interface ThreadPageProps {
   params: Promise<{

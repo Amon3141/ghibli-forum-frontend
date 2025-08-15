@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { api } from '@/utils/api';
-import { User } from '@/types/database/user';
+import { User } from '@/types/database';
 
 import { useAuth } from '@/contexts/AuthContext';
 import useFileUpload from '@/hook/useImageUpload';

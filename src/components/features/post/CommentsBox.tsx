@@ -1,7 +1,7 @@
 'use client';
 import { useIsSm } from "@/hook/useIsScreenWidth";
-import { MessageBoxType } from "@/types/MessageBoxType";
-import { Comment } from "@/types/database/comment";
+import { MessageBoxType } from "@/types/types";
+import { Comment } from "@/types/database";
 
 import MessageBox from "@/components/ui/MessageBox";
 import CommentCard from "@/components/features/post/CommentCard";

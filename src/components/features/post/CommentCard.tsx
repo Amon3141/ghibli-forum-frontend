@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { Comment } from "@/types/database/comment";
+import { Comment } from "@/types/database";
 import { FaRegComment } from "react-icons/fa";
 
 import LikeButton from "@/components/features/action/LikeButton";

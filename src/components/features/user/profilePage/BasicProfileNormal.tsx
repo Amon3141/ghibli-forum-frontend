@@ -1,6 +1,5 @@
-import { User } from "@/types/database/user";
-import ProfileItemCard from "./ProfileItemCard";
-import { ItemCardColor } from "./ProfileItemCard";
+import { User } from "@/types/database";
+import AdminIcon from "../AdminIcon";
 
 interface BasicProfileNormalProps {
   user: User;
@@ -15,14 +14,10 @@ export default function BasicProfileNormal({ user }: BasicProfileNormalProps) {
       <div className="flex items-center gap-4">
         {/* Username */}
         <div className="flex flex-col gap-0.5 sm:gap-1">
-          <div className="flex items-end gap-2">
-            <p className="text-2xl sm:text-3xl">{user.username ?? '無名さん'}</p>
+          <div className="flex items-end gap-2.5">
+            <p className="text-2xl sm:text-3xl -ml-1">{user.username ?? '無名さん'}</p>
             {user.isAdmin && (
-              <div className="
-                px-1 sm:px-1.5 py-0.5 mb-1.25 rounded-sm
-                text-[0.6rem] sm:text-[0.7rem] text-white bg-textcolor/85 whitespace-nowrap
-                flex items-center justify-center
-              ">管理者</div>
+              <AdminIcon />
             )}
           </div>
           <p className="text-textcolor/80 small-text">@{user.userId ?? '不明'}</p>

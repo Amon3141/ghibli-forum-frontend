@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
 import UserContents from '@/components/features/user/profilePage/UserContents';
 import { useParams } from 'next/navigation';
-import { User } from '@/types/database/user';
+import { User } from '@/types/database';
 import { api } from '@/utils/api';
 import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
