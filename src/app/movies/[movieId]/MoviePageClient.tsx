@@ -69,7 +69,7 @@ export default function MoviePageClient({
   }
   
   return (
-    <div className="min-h-full w-full max-w-[1000px]">
+    <div className="min-h-full w-full max-w-[1000px] mt-0 sm:mt-1.5">
       <div className="space-y-4 sm:space-y-3 px-2 my-1">
         {createThreadMessage && (
           <div className="rounded-sm bg-green-100 p-4">

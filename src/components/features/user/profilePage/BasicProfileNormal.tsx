@@ -10,10 +10,10 @@ interface BasicProfileNormalProps {
  */
 export default function BasicProfileNormal({ user }: BasicProfileNormalProps) {
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex flex-col items-start gap-2 sm:gap-2.5">
       <div className="flex items-center gap-4">
         {/* Username */}
-        <div className="flex flex-col gap-0.5 sm:gap-1">
+        <div className="flex flex-col gap-1 sm:gap-1.5">
           <div className="flex items-end gap-2.5">
             <p className="text-2xl sm:text-3xl -ml-1">{user.username ?? '無名さん'}</p>
             {user.isAdmin && (

@@ -75,7 +75,7 @@ export default function PrivateProfilePage() {
   }
 
   return (
-    <div className="flex flex-col w-full max-w-[1000px] h-full p-3">
+    <div className="flex flex-col w-full max-w-[800px] h-full p-3">
       <div 
         className={`
           transition-all ease-in-out

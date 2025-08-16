@@ -56,17 +56,18 @@ export default function BasicProfileEditing({
   };
 
   const handleMovieChange = (movieId: string) => {
-    const updatedData = { ...formData, favoriteMovieId: parseInt(movieId) || undefined };
+    if (movieId === "") return;
+    const updatedData = { ...formData, favoriteMovieId: parseInt(movieId) };
     setFormData(updatedData);
     onUserUpdate?.(updatedData);
   };
 
   const handleSaveEdit = async () => {
-    console.log("clicked");
     setIsSaving(true);
-    if (formData.bio.length > bioMaxLength) {
-      return;
-    }
+    if (
+      formData.bio.length > bioMaxLength ||
+      formData.username.length === 0
+    ) return;
     await onSave?.();
     setIsSaving(false);
   }
@@ -81,7 +82,7 @@ export default function BasicProfileEditing({
         <InputField
           value={formData.username}
           onChange={(e) => handleInputChange('username', e.target.value)}
-          placeholder="ユーザー名"
+          placeholder="ユーザー名を入力してください"
         />
       </div>
 
@@ -104,7 +105,7 @@ export default function BasicProfileEditing({
         <textarea
           value={formData.bio}
           onChange={(e) => handleInputChange('bio', e.target.value)}
-          placeholder="自己紹介を入力してください..."
+          placeholder="自己紹介を入力してください"
           className="
             w-full resize-none rounded-md
             border-1 border-gray-300 bg-gray-50
@@ -126,7 +127,7 @@ export default function BasicProfileEditing({
       {/* Favorite Character Input */}
       <div className="w-full">
         <label className="block text-sm font-medium text-textcolor/80 mb-1">
-          好きなキャラクター
+          好きなキャラクターを入力してください
         </label>
         <InputField
           value={formData.favoriteCharacter}
@@ -150,7 +151,7 @@ export default function BasicProfileEditing({
             focus:outline-none focus:ring-0
           "
         >
-          <option value="">作品を選択してください</option>
+          <option value=''>作品を選択してください</option>
           {movies.map((movie) => (
             <option key={movie.id} value={movie.id}>
               {movie.title}
@@ -167,10 +168,10 @@ export default function BasicProfileEditing({
         <GeneralButton 
           color="primary" 
           onClick={handleSaveEdit} 
-          disabled={formData.bio?.length > bioMaxLength}
+          disabled={formData.bio?.length > bioMaxLength || formData.username.length === 0}
           className={`
             bg-primary/80 border-primary/80
-            ${formData.bio?.length > bioMaxLength ? 'opacity-60 cursor-not-allowed' : ''}
+            ${formData.bio?.length > bioMaxLength || formData.username.length === 0 ? 'opacity-60 cursor-not-allowed' : ''}
           `}
         >
           変更を保存

@@ -168,7 +168,7 @@ export default function ProfileHeader({
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-7">
+      <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-7">
         {/* Profile Image */}
         <div className="
           flex-shrink-0 w-28 h-28 sm:w-30 sm:h-30
