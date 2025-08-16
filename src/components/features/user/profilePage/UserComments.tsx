@@ -44,7 +44,7 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
   }
 
   if (comments.length === 0) {
-    return <p>まだコメントはありません。</p>;
+    return <p className="text-gray-500 text-sm">まだコメントはありません。</p>;
   }
 
   return (

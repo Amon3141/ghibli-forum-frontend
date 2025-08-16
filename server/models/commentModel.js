@@ -135,7 +135,7 @@ async function findRepliesByComment(commentId) {
       },
       reactions: reactionInclude
     },
-    orderBy: { createdAt: 'asc' }
+    orderBy: { createdAt: 'desc' }
   });
 }
 

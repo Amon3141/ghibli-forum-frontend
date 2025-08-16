@@ -1,4 +1,4 @@
-import LikeButton from "@/components/features/action/LikeButton";
+import LikeButton from "@/components/ui/action/LikeButton";
 import UsernameInline from "../user/UsernameInline";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/utils/api";

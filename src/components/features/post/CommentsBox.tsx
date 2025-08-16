@@ -1,5 +1,5 @@
 'use client';
-import { useIsSm } from "@/hook/useIsScreenWidth";
+import { useIsSm } from "@/hooks/useIsScreenWidth";
 import { MessageBoxType } from "@/types/types";
 import { Comment } from "@/types/database";
 

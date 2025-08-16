@@ -5,10 +5,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Comment } from "@/types/database";
 import { FaRegComment } from "react-icons/fa";
 
-import LikeButton from "@/components/features/action/LikeButton";
-import TrashButton from "@/components/features/action/TrashButton";
+import LikeButton from "@/components/ui/action/LikeButton";
+import TrashButton from "@/components/ui/action/TrashButton";
 import UsernameIcon from "@/components/features/user/UsernameIcon";
-import { useIsSm } from "@/hook/useIsScreenWidth";
+import { useIsSm } from "@/hooks/useIsScreenWidth";
 import { getSemanticDateString } from "@/utils/dateHelpers";
 
 interface CommentCardProps {
@@ -75,7 +75,7 @@ export default function CommentCard({
               )}
             </div>
           </div>
-          {comment.author?.id === user?.id && (
+          {user && comment.author?.id === user?.id && (
             <div className="opacity-0 group-hover/comment-card:opacity-100">
               <TrashButton onClick={() => handleClickTrashButton(comment.id)} />
             </div>

@@ -1,10 +1,10 @@
 import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { useIsSm } from "@/hook/useIsScreenWidth";
+import { useIsSm } from "@/hooks/useIsScreenWidth";
 import { Comment } from "@/types/database";
 
-import LikeButton from "@/components/features/action/LikeButton";
-import TrashButton from "@/components/features/action/TrashButton";
+import LikeButton from "@/components/ui/action/LikeButton";
+import TrashButton from "@/components/ui/action/TrashButton";
 import UsernameIcon from "../user/UsernameIcon";
 import { getSemanticDateString } from "@/utils/dateHelpers";
 
@@ -46,7 +46,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
           ) ?? false}
           onClick={() => handleClickLikeButton()}
         />
-        {replyData.author?.id === user?.id && (
+        {user && replyData.author?.id === user?.id && (
           <div className="opacity-0 group-hover/reply-card:opacity-100">
             <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
           </div>

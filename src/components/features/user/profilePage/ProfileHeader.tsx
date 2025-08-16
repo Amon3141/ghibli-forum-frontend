@@ -4,7 +4,7 @@ import { api } from '@/utils/api';
 import { User } from '@/types/database';
 
 import { useAuth } from '@/contexts/AuthContext';
-import useFileUpload from '@/hook/useImageUpload';
+import useFileUpload from '@/hooks/useImageUpload';
 
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
@@ -119,10 +119,8 @@ export default function ProfileHeader({
       )
     }
     return (
-      <div className="w-full bg-gray-200 flex items-center justify-center">
-        <span className="w-full h-full text-gray-500 text-3xl">
-          {user.username?.[0]?.toUpperCase() ?? '?'}
-        </span>
+      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-4xl">
+        {user.username?.[0]?.toUpperCase() ?? '?'}
       </div>
     )
   }

@@ -40,7 +40,7 @@ export default function UserLikes({ user }: UserLikesProps) {
   }
 
   if (likedComments.length === 0) {
-    return <p>まだいいねした項目はありません。</p>;
+    return <p className="text-gray-500 text-sm">まだいいねした項目はありません。</p>;
   }
 
   return (

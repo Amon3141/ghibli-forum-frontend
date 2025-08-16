@@ -1,11 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { api } from "@/utils/api";
-import { useIsSm } from "@/hook/useIsScreenWidth";
+import { useIsSm } from "@/hooks/useIsScreenWidth";
+import { useAuth } from '@/contexts/AuthContext';
+import { useLoginPopup } from '@/contexts/LoginPopupContext';
 
 import ThreadHeader from "@/components/features/thread/ThreadHeader";
-import PostCommentPopup from "@/components/features/post/CommentPopup";
+import PostCommentPopup from "@/components/features/post/PostCommentPopup";
 import ConfirmationPopup from "@/components/ui/ConfirmationPopup";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MessageBox from "@/components/ui/MessageBox";
@@ -18,6 +19,7 @@ import { FaComment } from "react-icons/fa6";
 
 import { Thread } from "@/types/database";
 import { Comment } from "@/types/database";
+import Overlay from '@/components/ui/Overlay';
 
 interface ThreadPageClientProps {
   threadId: number;
@@ -28,6 +30,8 @@ export default function ThreadPageClient({
   threadId, initialData
 } : ThreadPageClientProps) {
   const isSm = useIsSm();
+  const { user } = useAuth();
+  const { openPopupWithMessage } = useLoginPopup();
 
   const [thread, setThread] = useState<Thread | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -140,6 +144,10 @@ export default function ThreadPageClient({
   }
 
   const handlePostComment = async (comment: string): Promise<boolean> => {
+    if (!user) {
+      openPopupWithMessage('想いを共有しよう');
+      return false;
+    }
     setIsPostingComment(true);
     setPostCommentError(null);
     let isSuccess = true;
@@ -270,29 +278,20 @@ export default function ThreadPageClient({
       >
         <FaComment size={28} />
       </button>
-      {isCommentPopupOpen && typeof window !== 'undefined' && createPortal(
-        <>
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-40"
-          />
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            <PostCommentPopup
+
+      {isCommentPopupOpen && typeof window !== 'undefined' && (
+        <Overlay zIndex={40}>
+          <PostCommentPopup
               onClose={handleClosePostCommentPopup}
               handlePostComment={handlePostComment}
               isPostingComment={isPostingComment}
               postCommentError={postCommentError}
             />
-          </div>
-        </>,
-        document.body
+        </Overlay>
       )}
-      {isDeletePopupOpen && typeof window !== 'undefined' && createPortal(
-        <>
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-40"
-          />
-          <div className="fixed inset-0 flex items-center justify-center z-50">
-            <ConfirmationPopup
+      {isDeletePopupOpen && typeof window !== 'undefined' && (
+        <Overlay zIndex={40}>
+          <ConfirmationPopup
               type="delete"
               confirmMessage="コメントを削除しますか？"
               confirmLabel="削除"
@@ -304,9 +303,7 @@ export default function ThreadPageClient({
               isProcessing={isDeletingComment}
               processError={deleteCommentError}
             />
-          </div>
-        </>,
-        document.body
+        </Overlay>
       )}
     </div>
   );

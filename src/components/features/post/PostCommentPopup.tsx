@@ -25,29 +25,32 @@ export default function PostCommentPopup({
 
   return (
     <div className="w-[90%] md:w-[60%] lg:w-[50%] bg-custom-white rounded-md p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg py-1">コメントを投稿</h3>
-        <button className="text-xl px-1 cursor-pointer" onClick={() => {
+      <div className="flex items-center justify-between gap-1">
+        <h3 className="text-base sm:text-lg py-1">コメントを投稿</h3>
+        <button className="
+          flex items-center justify-center h-8 w-8 p-1.5
+          text-base sm:text-lg rounded-full hover:bg-gray-100 cursor-pointer
+        " onClick={() => {
           setNewComment("");
           onClose();
         }}>×</button>
       </div>
-      <div className="flex flex-col items-end space-y-2">
+      <div className="flex flex-col items-end space-y-2.5">
+        {postCommentError && (
+          <MessageBox type={MessageBoxType.Error} message={postCommentError} />
+        )}
         <div className="w-full m-0">
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-md resize-none focus:outline-none"
+            className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md resize-none focus:outline-none text-sm sm:text-base"
             rows={5}
             placeholder="コメントを入力してください..."
           />
         </div>
-        {postCommentError && (
-          <MessageBox type={MessageBoxType.Error} message={postCommentError} className="mt-1" />
-        )}
         <GeneralButton
           className={`
-            bg-primary/60 border-primary mt-1
+            bg-primary/60 border-primary mt-1.5
             ${!newComment && 'hover:bg-primary/60 pointer-events-none'}`
           }
           onClick={handleSubmit}

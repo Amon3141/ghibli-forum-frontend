@@ -6,12 +6,12 @@ import { User } from '@/types/database';
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
-  login: (identifier: string, password: string) => Promise<void>;
-  register: (userId: string, username: string, password: string, email: string) => Promise<void>;
-  logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  login: (identifier: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  register: (userId: string, username: string, password: string, email: string) => Promise<void>;
+  checkAuth: () => Promise<void>;
+  isLoading: boolean;
 }
 
 interface AuthProviderProps {
@@ -20,7 +20,7 @@ interface AuthProviderProps {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -86,7 +86,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout, checkAuth, setUser }}>
+    <AuthContext.Provider value={{
+      user,
+      setUser,
+      login,
+      logout,
+      register,
+      checkAuth,
+      isLoading
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,7 +7,9 @@ import ReplyCard from "@/components/features/post/ReplyCard";
 import GeneralButton from "@/components/ui/GeneralButton";
 import { IoSend } from "react-icons/io5";
 import { api } from "@/utils/api";
-import { useIsSm } from "@/hook/useIsScreenWidth";
+import { useIsSm } from "@/hooks/useIsScreenWidth";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLoginPopup } from "@/contexts/LoginPopupContext";
 
 export enum RepliesBoxType {
   Side = 'side',
@@ -40,6 +42,9 @@ export default function RepliesBox({
   onClickCommentTrashButton
 }: RepliesBoxProps) {
   const isSm = useIsSm();
+  const { user } = useAuth();
+  const { openPopupWithMessage } = useLoginPopup();
+  
   const [newReply, setNewReply] = useState<string>("");
   const [replyToId, setReplyToId] = useState<number | null>(null);
 
@@ -50,6 +55,11 @@ export default function RepliesBox({
   const isBelow = (type === RepliesBoxType.Below);
 
   const handlePostReply = async (reply: string, parentId: number, replyToId: number | null) => {
+    if (!user) {
+      openPopupWithMessage('会話に参加しよう');
+      return;
+    }
+
     setIsPostingReply(true);
     setPostReplyError(null);
     try {
@@ -58,7 +68,7 @@ export default function RepliesBox({
         parentId,
         replyToId: replyToId || undefined
       });
-      setReplies([...replies, response.data]);
+      setReplies([response.data, ...replies]);
       setRefreshComment((prev) => ({
         refreshCount: prev.refreshCount + 1,
         commentId: parentId
@@ -67,6 +77,7 @@ export default function RepliesBox({
       console.error(err.response?.data?.error || '返信投稿時にエラーが発生しました', err);
       setPostReplyError(err.response?.data?.error || '返信投稿時にエラーが発生しました');
     } finally {
+      setNewReply("");
       setIsPostingReply(false);
     }
   }
@@ -156,7 +167,6 @@ export default function RepliesBox({
             `}
             onClick={async () => {
               await handlePostReply(newReply, selectedCommentId, replyToId);
-              setNewReply("");
             }}
             disabled={newReply === ""}
             color="primary"
