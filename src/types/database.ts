@@ -5,10 +5,14 @@ export interface User {
   email: string;
   isAdmin: boolean;
   imagePath?: string;
+  isDeleted: boolean;
+  deletedAt?: Date;
+
   bio?: string;
   favoriteCharacter?: string;
   favoriteMovieId?: number;
   favoriteMovie?: Movie;
+
   comments?: Comment[];
   threads?: Thread[];
 };
@@ -21,14 +25,37 @@ export interface Movie {
   imagePath?: string;
   threads?: Thread[];
   _count?: {
-    threads: number;
+    threads?: number;
   }
+};
+
+export interface Thread {
+  id: number;
+  title: string;
+  createdAt: string;
+  updatedAt?: string;
+  description: string;
+  imagePath?: string;
+  isDeleted: boolean;
+  deletedAt?: Date;
+  movieId: number;
+  movie?: Movie;
+  creatorId: number;
+  creator?: User;
+  comments?: Comment[];
+  reactions?: Reaction[];
+  _count?: {
+    comments?: number;
+    reactions?: number;
+  };
 };
 
 export interface Comment {
   id: number;
   content: string;
   createdAt: string;
+  level: number;
+
   threadId: number;
   thread?: Thread;
   authorId: number;
@@ -37,38 +64,39 @@ export interface Comment {
   parent?: Comment;
   replyToId?: number;
   replyTo?: Comment;
+
+  replies?: Comment[];
   mentionedBy?: Comment[];
   reactions?: Reaction[];
+
   _count?: {
-    replies: number;
+    replies?: number;
   };
 }
 
-export interface Thread {
-  id: number;
-  title: string;
-  createdAt: string;
-  updatedAt?: string;
-  description: string;
-  movieId: number;
-  movie?: Movie;
-  creatorId: number;
-  creator?: User;
-  comments?: Comment[];
-  reactions?: Reaction[];
-  _count?: {
-    comments: number;
-  };
-};
+export enum ReactionType {
+  Like = "LIKE",
+  Love = "LOVE",
+  Laugh = "LAUGH",
+  Angry = "ANGRY",
+  Sad = "SAD"
+}
+
+export enum ReactableType {
+  Comment = "comment",
+  Thread = "thread",
+}
 
 export interface Reaction {
   id: number;
-  type: string;
+  type: ReactionType;
+  reactableType: ReactableType;
   createdAt: string;
-  updatedAt?: string;
+
   userId: number;
   user?: User;
   commentId?: number;
   comment?: Comment;
   threadId?: number;
+  thread?: Thread;
 }

@@ -135,7 +135,8 @@ async function findThreadsByMovie(movieId) {
       reactions: reactionInclude,
       _count: {
         select: {
-          comments: true
+          comments: true,
+          reactions: true
         }
       }
     },

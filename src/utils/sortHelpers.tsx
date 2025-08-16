@@ -20,8 +20,8 @@ export const getSortedThreads = (
       const commentsB = b._count?.comments || 0;
       return sortDirection === SortDirection.asc ? commentsA - commentsB : commentsB - commentsA;
     } else if (sortType === ThreadSortType.likes) {
-      const likesA = a.reactions?.length || 0;
-      const likesB = b.reactions?.length || 0;
+      const likesA = a._count?.reactions || 0;
+      const likesB = b._count?.reactions || 0;
       return sortDirection === SortDirection.asc ? likesA - likesB : likesB - likesA;
     }
     return 0;

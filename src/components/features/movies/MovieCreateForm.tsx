@@ -30,7 +30,7 @@ export default function MovieCreateForm({ movies, setMovies }: MovieCreateFormPr
   };
 
   return (
-    <div className="bg-primary/50 border-1 border-primary rounded-md p-3 space-y-2">
+    <div className="bg-primary/50 border-1 border-primary rounded-md p-3 space-y-2 mb-4">
       <div className="flex items-end gap-2.5">
         <h2 className="text-lg sm:text-xl font-bold pb-1">新規作成</h2>
         <AdminIcon />

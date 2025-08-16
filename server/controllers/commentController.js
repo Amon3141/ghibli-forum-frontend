@@ -77,9 +77,10 @@ async function postComment(req, res) {
   try {
     const { id: threadId } = req.params;
     const authorId = req.user.id;
-    const { content, parentId, replyToId } = req.body;
+    const { content, level, parentId, replyToId } = req.body;
     const comment = await commentModel.createComment({
       content,
+      level: Number(level),
       threadId: Number(threadId),
       authorId: Number(authorId),
       parentId: parentId ? Number(parentId) : null,

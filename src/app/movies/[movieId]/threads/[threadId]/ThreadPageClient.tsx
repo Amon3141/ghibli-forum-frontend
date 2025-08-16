@@ -31,7 +31,7 @@ export default function ThreadPageClient({
 } : ThreadPageClientProps) {
   const isSm = useIsSm();
   const { user } = useAuth();
-  const { openPopupWithMessage } = useLoginPopup();
+  const { openLoginPopupWithMessage } = useLoginPopup();
 
   const [thread, setThread] = useState<Thread | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -145,7 +145,7 @@ export default function ThreadPageClient({
 
   const handlePostComment = async (comment: string): Promise<boolean> => {
     if (!user) {
-      openPopupWithMessage('想いを共有しよう');
+      openLoginPopupWithMessage('想いを共有しよう');
       return false;
     }
     setIsPostingComment(true);
@@ -153,7 +153,8 @@ export default function ThreadPageClient({
     let isSuccess = true;
     try {
       const response = await api.post(`/threads/${threadId}/comments`, {
-        content: comment
+        content: comment,
+        level: 1
       });
       setComments([response.data, ...comments]);
       handleChangeSelectedComment(response.data.id);
@@ -180,6 +181,7 @@ export default function ThreadPageClient({
         }));
       } else {
         setComments(comments.filter((comment) => comment.id !== commentId));
+        setSelectedCommentId(null);
       }
     } catch (err: any) {
       setDeleteCommentError(err.response?.data?.error || 'コメントの削除に失敗しました');
@@ -190,9 +192,9 @@ export default function ThreadPageClient({
     }
   };
 
-  const onClickCommentTrashButton = async (replyId: number) => {
-    setDeleteCommentId(replyId);
-    setIsDeleteCommentReply(true);
+  const onClickCommentTrashButton = async (commentId: number, isReply: boolean) => {
+    setDeleteCommentId(commentId);
+    setIsDeleteCommentReply(isReply);
     setIsDeletePopupOpen(true);
   }
 
@@ -206,7 +208,7 @@ export default function ThreadPageClient({
         selectedCommentId={commentId}
         fetchRepliesError={fetchRepliesError}
         setRefreshComment={setRefreshComment}
-        onClickCommentTrashButton={onClickCommentTrashButton}
+        onClickCommentTrashButton={(replyId) => onClickCommentTrashButton(replyId, true)}
         setIsFetchingReplies={setIsFetchingReplies}
       />
     )
@@ -253,7 +255,7 @@ export default function ThreadPageClient({
               selectedCommentId={selectedCommentId}
               fetchCommentsError={fetchCommentsError}
               handleChangeSelectedComment={handleChangeSelectedComment}
-              onClickCommentTrashButton={onClickCommentTrashButton}
+              onClickCommentTrashButton={(commentId) => onClickCommentTrashButton(commentId, false)}
               renderRepliesBox={renderRepliesBox}
             />
           </div>

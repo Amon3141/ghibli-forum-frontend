@@ -1,5 +1,6 @@
 import { User } from "@/types/database";
 import Link from "next/link";
+import router from "next/router";
 
 interface UsernameInlineProps {
   user?: User | null;
@@ -8,9 +9,13 @@ interface UsernameInlineProps {
 
 export default function UsernameInline({ user = null, textSize = "small-text" }: UsernameInlineProps) {
   return (
-    <Link
-      href={`/profile/${user?.userId}`}
+    <div
       className={`flex items-center gap-1 ${textSize}`}
+      onClick={() => {
+        if (user) {
+          router.push(`/profile/${user.userId}`);
+        }
+      }}
     >
       {user ? (
         <span className="flex items-center gap-[2px]">
@@ -20,6 +25,6 @@ export default function UsernameInline({ user = null, textSize = "small-text" }:
       ) : (
         <span>無名さん</span>
       )}
-    </Link>
+    </div>
   );
 }

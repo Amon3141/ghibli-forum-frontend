@@ -29,7 +29,7 @@ export default function MoviePageClient({
   const [showThreadForm, setShowThreadForm] = useState(false);
   const [createThreadMessage, setCreateThreadMessage] = useState<string | null>(null);
 
-  const [sortType, setSortType] = useState<ThreadSortType>(ThreadSortType.date);
+  const [sortType, setSortType] = useState<ThreadSortType>(ThreadSortType.comments);
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.desc);
 
   const initializeData = async () => {

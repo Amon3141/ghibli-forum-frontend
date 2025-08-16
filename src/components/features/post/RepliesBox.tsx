@@ -43,7 +43,7 @@ export default function RepliesBox({
 }: RepliesBoxProps) {
   const isSm = useIsSm();
   const { user } = useAuth();
-  const { openPopupWithMessage } = useLoginPopup();
+  const { openLoginPopupWithMessage } = useLoginPopup();
   
   const [newReply, setNewReply] = useState<string>("");
   const [replyToId, setReplyToId] = useState<number | null>(null);
@@ -56,15 +56,15 @@ export default function RepliesBox({
 
   const handlePostReply = async (reply: string, parentId: number, replyToId: number | null) => {
     if (!user) {
-      openPopupWithMessage('会話に参加しよう');
+      openLoginPopupWithMessage('会話に参加しよう');
       return;
     }
-
     setIsPostingReply(true);
     setPostReplyError(null);
     try {
       const response = await api.post(`/threads/${threadId}/comments`, {
         content: reply,
+        level: 2,
         parentId,
         replyToId: replyToId || undefined
       });
@@ -95,7 +95,6 @@ export default function RepliesBox({
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-      console.log(textareaRef.current.scrollHeight);
     }
   }, [newReply]);
 

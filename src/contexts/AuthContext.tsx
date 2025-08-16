@@ -1,6 +1,5 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@/utils/api';
 import { User } from '@/types/database';
 
@@ -22,9 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkAuth = async () => {
     setIsLoading(true);
@@ -33,7 +30,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(response.data.user as User);
     } catch (err: any) {
       setUser(null);
-      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -76,13 +72,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoading(false);
   };
 
-  // Check authentication status on mount
   useEffect(() => {
-    try {
-      checkAuth();
-    } catch (err) {
-      router.replace('/auth/login');
-    }
+    checkAuth();
   }, []);
 
   return (

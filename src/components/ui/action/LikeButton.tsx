@@ -13,17 +13,16 @@ export default function LikeButton({
   likes: initialLikes, isLiked: initialIsLiked, onClick
 }: LikeButtonProps) {
   const { user } = useAuth();
-  const { openPopupWithMessage } = useLoginPopup();
+  const { openLoginPopupWithMessage } = useLoginPopup();
 
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
 
   const handleClick = () => {
     if (!user) {
-      openPopupWithMessage('「好き」を伝えよう');
+      openLoginPopupWithMessage('「好き」を伝えよう');
       return;
     }
-
     if (isLiked) {
       setIsLiked(false);
       setLikes(likes - 1);

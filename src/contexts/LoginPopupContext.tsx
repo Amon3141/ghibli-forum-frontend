@@ -7,7 +7,7 @@ interface LoginPopupContextType {
   isLoginPopupOpen: boolean;
   setIsLoginPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   actionMessage: string | null;
-  openPopupWithMessage: (message: string) => void;
+  openLoginPopupWithMessage: (message: string) => void;
 }
 
 interface LoginPopupProviderProps {
@@ -20,7 +20,7 @@ export const LoginPopupProvider = ({ children }: LoginPopupProviderProps) => {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 
-  const openPopupWithMessage = (message: string) => {
+  const openLoginPopupWithMessage = (message: string) => {
     setActionMessage(message);
     setIsLoginPopupOpen(true);
   }
@@ -30,7 +30,7 @@ export const LoginPopupProvider = ({ children }: LoginPopupProviderProps) => {
       isLoginPopupOpen,
       setIsLoginPopupOpen,
       actionMessage,
-      openPopupWithMessage
+      openLoginPopupWithMessage
     }}>
       {children}
       {isLoginPopupOpen && actionMessage && typeof window !== 'undefined' && (

@@ -1,4 +1,4 @@
-import { TbTrash } from "react-icons/tb";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 interface TrashButtonProps {
   onClick: () => void;
@@ -10,7 +10,7 @@ export default function TrashButton({ onClick: handleClickTrashButton }: TrashBu
       onClick={handleClickTrashButton}
       className="flex items-center justify-center transition-opacity duration-100 cursor-pointer group"
     >
-      <TbTrash className="text-lg group-hover:text-red-700"/>
+      <FaRegTrashCan className="group-hover:text-red-700"/>
     </button>
   );
 }

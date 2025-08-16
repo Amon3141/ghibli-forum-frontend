@@ -10,7 +10,6 @@ generator client {
   output   = "../../node_modules/.prisma/client"
 }
 
-// Reaction types enum
 enum ReactionType {
   LIKE
   LOVE
@@ -19,7 +18,7 @@ enum ReactionType {
   SAD
 }
 
-// What can be reacted to
+// Resources that are reacted
 enum ReactableType {
   COMMENT
   THREAD

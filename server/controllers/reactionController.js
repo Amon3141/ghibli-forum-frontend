@@ -39,9 +39,14 @@ async function updateReaction(reactableType, req, res) {
 
     // Check if user already has a reaction on this comment
     const existingReaction = await reactionModel.findReactionsByUserAndReactableType(userId, reactableType);
-    const userReaction = existingReaction.find(reaction => 
-      reaction.comment && reaction.comment.id === Number(reactableId)
-    );
+    const userReaction = existingReaction.find(reaction => {
+      if (reactableType === 'COMMENT') {
+        return reaction.comment && reaction.comment.id === Number(reactableId);
+      } else if (reactableType === 'THREAD') {
+        return reaction.thread && reaction.thread.id === Number(reactableId);
+      }
+      return false;
+    });
 
     let result;
 

@@ -63,7 +63,7 @@ export default function LoginForm() {
           />
         </div>
         
-        <div className="flex justify-between items-center mt-2.5">
+        <div className="flex justify-between items-center mt-2.5 gap-2">
           <button
             type="button"
             onClick={handleGoToRegister}

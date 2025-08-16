@@ -2,7 +2,7 @@ import LikeButton from "@/components/ui/action/LikeButton";
 import UsernameInline from "../user/UsernameInline";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/utils/api";
-import { Thread } from "@/types/database";
+import { Thread, ReactionType } from "@/types/database";
 import Link from "next/link";
 
 interface ThreadHeaderProps {
@@ -15,10 +15,10 @@ export default function ThreadHeader({ thread }: ThreadHeaderProps) {
   const handleClickLikeButton = () => {
     try {
       api.put(`/threads/${thread.id}/reaction`, {
-        reactionType: 'LIKE'
+        reactionType: ReactionType.Like
       });
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'スレッドのいいねに失敗しました', err);
+      // console.error(err.response?.data?.error || 'スレッドのいいねに失敗しました', err);
     }
   }
 

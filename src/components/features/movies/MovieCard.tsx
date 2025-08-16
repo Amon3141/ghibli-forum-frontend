@@ -4,6 +4,7 @@ import { PiYarn } from "react-icons/pi";
 import { useMemo } from "react";
 
 import { Movie } from "@/types/database";
+import AnalyticsIcon from "@/components/ui/AnalyticsIcon";
 
 interface MovieCardProps {
   movie: Movie;
@@ -32,10 +33,12 @@ export default function MovieCard({movie}: MovieCardProps) {
         
         <div className="flex items-center justify-between py-3 px-3 h-9 sm:h-12 gap-1">
           <div className="font-bold text-xs sm:text-base truncate">{movie.title}</div>
-          <div className="flex items-center gap-[3px] px-2 py-1 bg-primary/50 border-1 border-primary rounded-full flex-shrink-0">
-            <PiYarn className="text-textcolor text-sm sm:text-base"/>
-            <span className="text-[11px] sm:text-sm">{movie._count?.threads ?? 0}</span>
-          </div>
+          <AnalyticsIcon
+            icon={PiYarn}
+            analyticsNumber={movie._count?.threads}
+            color="primary"
+            size="small"
+          />
         </div>
       </div>
     </Link>

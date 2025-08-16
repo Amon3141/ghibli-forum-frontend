@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { api } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { Comment } from "@/types/database";
-import { FaRegComment } from "react-icons/fa";
+import { Comment, ReactionType, ReactableType } from "@/types/database";
+import { FaRegComment } from "react-icons/fa6";
 
 import LikeButton from "@/components/ui/action/LikeButton";
 import TrashButton from "@/components/ui/action/TrashButton";
@@ -32,10 +32,10 @@ export default function CommentCard({
   const handleClickLikeButton = () => {
     try {
       api.put(`/comments/${comment.id}/reaction`, {
-        reactionType: 'LIKE'
+        reactionType: ReactionType.Like
       });
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
+      // console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
     }
   };
 

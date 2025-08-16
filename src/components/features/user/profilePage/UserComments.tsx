@@ -19,11 +19,12 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
     const fetchComments = async () => {
       try {
         const response = await api.get(`/users/${user.id}/comments`);
+        console.log(response.data);
         const filteredComments = response.data.filter((comment: Comment) => {
           if (commentType === 'comments') {
-            return !comment.parentId;
+            return comment.level === 1;
           } else if (commentType === 'replies') {
-            return comment.parentId;
+            return comment.level === 2;
           }
           return false;
         });

@@ -16,6 +16,10 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ error: '全ての項目を入力してください' });
   }
 
+  if (!email.includes('@')) {
+    return res.status(400).json({ error: '無効なメールアドレスです' });
+  }
+
   if (userId.includes('@')) {
     return res.status(400).json({ error: 'ユーザーIDに@記号は使用できません' });
   }

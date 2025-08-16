@@ -25,16 +25,23 @@ export default function CommentCardInProfilePage({ comment }: CommentCardInProfi
           >
             @{comment.thread?.title || '無効なスレッドURL'}
           </Link>
-          {comment.parent && (
-            <span className="small-text text-textcolor/90 font-bold"> (返信先: {comment.parent?.author?.username} @{comment.parent?.author?.userId})</span>
-          )}
         </p>
         <p className="text-xs text-gray-400">{getSemanticDateString(comment.createdAt)}</p>
       </div>
       <div className="flex items-start gap-2.5">
         <ProfileIcon user={comment.author ?? null} size={38} className="mt-0.5" />
         <div className="space-y-1">
-          <UsernameInline user={comment.author} textSize="small-text" />
+          <div className="flex flex-col items-start gap-0.5 sm:flex-row sm:items-center sm:gap-1">
+            <UsernameInline user={comment.author} textSize="small-text" />
+            {comment.level > 1 && (
+              <span className="text-[10px] sm:text-[12px] text-textcolor/80 font-bold">
+                {comment.parent
+                  ? `→ ${comment.parent?.author?.username} @${comment.parent?.author?.userId}`
+                  : `→ 削除されたコメント`
+                }
+              </span>
+            )}
+          </div>
           <p className="small-text">{comment.content}</p>
         </div>
       </div>

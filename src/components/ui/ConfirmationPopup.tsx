@@ -23,12 +23,12 @@ export default function ConfirmationPopup({
   };
 
   return (
-    <div className="bg-custom-white rounded-lg p-6 max-w-md w-full mx-4">
-      <p className="text-lg mb-3">{confirmMessage}</p>
-      {processError && (
-        <MessageBox type={MessageBoxType.Error} message={processError} />
-      )}
-      <div className="flex justify-end gap-4 mt-3">
+    <div className="
+      flex flex-col items-center bg-custom-white rounded-lg
+      py-3 px-5 sm:py-4 sm:px-7 max-w-md mx-4 space-y-3 sm:space-y-4
+    ">
+      <p className="text-sm sm:text-base pt-1">{confirmMessage}</p>
+      <div className="flex items-center justify-center gap-4 mt-2 mb-1">
         <GeneralButton
           onClick={onClose}
           color="default"
@@ -42,6 +42,11 @@ export default function ConfirmationPopup({
           {confirmLabel}{isProcessing && "中..."}
         </GeneralButton>
       </div>
+      {processError && (
+        <div className="w-full mt-2 sm:mt-3">
+          <MessageBox type={MessageBoxType.Error} message={processError} />
+        </div>
+      )}
     </div>
   );
 }

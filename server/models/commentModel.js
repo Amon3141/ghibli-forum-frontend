@@ -63,8 +63,8 @@ async function findCommentById(id) {
 async function findCommentsByThread(threadId) {
   return await prisma.comment.findMany({
     where: { 
-      threadId,
-      parentId: null // Only get top-level comments
+      level: 1,
+      threadId
     },
     include: {
       author: true,
@@ -122,6 +122,7 @@ async function findCommentsByAuthor(authorId) {
 async function findRepliesByComment(commentId) {
   return await prisma.comment.findMany({
     where: { 
+      level: 2,
       parentId: commentId
     },
     include: {

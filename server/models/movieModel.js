@@ -54,7 +54,8 @@ async function findMovieById(id) {
           },
           _count: {
             select: {
-              comments: true
+              comments: true,
+              reactions: true
             }
           }
         },
