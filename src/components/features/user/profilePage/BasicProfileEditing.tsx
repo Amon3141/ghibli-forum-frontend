@@ -63,11 +63,13 @@ export default function BasicProfileEditing({
   };
 
   const handleSaveEdit = async () => {
-    setIsSaving(true);
     if (
       formData.bio.length > bioMaxLength ||
       formData.username.length === 0
-    ) return;
+    ) {
+      return;
+    }
+    setIsSaving(true);
     await onSave?.();
     setIsSaving(false);
   }
