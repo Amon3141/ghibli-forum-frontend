@@ -9,6 +9,10 @@ import useFileUpload from '@/hooks/useImageUpload';
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FiEdit3 } from "react-icons/fi";
+import { LuLogOut } from "react-icons/lu";
+
+
 import BasicProfileNormal from './BasicProfileNormal';
 import BasicProfileEditing from './BasicProfileEditing';
 import ProfileItemCard, { ItemCardColor } from './ProfileItemCard';
@@ -222,22 +226,19 @@ export default function ProfileHeader({
       {!isPublicProfile && !isEditing && (
         <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-custom-white shadow p-2 cursor-pointer">
           <BsThreeDots className="text-lg"/>
-          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-35 text-xs flex flex-col gap-1 bg-custom-white/95 mt-2 font-bold text-textcolor">
-            <li>
+          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-45 small-text flex flex-col gap-1 bg-custom-white/95 mt-2 font-bold text-textcolor">
+            <li className="flex items-center gap-1.5">
+              <FiEdit3 className="text-base sm:text-lg" />
               <button 
-                onClick={async () => {
-                  setIsEditing(true);
-                }}
+                onClick={() => setIsEditing(true)}
               >
                 プロフィールを編集
               </button>
             </li>
             <li className="border-t border-gray-100 my-1"></li>
-            <li>
-              <button 
-                onClick={logout}
-                className="text-red-700"
-              >
+            <li className="flex items-center gap-1.5 text-red-700">
+              <LuLogOut className="text-base sm:text-lg" />
+              <button onClick={logout}>
                 ログアウト
               </button>
             </li>
