@@ -9,6 +9,7 @@
   --color-background: #F5F5F5;
   --color-custom-white: #FFFFFD;
   --color-selection-background: #f6eed2;
+  --color-autofill-background: #F2E3B3;
 }
 
 @theme {
@@ -57,6 +58,18 @@
   ::-webkit-selection {
     background-color: var(--color-selection-background);
     color: var(--color-textcolor);
+  }
+
+  ::-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-autofill-background) inset !important;
+    -webkit-text-fill-color: var(--color-textcolor) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-autofill-background) inset !important;
+    -webkit-text-fill-color: var(--color-textcolor) !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 }
 
