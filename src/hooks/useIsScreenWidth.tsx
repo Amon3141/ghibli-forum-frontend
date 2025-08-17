@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 // 画面幅がthreasholdより大きいかどうかを返す
 function useIsScreenWidth(threashold: number) {
-  const [isScreenWidth, setIsScreenWidth] = useState(false);
+  const [isScreenWidth, setIsScreenWidth] = useState<boolean | null>(null);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -27,5 +27,12 @@ function useIsScreenWidth(threashold: number) {
   return isScreenWidth;
 }
 
-export const useIsSm = () => useIsScreenWidth(640);
-export const useIsValidWidth = () => useIsScreenWidth(315);
+export const useIsSm = () => {
+  const isSm = useIsScreenWidth(640);
+  return isSm === null ? false : isSm;
+};
+
+export const useIsValidWidth = () => {
+  const isValidWidth = useIsScreenWidth(315);
+  return isValidWidth === null ? true : isValidWidth;
+};

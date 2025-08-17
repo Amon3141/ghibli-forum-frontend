@@ -4,6 +4,9 @@ import { useState } from 'react';
 import UserComments from './UserComments';
 import UserLikes from '@/components/features/user/profilePage/UserLikes';
 import { User } from '@/types/database';
+import ConfirmationPopup from '@/components/ui/ConfirmationPopup';
+import Overlay from '@/components/ui/Overlay';
+import { api } from '@/utils/api';
 
 interface UserContentsProps {
   user: User;
@@ -44,9 +47,15 @@ export default function UserContents({ user }: UserContentsProps) {
       </div>
 
       <div className="mt-4">
-        {activeTab === 'comments' && <UserComments user={user} commentType="comments" />}
-        {activeTab === 'replies' && <UserComments user={user} commentType="replies" />}
-        {activeTab === 'likes' && <UserLikes user={user} />}
+        {activeTab === 'comments' && (
+          <UserComments user={user} commentType="comments" />
+        )}
+        {activeTab === 'replies' && (
+          <UserComments user={user} commentType="replies" />
+        )}
+        {activeTab === 'likes' && (
+          <UserLikes user={user} />
+        )}
       </div>
     </div>
   );

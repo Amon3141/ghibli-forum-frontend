@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { useIsSm } from "@/hooks/useIsScreenWidth";
 import { useAuth } from '@/contexts/AuthContext';
 import { useLoginPopup } from '@/contexts/LoginPopupContext';
+import { useRouter } from 'next/navigation';
 
 import ThreadHeader from "@/components/features/thread/ThreadHeader";
 import PostCommentPopup from "@/components/features/post/PostCommentPopup";
@@ -32,16 +33,20 @@ export default function ThreadPageClient({
   const isSm = useIsSm();
   const { user } = useAuth();
   const { openLoginPopupWithMessage } = useLoginPopup();
+  const router = useRouter();
 
   const [thread, setThread] = useState<Thread | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
   const [replies, setReplies] = useState<Comment[]>([]);
 
-  const [isCommentPopupOpen, setIsCommentPopupOpen] = useState<boolean>(false);
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
+  const [isPostCommentPopupOpen, setIsPostCommentPopupOpen] = useState<boolean>(false);
+  const [isCommentDeletePopupOpen, setIsCommentDeletePopupOpen] = useState<boolean>(false);
   const [isDeleteCommentReply, setIsDeleteCommentReply] = useState<boolean>(false);
   const [deleteCommentId, setDeleteCommentId] = useState<number | null>(null);
+
+  const [isThreadDeletePopupOpen, setIsThreadDeletePopupOpen] = useState<boolean>(false);
+  const [deleteThreadId, setDeleteThreadId] = useState<number | null>(null);
 
   // Loading States
   const [isFetchingThread, setIsFetchingThread] = useState<boolean>(true);
@@ -49,6 +54,7 @@ export default function ThreadPageClient({
   const [isFetchingReplies, setIsFetchingReplies] = useState<boolean>(false);
   const [isPostingComment, setIsPostingComment] = useState<boolean>(false);
   const [isDeletingComment, setIsDeletingComment] = useState<boolean>(false);
+  const [isDeletingThread, setIsDeletingThread] = useState<boolean>(false);
 
   // Error States
   const [fetchThreadError, setFetchThreadError] = useState<string | null>(null);
@@ -56,6 +62,7 @@ export default function ThreadPageClient({
   const [fetchRepliesError, setFetchRepliesError] = useState<string | null>(null);
   const [postCommentError, setPostCommentError] = useState<string | null>(null);
   const [deleteCommentError, setDeleteCommentError] = useState<string | null>(null);
+  const [deleteThreadError, setDeleteThreadError] = useState<string | null>(null);
 
   const [refreshComment, setRefreshComment] = useState<{
     refreshCount: number,
@@ -92,17 +99,9 @@ export default function ThreadPageClient({
   }
 
   const handleClosePostCommentPopup = () => {
-    setIsCommentPopupOpen(false);
+    setIsPostCommentPopupOpen(false);
     setIsPostingComment(false);
     setPostCommentError(null);
-  }
-
-  const handleCloseDeletePopup = () => {
-    setIsDeletePopupOpen(false);
-    setIsDeletingComment(false);
-    setDeleteCommentError(null);
-    setIsDeleteCommentReply(false);
-    setDeleteCommentId(null);
   }
 
   // REST API Helpers
@@ -167,6 +166,8 @@ export default function ThreadPageClient({
     }
   }
 
+  /* ----- Comment Deletion ----- */
+
   const handleDeleteComment = async (commentId: number, isReply: boolean): Promise<boolean> => {
     setIsDeletingComment(true);
     setDeleteCommentError(null);
@@ -190,12 +191,50 @@ export default function ThreadPageClient({
       setIsDeletingComment(false);
       return isSuccess;
     }
-  };
+  }
 
   const onClickCommentTrashButton = async (commentId: number, isReply: boolean) => {
     setDeleteCommentId(commentId);
     setIsDeleteCommentReply(isReply);
-    setIsDeletePopupOpen(true);
+    setIsCommentDeletePopupOpen(true);
+  }
+
+  const handleCloseCommentDeletePopup = () => {
+    setIsCommentDeletePopupOpen(false);
+    setIsDeletingComment(false);
+    setDeleteCommentError(null);
+    setIsDeleteCommentReply(false);
+    setDeleteCommentId(null);
+  }
+
+  /* ----- Thread Deletion ----- */
+
+  const handleDeleteThread = async (threadId: number): Promise<boolean> => {
+    setIsDeletingThread(true);
+    setDeleteThreadError(null);
+    let isSuccess = true;
+    try {
+      await api.delete(`/threads/${threadId}`);
+    } catch (err: any) {
+      setDeleteThreadError(err.response?.data?.error || 'スレッドの削除に失敗しました');
+      isSuccess = false;
+    } finally {
+      setIsDeletingThread(false);
+      router.push(thread?.movieId ? `/movies/${thread?.movieId}` : '/');
+      return isSuccess;
+    }
+  }
+
+  const onClickThreadTrashButton = async (threadId: number) => {
+    setDeleteThreadId(threadId);
+    setIsThreadDeletePopupOpen(true);
+  }
+
+  const handleCloseDeleteThreadPopup = () => {
+    setIsThreadDeletePopupOpen(false);
+    setIsDeletingThread(false);
+    setDeleteThreadError(null);
+    setDeleteThreadId(null);
   }
 
   const renderRepliesBox = (commentId: number, type: RepliesBoxType) => {
@@ -234,14 +273,17 @@ export default function ThreadPageClient({
   return (
     <div className="w-full max-w-[1000px] mb-2">
       {!isFetchingThread && (
-        <>
+        <div className="w-full space-y-3">
           {thread && (
-            <ThreadHeader thread={thread} />
+            <ThreadHeader
+              thread={thread}
+              onClickThreadTrashButton={onClickThreadTrashButton}
+            />
           )}
           {fetchThreadError && (
-            <MessageBox type={MessageBoxType.Error} message={fetchThreadError} className="my-3" />
+            <MessageBox type={MessageBoxType.Error} message={fetchThreadError} className="mb-3" />
           )}
-        </>
+        </div>
       )}
 
       <div className={`
@@ -276,12 +318,12 @@ export default function ThreadPageClient({
           flex items-center justify-center
           popup-element
         "
-        onClick={() =>setIsCommentPopupOpen(true)}
+        onClick={() =>setIsPostCommentPopupOpen(true)}
       >
         <FaComment size={28} />
       </button>
 
-      {isCommentPopupOpen && typeof window !== 'undefined' && (
+      {isPostCommentPopupOpen && typeof window !== 'undefined' && (
         <Overlay zIndex={40}>
           <PostCommentPopup
               onClose={handleClosePostCommentPopup}
@@ -291,7 +333,8 @@ export default function ThreadPageClient({
             />
         </Overlay>
       )}
-      {isDeletePopupOpen && typeof window !== 'undefined' && (
+
+      {isCommentDeletePopupOpen && typeof window !== 'undefined' && (
         <Overlay zIndex={40}>
           <ConfirmationPopup
               type="delete"
@@ -301,9 +344,25 @@ export default function ThreadPageClient({
                 if (deleteCommentId === null) return false;
                 return await handleDeleteComment(deleteCommentId, isDeleteCommentReply);
               }}
-              onClose={handleCloseDeletePopup}
+              onClose={handleCloseCommentDeletePopup}
               isProcessing={isDeletingComment}
               processError={deleteCommentError}
+            />
+        </Overlay>
+      )}
+      {isThreadDeletePopupOpen && typeof window !== 'undefined' && (
+        <Overlay zIndex={40}>
+          <ConfirmationPopup
+              type="delete"
+              confirmMessage="本当にスレッドを削除しますか？"
+              confirmLabel="削除"
+              onConfirm={async () => {
+                if (deleteThreadId === null) return false;
+                return await handleDeleteThread(deleteThreadId);
+              }}
+              onClose={handleCloseDeleteThreadPopup}
+              isProcessing={isDeletingThread}
+              processError={deleteThreadError}
             />
         </Overlay>
       )}

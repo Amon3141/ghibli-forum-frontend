@@ -45,6 +45,7 @@ async function findMovieById(id) {
     where: { id },
     include: {
       threads: {
+        where: { isDeleted: false },
         include: {
           creator: {
             select: {

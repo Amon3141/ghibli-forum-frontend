@@ -54,12 +54,12 @@ model User {
   deletedAt DateTime?
 
   // Email verification
-  isEmailVerified Boolean @default(false)
-  emailVerificationToken String?
+  isEmailVerified          Boolean   @default(false)
+  emailVerificationToken   String?
   emailVerificationExpires DateTime?
 
   // Password reset
-  resetToken String?
+  resetToken        String?
   resetTokenExpires DateTime?
 
   // UserProfile related

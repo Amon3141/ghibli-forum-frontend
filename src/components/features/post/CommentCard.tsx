@@ -19,7 +19,7 @@ interface CommentCardProps {
 }
 
 export default function CommentCard({
-  comment, selectedCommentId, onClickShowReply: handleClickShowReply, onClickTrashButton: handleClickTrashButton
+  comment, selectedCommentId, onClickShowReply, onClickTrashButton
 }: CommentCardProps) {
   const isSm = useIsSm();
   const { user } = useAuth();
@@ -68,7 +68,7 @@ export default function CommentCard({
             <div className="flex items-center gap-1">
               <FaRegComment
                 className="cursor-pointer popup-element"
-                onClick={handleClickShowReply}
+                onClick={onClickShowReply}
               />
               {comment._count && typeof comment._count.replies === 'number' && comment._count.replies > 0 && (
                 <p className="small-text">{comment._count.replies}</p>
@@ -77,7 +77,7 @@ export default function CommentCard({
           </div>
           {user && comment.author?.id === user?.id && (
             <div className="opacity-0 group-hover/comment-card:opacity-100">
-              <TrashButton onClick={() => handleClickTrashButton(comment.id)} />
+              <TrashButton onClick={() => onClickTrashButton(comment.id)} />
             </div>
           )}
         </div>

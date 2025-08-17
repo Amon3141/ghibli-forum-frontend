@@ -8,7 +8,7 @@ export default function TrashButton({ onClick: handleClickTrashButton }: TrashBu
   return (
     <button
       onClick={handleClickTrashButton}
-      className="flex items-center justify-center transition-opacity duration-100 cursor-pointer group"
+      className="flex items-center justify-center transition-opacity duration-100 cursor-pointer group popup-element"
     >
       <FaRegTrashCan className="group-hover:text-red-700"/>
     </button>

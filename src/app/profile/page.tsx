@@ -16,6 +16,7 @@ export default function PrivateProfilePage() {
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
   const [showEditingHeader, setShowEditingHeader] = useState(false);
   const [showMainContent, setShowMainContent] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const prevIsEditing = useRef(isEditing);
   const headerTransitionDuration = 100;
   const mainContentTransitionDuration = 500;
@@ -55,7 +56,11 @@ export default function PrivateProfilePage() {
     }
   }, [isEditing]);
 
-  if (isLoading) {
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted || isLoading) {
     return (
       <LoadingScreen message="ユーザー情報を読み込んでいます..." />
     );

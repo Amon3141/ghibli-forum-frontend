@@ -16,7 +16,7 @@ async function getAllThreads(req, res) {
     const threads = await threadModel.findAllThreads();
     res.json(threads);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch threads' });
+    res.status(500).json({ error: 'スレッドの取得に失敗しました' });
   }
 }
 
@@ -30,11 +30,11 @@ async function getThreadById(req, res) {
     const { id } = req.params;
     const thread = await threadModel.findThreadById(Number(id));
     if (!thread) {
-      return res.status(404).json({ error: 'Thread not found' });
+      return res.status(404).json({ error: 'スレッドが見つかりません' });
     }
     res.json(thread);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch thread' });
+    res.status(500).json({ error: 'スレッドの取得に失敗しました' });
   }
 }
 
@@ -49,7 +49,7 @@ async function getThreadsByUser(req, res) {
     const threads = await threadModel.findThreadsByUser(Number(userId));
     res.json(threads);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch user threads' });
+    res.status(500).json({ error: 'ユーザーのスレッドの取得に失敗しました' });
   }
 }
 
@@ -64,7 +64,7 @@ async function getThreadsByMovie(req, res) {
     const threads = await threadModel.findThreadsByMovie(Number(movieId));
     res.json(threads);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch movie threads' });
+    res.status(500).json({ error: '映画のスレッドの取得に失敗しました' });
   }
 }
 
@@ -88,9 +88,9 @@ async function postThread(req, res) {
     res.status(201).json(thread);
   } catch (error) {
     if (error.code === 'P2003') {
-      return res.status(400).json({ error: 'Invalid movie ID or creator ID' });
+      return res.status(400).json({ error: '無効な映画IDまたは作成者ID' });
     }
-    res.status(500).json({ error: 'Failed to create thread' });
+    res.status(500).json({ error: 'スレッドの作成に失敗しました' });
   }
 }
 
@@ -111,9 +111,27 @@ async function putThread(req, res) {
     res.json(thread);
   } catch (error) {
     if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Thread not found' });
+      return res.status(404).json({ error: 'スレッドが見つかりません' });
     }
-    res.status(500).json({ error: 'Failed to update thread' });
+    res.status(500).json({ error: 'スレッドの更新に失敗しました' });
+  }
+}
+
+/**
+ * Soft delete a thread
+ * @returns {Promise<void>} - Returns 204 No Content on success
+ * @throws {Error} Database error or thread not found
+ */
+async function softDeleteThread(req, res) {
+  try {
+    const { id } = req.params;
+    await threadModel.softDeleteThread(Number(id));
+    res.status(204).send();
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: 'スレッドが見つかりません' });
+    }
+    res.status(500).json({ error: 'スレッドの削除に失敗しました' });
   }
 }
 
@@ -129,9 +147,9 @@ async function deleteThread(req, res) {
     res.status(204).send();
   } catch (error) {
     if (error.code === 'P2025') {
-      return res.status(404).json({ error: 'Thread not found' });
+      return res.status(404).json({ error: 'スレッドが見つかりません' });
     }
-    res.status(500).json({ error: 'Failed to delete thread' });
+    res.status(500).json({ error: 'スレッドの削除に失敗しました' });
   }
 }
 
@@ -146,6 +164,7 @@ module.exports = {
   getThreadsByMovie,
   postThread,
   putThread,
+  softDeleteThread,
   deleteThread,
   updateThreadReaction
 }; 

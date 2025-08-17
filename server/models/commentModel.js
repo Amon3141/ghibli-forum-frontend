@@ -99,7 +99,8 @@ async function findCommentsByAuthor(authorId) {
       thread: {
         select: {
           id: true,
-          title: true
+          title: true,
+          isDeleted: true
         }
       },
       reactions: reactionInclude,

@@ -226,8 +226,8 @@ export default function ProfileHeader({
       {!isPublicProfile && !isEditing && (
         <div tabIndex={0} className="absolute right-0 top-0 dropdown dropdown-bottom dropdown-end rounded-full bg-custom-white shadow p-2 cursor-pointer">
           <BsThreeDots className="text-lg"/>
-          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-45 small-text flex flex-col gap-1 bg-custom-white/95 mt-2 font-bold text-textcolor">
-            <li className="flex items-center gap-1.5">
+          <ul tabIndex={0} className="dropdown-content z-5 px-3 py-3 shadow rounded-box w-45 small-text flex flex-col gap-1 bg-custom-white/95 mt-2 font-bold">
+            <li className="flex items-center gap-1.5 text-textcolor/95">
               <FiEdit3 className="text-base sm:text-lg" />
               <button 
                 onClick={() => setIsEditing(true)}
@@ -236,7 +236,7 @@ export default function ProfileHeader({
               </button>
             </li>
             <li className="border-t border-gray-100 my-1"></li>
-            <li className="flex items-center gap-1.5 text-red-700">
+            <li className="flex items-center gap-1.5 text-orange-700">
               <LuLogOut className="text-base sm:text-lg" />
               <button onClick={logout}>
                 ログアウト

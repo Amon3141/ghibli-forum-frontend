@@ -56,13 +56,13 @@ export interface Comment {
   createdAt: string;
   level: number;
 
-  threadId: number;
+  threadId: number | null;
   thread?: Thread;
   authorId: number;
   author?: User;
-  parentId?: number;
+  parentId: number | null;
   parent?: Comment;
-  replyToId?: number;
+  replyToId: number | null;
   replyTo?: Comment;
 
   replies?: Comment[];

@@ -22,7 +22,7 @@ router.get('/:id/comments', commentController.getCommentsByThread);
 router.put('/:id', verifyToken, threadController.putThread);
 
 // DELETE /api/threads/:id - Delete a thread
-router.delete('/:id', verifyToken, threadController.deleteThread);
+router.delete('/:id', verifyToken, threadController.softDeleteThread);
 
 // POST /api/threads/:id/comments - Create a new comment
 router.post('/:id/comments', verifyToken, commentController.postComment);

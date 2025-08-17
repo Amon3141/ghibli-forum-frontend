@@ -64,10 +64,11 @@ async function findAllThreads() {
  */
 async function findThreadById(id) {
   return await prisma.thread.findUnique({
-    where: { id },
+    where: { id, isDeleted: false },
     include: {
       creator: {
         select: {
+          id: true,
           username: true,
           userId: true
         }
@@ -97,10 +98,11 @@ async function findThreadById(id) {
  */
 async function findThreadsByUser(userId) {
   return await prisma.thread.findMany({
-    where: { creatorId: userId },
+    where: { creatorId: userId, isDeleted: false },
     include: {
       creator: {
         select: {
+          id: true,
           username: true,
           userId: true
         }
@@ -124,10 +126,11 @@ async function findThreadsByUser(userId) {
  */
 async function findThreadsByMovie(movieId) {
   return await prisma.thread.findMany({
-    where: { movieId },
+    where: { movieId, isDeleted: false },
     include: {
       creator: {
         select: {
+          id: true,
           username: true,
           userId: true
         }
@@ -173,6 +176,23 @@ async function updateThread(id, data) {
 }
 
 /**
+ * Soft deletes a thread
+ * @async
+ * @param {number} id - The ID of the thread to soft delete
+ * @returns {Promise<Thread>} Soft deleted thread object
+ * @throws {Error} If thread not found
+ */
+async function softDeleteThread(id) {
+  return await prisma.thread.update({
+    where: { id },
+    data: { 
+      isDeleted: true,
+      deletedAt: new Date()
+    }
+  });
+}
+
+/**
  * Deletes a thread
  * @async
  * @param {number} id - The ID of the thread to delete
@@ -195,6 +215,7 @@ const readOperations = {
 const writeOperations = {
   createThread,
   updateThread,
+  softDeleteThread,
   deleteThread
 };
 
