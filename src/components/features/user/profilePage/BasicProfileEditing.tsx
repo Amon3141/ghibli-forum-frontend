@@ -33,22 +33,6 @@ export default function BasicProfileEditing({
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    setFormData(defaultFormData);
-  }, [user]);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await api.get('/movies');
-        setMovies(response.data);
-      } catch (error) {
-        setMovies([]);
-      }
-    };
-    fetchMovies();
-  }, []);
-
   const handleInputChange = (field: string, value: string) => {
     const updatedData = { ...formData, [field]: value };
     setFormData(updatedData);
@@ -73,6 +57,22 @@ export default function BasicProfileEditing({
     await onSave?.();
     setIsSaving(false);
   }
+
+  useEffect(() => {
+    setFormData(defaultFormData);
+  }, [user]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await api.get('/movies');
+        setMovies(response.data);
+      } catch (error) {
+        setMovies([]);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   return (
     <div className="flex flex-col items-start gap-3">
@@ -129,12 +129,12 @@ export default function BasicProfileEditing({
       {/* Favorite Character Input */}
       <div className="w-full">
         <label className="block text-sm font-medium text-textcolor/80 mb-1">
-          好きなキャラクターを入力してください
+          好きなキャラクター
         </label>
         <InputField
           value={formData.favoriteCharacter}
           onChange={(e) => handleInputChange('favoriteCharacter', e.target.value)}
-          placeholder="好きなキャラクター"
+          placeholder="好きなキャラクターを入力してください"
         />
       </div>
 
@@ -164,9 +164,11 @@ export default function BasicProfileEditing({
 
       {/* Action Buttons */}
       <div className="flex justify-end w-full gap-3 mt-3">
-        <GeneralButton onClick={onCancel}>
-          キャンセル
-        </GeneralButton>
+        {onCancel && (
+          <GeneralButton onClick={onCancel}>
+            キャンセル
+          </GeneralButton>
+        )}
         <GeneralButton 
           color="primary" 
           onClick={handleSaveEdit} 

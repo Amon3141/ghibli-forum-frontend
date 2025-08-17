@@ -20,7 +20,7 @@ export default function LoginForm() {
   const [resendMessage, setResendMessage] = useState<string>("");
 
   const router = useRouter();
-  const { login, isLoading, isSendingEmail, resendVerificationEmail } = useAuth();
+  const { user, login, isLoading, isSendingEmail, resendVerificationEmail } = useAuth();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -33,7 +33,6 @@ export default function LoginForm() {
     
     try {
       await login(identifier, password);
-      router.replace('/');
     } catch (err: any) {
       const errorData = err.response?.data;
       setLoginError(errorData?.error);
@@ -49,7 +48,7 @@ export default function LoginForm() {
   const handleResendEmail = async () => {
     setResendMessage('');
     try {
-      const response = await resendVerificationEmail(userEmail);
+      await resendVerificationEmail(userEmail);
       setResendMessage('確認メールを送信しました');
     } catch (error: any) {
       setResendMessage(error.message || '確認メールの再送信に失敗しました。少し後で再度お試しください。');
@@ -58,6 +57,14 @@ export default function LoginForm() {
 
   const handleGoToRegister = () => {
     router.push('/auth/register');
+  }
+
+  if (user) {
+    if (user.isFirstTimeLogin) {
+      router.replace('/auth/setup-profile');
+    } else {
+      router.replace('/');
+    }
   }
 
   return (
@@ -114,7 +121,9 @@ export default function LoginForm() {
           </div>
         </div>
       </form>
-      {loginError && <MessageBox type={MessageBoxType.Error} message={loginError} />}
+      {loginError && (
+        <MessageBox type={MessageBoxType.Error} message={loginError} />
+      )}
       
       {needsEmailVerification && (
         <div className="w-full space-y-3">

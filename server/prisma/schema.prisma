@@ -43,15 +43,16 @@ model Movie {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  userId    String    @unique
-  username  String
-  password  String
-  email     String    @unique
-  isAdmin   Boolean
-  imagePath String?
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime?
+  id               Int       @id @default(autoincrement())
+  userId           String    @unique
+  username         String
+  password         String
+  email            String    @unique
+  isAdmin          Boolean
+  imagePath        String?
+  isDeleted        Boolean   @default(false)
+  deletedAt        DateTime?
+  isFirstTimeLogin Boolean   @default(true)
 
   // Email verification
   isEmailVerified          Boolean   @default(false)

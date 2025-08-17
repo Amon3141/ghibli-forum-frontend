@@ -22,6 +22,7 @@ const userWithoutPassword = {
   favoriteCharacter: true,
   favoriteMovie: true,
   isEmailVerified: true,
+  isFirstTimeLogin: true
 };
 
 /**

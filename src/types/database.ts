@@ -7,6 +7,7 @@ export interface User {
   imagePath?: string;
   isDeleted: boolean;
   deletedAt?: Date;
+  isFirstTimeLogin: boolean;
 
   bio?: string;
   favoriteCharacter?: string;

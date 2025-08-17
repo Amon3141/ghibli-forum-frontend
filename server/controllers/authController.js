@@ -133,8 +133,8 @@ const loginUser = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',       // CSRF protection
-      maxAge: 3 * 60 * 60 * 1000    // 3 hour
+      sameSite: 'strict',         // CSRF protection
+      maxAge: 3 * 60 * 60 * 1000  // 3時間
     });
 
     return res.status(200).json({

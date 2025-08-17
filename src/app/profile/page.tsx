@@ -1,10 +1,9 @@
 'use client';
-import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsSm } from '@/hooks/useIsScreenWidth';
+import { useRouter } from 'next/navigation';
 
-import GeneralButton from '@/components/ui/GeneralButton';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
 import UserContents from '@/components/features/user/profilePage/UserContents';
@@ -12,6 +11,8 @@ import UserContents from '@/components/features/user/profilePage/UserContents';
 export default function PrivateProfilePage() {
   const isSm = useIsSm();
   const { user, isLoading } = useAuth();
+  const router = useRouter();
+  
   const [isEditing, setIsEditing] = useState(false);
   const [showHeaderInCenter, setShowHeaderInCenter] = useState(false);
   const [showEditingHeader, setShowEditingHeader] = useState(false);
@@ -67,15 +68,9 @@ export default function PrivateProfilePage() {
   }
 
   if (!user) {
+    router.replace('/auth/login');
     return (
-      <div className="flex justify-center items-center h-full">
-        <div className="flex flex-col gap-4 items-start">
-          <h1 className="text-sm sm:text-base">ログインしてください</h1>
-          <GeneralButton>
-            <Link href="/auth/login">ログイン</Link>
-          </GeneralButton>
-        </div>
-      </div>
+      <LoadingScreen message="ログインページにリダイレクトしています..." />
     )
   }
 

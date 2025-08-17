@@ -5,6 +5,7 @@ import { User } from '@/types/database';
 
 import { useAuth } from '@/contexts/AuthContext';
 import useFileUpload from '@/hooks/useImageUpload';
+import { useRouter } from 'next/navigation';
 
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
@@ -34,6 +35,8 @@ export default function ProfileHeader({
 }: ProfileHeaderProps) {
   const { logout, setUser } = useAuth();
   const { handleUploadFile } = useFileUpload();
+  const router = useRouter();
+
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(user.imagePath || null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);

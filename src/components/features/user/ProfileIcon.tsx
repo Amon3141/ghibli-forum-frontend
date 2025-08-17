@@ -31,7 +31,7 @@ export default function ProfileIcon({ user, size = 40, sasToken = null, classNam
   }, []);
 
   useEffect(() => {
-    if (user && user.imagePath && localSasToken) {
+    if (user && user.imagePath) {
       setImageUrl(`${user.imagePath}?${localSasToken}`);
     }
   }, [user?.imagePath, localSasToken]);

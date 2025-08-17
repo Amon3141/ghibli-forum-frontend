@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { api } from '@/utils/api';
 import { User } from '@/types/database';
-import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -10,7 +9,7 @@ interface AuthContextType {
   login: (identifier: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (userId: string, username: string, password: string, email: string) => Promise<{ redirectUrl: string }>;
-  checkAuth: () => Promise<void>;
+  checkAuth: () => Promise<User | null>;
   isLoading: boolean;
   isSendingEmail: boolean;
   resendVerificationEmail: (email: string) => Promise<void>;
@@ -28,17 +27,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
-  const router = useRouter();
 
-  const checkAuth = async () => {
+  const checkAuth = async (): Promise<User | null> => {
     setIsLoading(true);
+    let user: User | null = null;
     try {
       const response = await api.get('/users/me');
       setUser(response.data.user as User);
+      user = response.data.user as User;
     } catch (err: any) {
       setUser(null);
     } finally {
       setIsLoading(false);
+      return user;
     }
   };
 
@@ -82,7 +83,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await api.post('/auth/logout');
     setUser(null);
     setIsLoading(false);
-    router.push('/auth/login');
   };
 
   const resendVerificationEmail = async (email: string) => {
