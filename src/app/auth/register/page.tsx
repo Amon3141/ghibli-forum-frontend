@@ -30,10 +30,11 @@ export default function RegisterForm() {
       return;
     }
     try {
-      await register(userId, username, password, email);
-      router.push('/auth/login');
+      const result = await register(userId, username, password, email);
+      console.log("result", result);
+      router.push(result.redirectUrl);
     } catch (err: any) {
-      setRegisterError(err.response?.data?.error);
+      setRegisterError(err.message);
     }
   };
 

@@ -1,4 +1,11 @@
 export enum MessageBoxType {
   Error = "error",
-  Success = "success"
+  Success = "success",
+  Warning = "warning"
+};
+
+export enum PageStatus {
+  Loading = "loading",
+  Success = "success",
+  Error = "error"
 };

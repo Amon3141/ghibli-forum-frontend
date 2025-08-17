@@ -39,6 +39,7 @@ model Movie {
   favoriteByUsers User[] @relation("FavoriteMovie")
 
   @@index([releaseDate])
+  @@index([isDeleted])
 }
 
 model User {
@@ -52,7 +53,12 @@ model User {
   isDeleted Boolean   @default(false)
   deletedAt DateTime?
 
-  // UserProfile fields
+  // Email verification
+  isEmailVerified Boolean @default(false)
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+
+  // UserProfile related
   bio               String?
   favoriteCharacter String?
   favoriteMovieId   Int?
@@ -63,7 +69,12 @@ model User {
   threads   Thread[]
   reactions Reaction[]
 
+  @@index([userId])
   @@index([username])
+  @@index([email])
+  @@index([isDeleted])
+  @@index([isEmailVerified])
+  @@index([emailVerificationToken])
 }
 
 model Thread {
@@ -87,6 +98,7 @@ model Thread {
   @@index([createdAt])
   @@index([movieId])
   @@index([creatorId])
+  @@index([isDeleted])
 }
 
 model Comment {

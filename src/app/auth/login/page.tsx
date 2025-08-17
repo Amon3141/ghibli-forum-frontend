@@ -15,9 +15,12 @@ export default function LoginForm() {
   const [password, setPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string>("");
+  const [needsEmailVerification, setNeedsEmailVerification] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [resendMessage, setResendMessage] = useState<string>("");
 
   const router = useRouter();
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, isResending, resendVerificationEmail } = useAuth();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -25,11 +28,31 @@ export default function LoginForm() {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoginError("");
+    setNeedsEmailVerification(false);
+    
     try {
       await login(identifier, password);
-      router.replace('/')
+      router.replace('/');
     } catch (err: any) {
-      setLoginError(err.response?.data?.error);
+      const errorData = err.response?.data;
+      setLoginError(errorData?.error);
+      
+      // メール認証が必要な場合
+      if (errorData?.emailVerificationRequired) {
+        setNeedsEmailVerification(true);
+        setUserEmail(errorData?.email || '');
+      }
+    }
+  };
+
+  const handleResendEmail = async () => {
+    setResendMessage('');
+    try {
+      const response = await resendVerificationEmail(userEmail);
+      setResendMessage('確認メールを送信しました');
+    } catch (error: any) {
+      setResendMessage(error.message || '確認メールの再送信に失敗しました。少し後で再度お試しください。');
     }
   };
 
@@ -80,6 +103,25 @@ export default function LoginForm() {
         </div>
       </form>
       {loginError && <MessageBox type={MessageBoxType.Error} message={loginError} />}
+      
+      {needsEmailVerification && (
+        <div className="w-full space-y-3">
+          {resendMessage && (
+            <MessageBox
+              type={resendMessage.includes('送信しました') ? MessageBoxType.Success : MessageBoxType.Error}
+              message={resendMessage}
+            />
+          )}
+
+          <GeneralAsyncButton
+            onClick={handleResendEmail}
+            mainText="確認メールを再送信"
+            isLoading={isResending}
+            loadingText="送信中..."
+            className="w-full"
+          />
+        </div>
+      )}
     </div>
   );
 }

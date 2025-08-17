@@ -14,4 +14,10 @@ router.post('/login', authController.loginUser);
 // POST /api/auth/logout - Logout a user
 router.post('/logout', authController.logoutUser);
 
+// GET /api/auth/verify-email - Verify email
+router.get('/verify-email', authController.verifyEmail);
+
+// POST /api/auth/resend-verification - Resend verification email
+router.post('/resend-verification', authController.resendVerificationEmail);
+
 module.exports = router;

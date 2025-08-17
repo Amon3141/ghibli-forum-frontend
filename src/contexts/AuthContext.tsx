@@ -8,9 +8,11 @@ interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   login: (identifier: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (userId: string, username: string, password: string, email: string) => Promise<void>;
+  register: (userId: string, username: string, password: string, email: string) => Promise<{ redirectUrl: string }>;
   checkAuth: () => Promise<void>;
   isLoading: boolean;
+  isSendingEmail: boolean;
+  resendVerificationEmail: (email: string) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -22,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const checkAuth = async () => {
     setIsLoading(true);
@@ -54,12 +57,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const register = async (userId: string, username: string, password: string, email: string) => {
     setIsLoading(true);
     try {
-      await api.post('/auth/register', {
+      const response = await api.post('/auth/register', {
         userId, username, password, email
       });
+
+      console.log("response", response);
+      
+      const emailSent = response.data.emailSent;
+      const redirectUrl = `/auth/email-sent?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
+
+      console.log("redirectUrl", redirectUrl);
+      
+      return { redirectUrl };
     } catch (err: any) {
       setUser(null);
-      throw err;
+      console.log(err);
+      throw new Error(err.response?.data?.error || 'ユーザー登録に失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -71,6 +84,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(null);
     setIsLoading(false);
   };
+
+  const resendVerificationEmail = async (email: string) => {
+    setIsSendingEmail(true);
+    try {
+      await api.post('/auth/resend-verification', { email });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || '確認メールの再送信に失敗しました。少し後で再度お試しください。');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  }
 
   useEffect(() => {
     checkAuth();
@@ -84,7 +108,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       logout,
       register,
       checkAuth,
-      isLoading
+      isLoading,
+      isSendingEmail,
+      resendVerificationEmail
     }}>
       {children}
     </AuthContext.Provider>

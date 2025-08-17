@@ -20,7 +20,8 @@ const userWithoutPassword = {
   imagePath: true,
   bio: true,
   favoriteCharacter: true,
-  favoriteMovie: true
+  favoriteMovie: true,
+  isEmailVerified: true,
 };
 
 /**
@@ -176,13 +177,37 @@ async function deleteUser(id) {
   });
 }
 
+/**
+ * Finds a user by their verification token
+ * @async
+ * @param {string} token - The verification token
+ * @returns {Promise<User|null>} User object if found, null otherwise
+ * PASSWORD IS NOT INCLUDED
+ */
+const findUserByVerificationToken = async (token) => {
+  try {
+    return await prisma.user.findFirst({
+      where: { 
+        emailVerificationToken: token,
+        emailVerificationExpires: {
+          gt: new Date()
+        }
+      },
+      select: userWithoutPassword
+    });
+  } catch (error) {
+    throw new Error('確認トークンでのユーザー検索に失敗しました');
+  }
+};
+
 const readOperations = {
   findAllUsers,
   findUserWithPasswordByUserId,
   findUserWithPasswordByEmail,
   findUserById,
   findUserByUserId,
-  findUserByEmail
+  findUserByEmail,
+  findUserByVerificationToken
 };
 
 const writeOperations = {
