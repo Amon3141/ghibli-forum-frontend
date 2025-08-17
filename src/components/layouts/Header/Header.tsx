@@ -21,7 +21,9 @@ export default function Header() {
       <div className="w-full flex items-center justify-between gap-1">
         <Link className="font-bold text-lg sm:text-xl tracking-wide flex items-end" href="/">
           <span>ジブリ掲示板</span>
-          <TbBeta className="text-xl sm:text-2xl text-lime-900"/>
+          <div style={{ transform: 'rotate(10deg)' }}>
+            <TbBeta className="text-xl sm:text-2xl text-lime-900"/>
+          </div>
         </Link>
         <nav className={`
           ${user ? 'gap-5 sm:gap-6' : 'gap-3 sm:gap-4'}
