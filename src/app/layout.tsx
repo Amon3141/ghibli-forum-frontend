@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layouts/Header/Header";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LoginPopupProvider } from "@/contexts/LoginPopupContext";
+import ScreenTooNarrowOverlay from "@/components/ui/ScreenTooNarrowOverlay";
 
 export const metadata: Metadata = {
   title: "ジブリ掲示板",
@@ -37,6 +38,7 @@ export default function RootLayout({
             ">
               {children}
             </main>
+            <ScreenTooNarrowOverlay />
           </body>
         </LoginPopupProvider>
       </AuthProvider>

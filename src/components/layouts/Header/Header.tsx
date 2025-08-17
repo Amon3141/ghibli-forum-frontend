@@ -4,6 +4,7 @@ import Link from 'next/link';
 import GeneralButton from '@/components/ui/GeneralButton';
 import ProfileIcon from '@/components/features/user/ProfileIcon';
 import { FiHome } from "react-icons/fi";
+import { TbBeta } from "react-icons/tb";
 
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,7 +19,10 @@ export default function Header() {
       flex items-center justify-center
     ">
       <div className="w-full flex items-center justify-between gap-1">
-        <Link className="font-bold text-lg sm:text-xl tracking-wide" href="/">ジブリ掲示板</Link>
+        <Link className="font-bold text-lg sm:text-xl tracking-wide flex items-end" href="/">
+          <span>ジブリ掲示板</span>
+          <TbBeta className="text-xl sm:text-2xl text-lime-900"/>
+        </Link>
         <nav className={`
           ${user ? 'gap-5 sm:gap-6' : 'gap-3 sm:gap-4'}
           font-bold flex items-center justify-end

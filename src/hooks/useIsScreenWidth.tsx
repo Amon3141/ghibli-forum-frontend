@@ -28,3 +28,4 @@ function useIsScreenWidth(threashold: number) {
 }
 
 export const useIsSm = () => useIsScreenWidth(640);
+export const useIsValidWidth = () => useIsScreenWidth(315);
