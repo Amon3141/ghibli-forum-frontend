@@ -74,7 +74,6 @@ export default function RepliesBox({
         commentId: parentId
       }));
     } catch (err: any) {
-      console.error(err.response?.data?.error || '返信投稿時にエラーが発生しました', err);
       setPostReplyError(err.response?.data?.error || '返信投稿時にエラーが発生しました');
     } finally {
       setNewReply("");

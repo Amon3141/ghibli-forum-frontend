@@ -25,13 +25,20 @@ export default function RegisterForm() {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!password || !confirmPassword) {
+      setRegisterError("パスワードを入力してください");
+      return;
+    }
+    if (password.length < 6) {
+      setRegisterError("パスワードは6文字以上で入力してください");
+      return;
+    }
     if (password !== confirmPassword) {
       setRegisterError("パスワードが一致しません");
       return;
     }
     try {
       const result = await register(userId, username, password, email);
-      console.log("result", result);
       router.push(result.redirectUrl);
     } catch (err: any) {
       setRegisterError(err.message);
@@ -99,7 +106,7 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={handleGoToLogin}
-            className="small-text text-indigo-500 underline hover:text-indigo-700"
+            className="small-text text-amber-600 underline hover:text-amber-700"
           >
             すでにアカウントをお持ちですか？
           </button>

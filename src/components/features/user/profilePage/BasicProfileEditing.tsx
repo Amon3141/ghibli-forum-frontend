@@ -43,7 +43,7 @@ export default function BasicProfileEditing({
         const response = await api.get('/movies');
         setMovies(response.data);
       } catch (error) {
-        console.error('Failed to fetch movies:', error);
+        setMovies([]);
       }
     };
     fetchMovies();

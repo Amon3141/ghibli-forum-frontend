@@ -187,7 +187,7 @@ async function deleteUser(id) {
 const findUserByVerificationToken = async (token) => {
   try {
     return await prisma.user.findFirst({
-      where: { 
+      where: {
         emailVerificationToken: token,
         emailVerificationExpires: {
           gt: new Date()
@@ -200,6 +200,29 @@ const findUserByVerificationToken = async (token) => {
   }
 };
 
+/**
+ * Finds a user by their password reset token
+ * @async
+ * @param {string} token - The reset token
+ * @returns {Promise<User|null>} User object if found, null otherwise
+ * PASSWORD IS NOT INCLUDED
+ */
+const findUserByResetToken = async (token) => {
+  try {
+    return await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpires: {
+          gt: new Date()
+        }
+      },
+      select: userWithoutPassword
+    });
+  } catch (error) {
+    throw new Error('リセットトークンでのユーザー検索に失敗しました');
+  }
+};
+
 const readOperations = {
   findAllUsers,
   findUserWithPasswordByUserId,
@@ -207,7 +230,8 @@ const readOperations = {
   findUserById,
   findUserByUserId,
   findUserByEmail,
-  findUserByVerificationToken
+  findUserByVerificationToken,
+  findUserByResetToken
 };
 
 const writeOperations = {

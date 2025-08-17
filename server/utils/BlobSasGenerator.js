@@ -22,7 +22,6 @@ const generateSasToken = (permissions) => {
 
     return sasToken;
   } catch (error) {
-    console.error("Error generating SAS token:", error);
     throw error;
   }
 }

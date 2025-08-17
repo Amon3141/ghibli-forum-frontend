@@ -17,7 +17,6 @@ const fetchMovie = async (movieId: number): Promise<LoadedData<Movie>> => {
     }
   } catch (err: any) {
     const errorMessage = err.response?.data?.error || '映画取得時にエラーが発生しました';
-    console.error(errorMessage, err);
     return {
       data: null, error: errorMessage
     }

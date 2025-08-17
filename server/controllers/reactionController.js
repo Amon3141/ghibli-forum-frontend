@@ -19,7 +19,6 @@ async function getReactedCommentsByUser(req, res) {
     const comments = reactions.map(reaction => reaction.comment);
     res.json(comments);
   } catch (error) {
-    console.error('Error fetching reacted comments:', error);
     res.status(500).json({ error: 'Failed to fetch reacted comments' });
   }
 }
@@ -68,7 +67,6 @@ async function updateReaction(reactableType, req, res) {
     }
 
   } catch (error) {
-    console.error(`Error updating ${reactableType} reaction:`, error);
     if (error.code === 'P2025') {
       return res.status(404).json({ error: `${reactableType} not found` });
     }

@@ -21,7 +21,6 @@ export default function UserLikes({ user }: UserLikesProps) {
         setLikedItems(response.data);
       } catch (err) {
         setError('いいねした項目の取得に失敗しました。');
-        console.error(err);
       }
     };
     fetchLikedComments();

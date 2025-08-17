@@ -20,4 +20,10 @@ router.get('/verify-email', authController.verifyEmail);
 // POST /api/auth/resend-verification - Resend verification email
 router.post('/resend-verification', authController.resendVerificationEmail);
 
+// POST /api/auth/forgot-password - Request password reset
+router.post('/forgot-password', authController.requestPasswordReset);
+
+// POST /api/auth/reset-password - Reset password with token
+router.post('/reset-password', authController.resetPassword);
+
 module.exports = router;

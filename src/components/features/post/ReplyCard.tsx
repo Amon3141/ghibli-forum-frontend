@@ -23,7 +23,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
         reactionType: 'LIKE'
       });
     } catch (err: any) {
-      console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
+      // console.error(err.response?.data?.error || 'コメントのいいねに失敗しました', err);
     }
   };
 

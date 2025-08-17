@@ -1,35 +1,27 @@
-'use client'
-import { useEffect, useState } from 'react';
-
-import ProfileHeader from '@/components/features/user/profilePage/ProfileHeader';
-import UserContents from '@/components/features/user/profilePage/UserContents';
-import { useParams } from 'next/navigation';
+import PublicProfilePageClient from './PublicProfilePageClient';
 import { User } from '@/types/database';
-import { api } from '@/utils/api';
 import GeneralButton from '@/components/ui/GeneralButton';
-import LoadingScreen from '@/components/ui/LoadingScreen';
 import Link from 'next/link';
+import { api } from '@/utils/api';
 
-export default function PublicProfilePage() {
-  const { userId } = useParams();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+interface PublicProfilePageProps {
+  params: {
+    userId: string;
+  };
+}
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setIsLoading(true);
-      const response = await api.get(`/users/${userId}`);
-      setUser(response.data);
-      setIsLoading(false);
-    }
-    fetchUser();
-  }, [userId]);
-  
-  if (isLoading) {
-    return (
-      <LoadingScreen message="ユーザー情報を読み込んでいます..." />
-    );
+async function getUserData(userId: string): Promise<User | null> {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    return null;
   }
+}
+
+export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
+  const { userId } = params;
+  const user = await getUserData(userId);
 
   if (!user) {
     return (
@@ -41,17 +33,10 @@ export default function PublicProfilePage() {
           </GeneralButton>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="flex flex-col w-full max-w-[1000px] h-full py-6 px-8 space-y-8">
-      <ProfileHeader
-        user={user}
-        isEditing={false}
-        isPublicProfile={true}
-      />
-      <UserContents user={user} />
-    </div>
-  )
+    <PublicProfilePageClient user={user} />
+  );
 }

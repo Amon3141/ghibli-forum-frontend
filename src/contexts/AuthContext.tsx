@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { api } from '@/utils/api';
 import { User } from '@/types/database';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -13,6 +14,8 @@ interface AuthContextType {
   isLoading: boolean;
   isSendingEmail: boolean;
   resendVerificationEmail: (email: string) => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<void>;
+  resetPassword: (token: string, newPassword: string) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -25,6 +28,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const router = useRouter();
 
   const checkAuth = async () => {
     setIsLoading(true);
@@ -60,18 +64,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await api.post('/auth/register', {
         userId, username, password, email
       });
-
-      console.log("response", response);
       
       const emailSent = response.data.emailSent;
       const redirectUrl = `/auth/email-sent?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
-
-      console.log("redirectUrl", redirectUrl);
       
       return { redirectUrl };
     } catch (err: any) {
       setUser(null);
-      console.log(err);
       throw new Error(err.response?.data?.error || 'ユーザー登録に失敗しました');
     } finally {
       setIsLoading(false);
@@ -83,6 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await api.post('/auth/logout');
     setUser(null);
     setIsLoading(false);
+    router.push('/auth/login');
   };
 
   const resendVerificationEmail = async (email: string) => {
@@ -94,7 +94,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } finally {
       setIsSendingEmail(false);
     }
-  }
+  };
+
+  const requestPasswordReset = async (email: string) => {
+    setIsSendingEmail(true);
+    try {
+      await api.post('/auth/forgot-password', { email });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || 'パスワードリセットメールの送信に失敗しました。少し後で再度お試しください。');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
+  const resetPassword = async (token: string, newPassword: string) => {
+    setIsLoading(true);
+    try {
+      await api.post('/auth/reset-password', { token, newPassword });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || 'パスワードリセットに失敗しました');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     checkAuth();
@@ -110,7 +132,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       checkAuth,
       isLoading,
       isSendingEmail,
-      resendVerificationEmail
+      resendVerificationEmail,
+      requestPasswordReset,
+      resetPassword
     }}>
       {children}
     </AuthContext.Provider>

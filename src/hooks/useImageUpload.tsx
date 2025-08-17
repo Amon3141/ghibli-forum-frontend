@@ -42,7 +42,6 @@ export default function useFileUpload(): UseFileUploadReturn {
       return {blobUrl, sasToken};
     } catch (error) {
       setUploadMessage(`Error uploading ${selectedFile?.name}`);
-      console.error('Error uploading image:', error);
       return null;
     }
   }

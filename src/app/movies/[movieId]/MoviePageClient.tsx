@@ -56,8 +56,6 @@ export default function MoviePageClient({
 
     const sortedThreads = getSortedThreads(threads, newSortType, newSortDirection);
     setThreads(sortedThreads);
-
-    console.log(sortedThreads);
   }
 
   useEffect(() => {

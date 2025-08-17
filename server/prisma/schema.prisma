@@ -58,6 +58,10 @@ model User {
   emailVerificationToken String?
   emailVerificationExpires DateTime?
 
+  // Password reset
+  resetToken String?
+  resetTokenExpires DateTime?
+
   // UserProfile related
   bio               String?
   favoriteCharacter String?

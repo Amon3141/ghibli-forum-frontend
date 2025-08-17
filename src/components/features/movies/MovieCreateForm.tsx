@@ -24,7 +24,6 @@ export default function MovieCreateForm({ movies, setMovies }: MovieCreateFormPr
       const response = await api.post('/movies', newMovie);
       setMovies([...movies, response.data.movie]);
     } catch (err: any) {
-      console.error('Failed to create movie:', err);
       setCreateMovieError(err.response?.data?.error || '映画登録時にエラーが発生しました');
     }
   };

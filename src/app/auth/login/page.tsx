@@ -20,7 +20,7 @@ export default function LoginForm() {
   const [resendMessage, setResendMessage] = useState<string>("");
 
   const router = useRouter();
-  const { login, isLoading, isResending, resendVerificationEmail } = useAuth();
+  const { login, isLoading, isSendingEmail, resendVerificationEmail } = useAuth();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -86,20 +86,32 @@ export default function LoginForm() {
           />
         </div>
         
-        <div className="flex justify-between items-center mt-2.5 gap-2">
-          <button
-            type="button"
-            onClick={handleGoToRegister}
-            className="small-text text-indigo-500 underline hover:text-indigo-700"
-          >
-            アカウント作成
-          </button>
-          <GeneralAsyncButton
-            type="submit"
-            mainText="ログイン"
-            loadingText="ログイン中..."
-            isLoading={isLoading}
-          />
+        <div className="space-y-3">
+          <div className="flex justify-between items-center gap-2">
+            <button
+              type="button"
+              onClick={handleGoToRegister}
+              className="small-text text-amber-600 underline hover:text-amber-700"
+            >
+              アカウント作成
+            </button>
+            <GeneralAsyncButton
+              type="submit"
+              mainText="ログイン"
+              loadingText="ログイン中..."
+              isLoading={isLoading}
+            />
+          </div>
+          
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => router.push('/auth/forgot-password')}
+              className="small-text text-gray-500 underline hover:text-gray-700"
+            >
+              パスワードを忘れた場合
+            </button>
+          </div>
         </div>
       </form>
       {loginError && <MessageBox type={MessageBoxType.Error} message={loginError} />}
@@ -116,7 +128,7 @@ export default function LoginForm() {
           <GeneralAsyncButton
             onClick={handleResendEmail}
             mainText="確認メールを再送信"
-            isLoading={isResending}
+            isLoading={isSendingEmail}
             loadingText="送信中..."
             className="w-full"
           />

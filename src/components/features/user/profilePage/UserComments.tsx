@@ -19,7 +19,6 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
     const fetchComments = async () => {
       try {
         const response = await api.get(`/users/${user.id}/comments`);
-        console.log(response.data);
         const filteredComments = response.data.filter((comment: Comment) => {
           if (commentType === 'comments') {
             return comment.level === 1;
@@ -31,7 +30,6 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
         setComments(filteredComments);
       } catch (err) {
         setError('コメントの取得に失敗しました。');
-        console.error(err);
       }
     };
 
@@ -41,7 +39,7 @@ export default function UserComments({ user, commentType }: UserCommentsProps) {
   }, [user.id, commentType]);
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <p className="text-red-700">{error}</p>;
   }
 
   if (comments.length === 0) {

@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/utils/api';
 import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
@@ -10,11 +10,13 @@ import { MessageBoxType } from '@/types/types';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import { PageStatus } from '@/types/types';
 
-export default function VerifyEmailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const token = params.token as string;
+interface VerifyEmailPageClientProps {
+  token: string | null;
+}
+
+export default function VerifyEmailPageClient({ token }: VerifyEmailPageClientProps) {
   const { resendVerificationEmail, isSendingEmail } = useAuth();
+  const router = useRouter();
 
   const [status, setStatus] = useState<PageStatus>(PageStatus.Loading);
   const [message, setMessage] = useState('');
@@ -61,9 +63,9 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="h-full flex items-center justify-center p-4">
+    <div className="h-full flex items-center justify-center p-4 mb-5">
       <div className="w-full max-w-md space-y-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-center mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-5">
           {status === PageStatus.Success ? 'メール認証完了' : 'メール認証エラー'}
         </h1>
 

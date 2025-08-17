@@ -62,7 +62,6 @@ const initializeMovies = async () => {
     
     return newMovies;
   } catch (err: any) {
-    console.error('Failed to initialize movies:', err);
     return [];
   }
 };

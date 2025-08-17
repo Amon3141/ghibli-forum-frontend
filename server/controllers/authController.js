@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const userModel = require('../models/userModel');
-const { sendVerificationEmail } = require('../utils/emailHelpers');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/emailHelpers');
 
 require('dotenv').config();
 
@@ -27,6 +27,10 @@ const registerUser = async (req, res) => {
 
   if (userId.includes('@')) {
     return res.status(400).json({ error: 'ユーザーIDに@記号は使用できません' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'パスワードは6文字以上で入力してください' });
   }
 
   // ユーザーIDとメールアドレスの重複チェック
@@ -65,7 +69,6 @@ const registerUser = async (req, res) => {
     try {
       await sendVerificationEmail(email, verificationToken);
     } catch (error) {
-      console.error('Email sending failed, but user was created:', error.message);
       return res.status(201).json({
         message: '確認メールの送信に失敗しました。少し後で再送信をお試しください。',
         user: newUser,
@@ -184,7 +187,6 @@ const verifyEmail = async (req, res) => {
       message: 'メールアドレスの確認が完了しました。ログインできます。'
     });
   } catch (err) {
-    console.error('Email verification error:', err);
     return res.status(500).json({ error: 'メールアドレス確認中にエラーが発生しました' });
   }
 };
@@ -222,14 +224,86 @@ const resendVerificationEmail = async (req, res) => {
         message: '確認メールを再送信しました'
       });
     } catch (emailError) {
-      console.error('Failed to resend verification email:', emailError);
       return res.status(500).json({ 
         error: '確認メールの再送信に失敗しました。少し後で再度お試しください。' 
       });
     }
   } catch (err) {
-    console.error('Resend verification error:', err);
     return res.status(500).json({ error: '確認メール再送信中にエラーが発生しました' });
+  }
+};
+
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'メールアドレスが必要です' });
+  }
+
+  try {
+    const user = await userModel.findUserByEmail(email);
+
+    if (!user) {
+      return res.status(200).json({ 
+        message: 'パスワードリセットメールを送信しました'
+      });
+    }
+
+    // リセットトークンを生成
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24時間
+
+    await userModel.updateUser(user.id, {
+      resetToken: resetToken,
+      resetTokenExpires: resetExpires
+    });
+
+    try {
+      await sendPasswordResetEmail(email, resetToken);
+      return res.status(200).json({
+        message: 'パスワードリセットメールを送信しました'
+      });
+    } catch (emailError) {
+      return res.status(500).json({ 
+        error: 'パスワードリセットメールの送信に失敗しました。少し後で再度お試しください。' 
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'パスワードリセットメールの送信中にエラーが発生しました' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    return res.status(400).json({ error: 'トークンと新しいパスワードが必要です' });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ error: 'パスワードは6文字以上である必要があります' });
+  }
+
+  try {
+    const user = await userModel.findUserByResetToken(token);
+    
+    if (!user) {
+      return res.status(400).json({ error: '無効または期限切れのリセットトークンです' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await userModel.updateUser(user.id, {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpires: null
+    });
+
+    return res.status(200).json({
+      message: 'パスワードが正常に更新されました。新しいパスワードでログインしてください。'
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'パスワードリセット中にエラーが発生しました' });
   }
 };
 
@@ -238,5 +312,7 @@ module.exports = {
   loginUser,
   logoutUser,
   verifyEmail,
-  resendVerificationEmail
+  resendVerificationEmail,
+  requestPasswordReset,
+  resetPassword
 };

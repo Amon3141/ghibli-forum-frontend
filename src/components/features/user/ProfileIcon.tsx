@@ -23,7 +23,7 @@ export default function ProfileIcon({ user, size = 40, sasToken = null, classNam
           const res = await api.get(`/sas/token?containerName=${containerName}`);
           setLocalSasToken(res.data.sasToken);
         } catch (err) {
-          console.error('Failed to fetch SAS token:', err);
+          // console.error('Failed to fetch SAS token:', err);
         }
       }
     };

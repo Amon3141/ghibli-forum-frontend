@@ -17,7 +17,6 @@ const fetchThread = async (threadId: number): Promise<LoadedData<Thread>> => {
     return { data: response.data, error: null };
   } catch (err: any) {
     const errorMessage = err.response?.data?.error || 'スレッド取得時にエラーが発生しました';
-    console.error(errorMessage, err);
     return { data: null, error: errorMessage };
   }
 }
@@ -28,7 +27,6 @@ const fetchAllCommentsForThread = async (threadId: number): Promise<LoadedData<C
     return { data: response.data, error: null };
   } catch (err: any) {
     const errorMessage = err.response?.data?.error || 'コメント取得時にエラーが発生しました';
-    console.error(errorMessage, err);
     return { data: null, error: errorMessage };
   }
 }

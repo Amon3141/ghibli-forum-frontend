@@ -11,14 +11,12 @@ function verifyToken(req, res, next) {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded;
     next();
-    console.log("Auth token is valid")
   } catch (err) {
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict'
     });
-    console.log("Auth token is invalid")
     return res.status(401).json({ error: 'Unauthorized' });
   }
 };

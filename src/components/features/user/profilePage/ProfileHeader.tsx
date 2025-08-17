@@ -46,7 +46,6 @@ export default function ProfileHeader({
       setSasToken(sasToken);
       return sasToken;
     } catch (err) {
-      console.error('SASトークンの取得に失敗しました:', err);
       return null;
     }
   };
@@ -85,7 +84,6 @@ export default function ProfileHeader({
       setSelectedImage(null);
       setEditingUser({});
     } catch (error) {
-      console.error("変更の保存に失敗しました: ", error);
       throw new Error(`変更の保存に失敗しました: ${error}`);
     } finally {
       setIsEditing(false);
