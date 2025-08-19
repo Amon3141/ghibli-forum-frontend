@@ -5,6 +5,7 @@ import MovieCard from "@/components/features/movies/MovieCard";
 import MovieCreateForm from './MovieCreateForm';
 import { LoadedData } from '@/types/ssr';
 import { Movie } from '@/types/database';
+import { shuffleArray } from '@/utils/sortHelpers';
 
 interface MovieListProps {
   movies: LoadedData<Movie[]>;
@@ -18,7 +19,8 @@ export default function MovieList({ movies: loadedMovies }: MovieListProps) {
 
   const initializeMovies = async () => {
     if (loadedMovies.data) {
-      setMovies(loadedMovies.data);
+      const shuffledMovies = shuffleArray(loadedMovies.data);
+      setMovies(shuffledMovies);
     } else if (loadedMovies.error) {
       setFetchMoviesError(loadedMovies.error);
     }

@@ -94,7 +94,7 @@ export default function PrivateProfilePage() {
       </div>
       <div 
         className={`
-          transition-all ease-in-out mt-5 sm:mt-7 pb-5 sm:pb-6
+          transition-all ease-in-out mt-3 sm:mt-4 pb-5 sm:pb-6
           ${showMainContent ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
         style={{ transitionDuration: `${mainContentTransitionDuration}ms` }}

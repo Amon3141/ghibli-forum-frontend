@@ -205,7 +205,7 @@ export default function ProfileHeader({
       
       {/* Favourites */}
       {!isEditing && (
-        <div className="flex gap-2.5 mt-4 sm:mt-5 sm:mt-7">
+        <div className="flex gap-2.5 mt-4 sm:mt-5 sm:mt-7 mb-2 sm:mb-3">
           {user.favoriteMovie && (
             <ProfileItemCard
               title = "好きな作品"
