@@ -3,7 +3,8 @@ import axios from 'axios';
 const getBaseURL = () => {
   if (typeof window === 'undefined') {
     // Server-side: use localhost
-    return 'http://localhost:3000/api';
+    const baseUrl = process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
+    return `${baseUrl}/api`;
   }
   // Client-side: use relative URL
   return '/api';

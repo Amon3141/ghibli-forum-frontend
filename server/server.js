@@ -22,6 +22,16 @@ app.prepare().then(() => {
   server.use(express.json());
   server.use(cookieParser());
 
+  /* ----- CORS ----- */
+  const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' 
+      ? process.env.FRONTEND_URL || 'https://ghibliforum.azurewebsites.net'
+      : 'http://localhost:3000',
+    credentials: true
+  };
+  
+  server.use(cors(corsOptions));
+
   /* ----- API Routes ----- */
   server.use('/api/movies', movieRoutes);
   server.use('/api/threads', threadRoutes);

@@ -1,4 +1,5 @@
-import { api } from "@/utils/api";
+require('dotenv').config();
+const axios = require('axios');
 
 const initialMovies = [
   {
@@ -53,15 +54,19 @@ const initialMovies = [
 
 const initializeMovies = async () => {
   try {
+    const baseUrl = process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
     const newMovies = [];
     
     for (const movie of initialMovies) {
-      const response = await api.post('/movies', movie);
+      const response = await axios.post(`${baseUrl}/api/movies`, movie);
       newMovies.push(response.data.movie);
     }
     
     return newMovies;
-  } catch (err: any) {
+  } catch (err) {
+    console.error('Error initializing movies:', err);
     return [];
   }
 };
+
+initializeMovies();
