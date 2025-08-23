@@ -58,6 +58,11 @@ export default function MoviePageClient({
     setThreads(sortedThreads);
   }
 
+  const handleCreateThread = (newThread: Thread) => {
+    setThreads(getSortedThreads([newThread, ...threads], sortType, sortDirection));
+    setCreateThreadMessage('スレッドが作成されました');
+  }
+
   useEffect(() => {
     initializeData();
   }, []);
@@ -95,10 +100,7 @@ export default function MoviePageClient({
                 <ThreadCreateForm
                   movieId={movieId}
                   setShowThreadForm={setShowThreadForm}
-                  onCreateThread={(newThread: Thread) => {
-                    setThreads([newThread, ...threads]);
-                    setCreateThreadMessage('スレッドが作成されました');
-                  }}
+                  onCreateThread={handleCreateThread}
                 />
               </div>
             )}
