@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -8,6 +8,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import InputField from '@/components/ui/InputField';
 import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
 import MessageBox from '@/components/ui/MessageBox';
+import LoadingScreen from '@/components/ui/LoadingScreen';
 import { MessageBoxType } from '@/types/types';
 
 export default function LoginForm() {
@@ -59,16 +60,22 @@ export default function LoginForm() {
     router.push('/auth/register');
   }
 
-  if (user) {
-    if (user.isFirstTimeLogin) {
-      router.replace('/auth/setup-profile');
-    } else {
-      router.replace('/');
+  useEffect(() => {
+    if (user) {
+      if (user.isFirstTimeLogin) {
+        router.replace('/auth/setup-profile');
+      } else {
+        router.replace('/');
+      }
     }
+  }, [user, router]);
+
+  if (user) {
+    return <LoadingScreen message="リダイレクト中..." />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-full max-w-sm mx-auto gap-4 mb-5 px-2">
+    <div className="flex flex-col items-center justify-center h-screen w-full max-w-md mx-auto gap-4 mb-5 px-2">
       <h2 className="text-xl sm:text-2xl font-bold">ログイン</h2>
       <form onSubmit={handleLogin} className="space-y-2 w-full">
         <InputField

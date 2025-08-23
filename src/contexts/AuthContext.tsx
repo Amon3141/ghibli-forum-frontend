@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       user = response.data.user as User;
     } catch (err: any) {
       setUser(null);
+      throw err;
     } finally {
       setIsLoading(false);
       return user;
@@ -46,10 +47,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = async (identifier: string, password: string) => {
     setIsLoading(true);
     try {
-      await api.post('/auth/login', {
+      const response = await api.post('/auth/login', {
         identifier,
         password
       });
+      localStorage.setItem('authToken', response.data.token);
       await checkAuth();
     } catch (err: any) {
       setUser(null);
@@ -64,6 +66,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const response = await api.post('/auth/register', {
         userId, username, password, email
+      }, {
+        timeout: 20000
       });
       
       const emailSent = response.data.emailSent;
@@ -88,7 +92,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const resendVerificationEmail = async (email: string) => {
     setIsSendingEmail(true);
     try {
-      await api.post('/auth/resend-verification', { email });
+      await api.post('/auth/resend-verification', { email }, {
+        timeout: 20000
+      });
     } catch (error: any) {
       throw new Error(error.response?.data?.error || '確認メールの再送信に失敗しました。少し後で再度お試しください。');
     } finally {
@@ -99,7 +105,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const requestPasswordReset = async (email: string) => {
     setIsSendingEmail(true);
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post('/auth/forgot-password', { email }, {
+        timeout: 20000
+      });
     } catch (error: any) {
       throw new Error(error.response?.data?.error || 'パスワードリセットメールの送信に失敗しました。少し後で再度お試しください。');
     } finally {
@@ -110,7 +118,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const resetPassword = async (token: string, newPassword: string) => {
     setIsLoading(true);
     try {
-      await api.post('/auth/reset-password', { token, newPassword });
+      await api.post('/auth/reset-password', { token, newPassword }, {
+        timeout: 20000
+      });
     } catch (error: any) {
       throw new Error(error.response?.data?.error || 'パスワードリセットに失敗しました');
     } finally {
@@ -119,7 +129,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(() => {
-    checkAuth();
+    checkAuth().catch(() => {});
   }, []);
 
   return (

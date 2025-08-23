@@ -1,14 +1,14 @@
 import EmailSentPageClient from './EmailSentPageClient';
 
 interface EmailSentPageProps {
-  searchParams: {
+  searchParams: Promise<{
     email?: string;
     emailSent?: string;
-  };
+  }>;
 }
 
-export default function EmailSentPage({ searchParams }: EmailSentPageProps) {
-  const { email, emailSent } = searchParams;
+export default async function EmailSentPage({ searchParams }: EmailSentPageProps) {
+  const { email, emailSent } = await searchParams;
 
   const emailSentBoolean = emailSent === 'true';
 

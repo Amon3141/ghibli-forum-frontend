@@ -32,7 +32,7 @@ export default function ForgotPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="h-full flex items-center justify-center p-4 mb-5">
+      <div className="h-full w-full max-w-md flex items-center justify-center p-4 mb-5">
         <div className="w-full max-w-md space-y-4">
           <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-5">
             メール送信完了
@@ -72,10 +72,10 @@ export default function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
-            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="メールアドレス"
+            type="email"
           />
 
           <div className="flex items-center justify-between gap-3">

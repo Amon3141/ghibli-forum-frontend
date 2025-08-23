@@ -42,7 +42,7 @@ export default function EmailSentPageClient({ email, emailSent }: EmailSentPageC
   }
 
   return (
-    <div className="h-full flex items-center justify-center p-4 mb-5">
+    <div className="h-full w-full max-w-md flex items-center justify-center p-4 mb-5">
       <div className="w-full max-w-md space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-5">
           メール送信{emailSent ? '完了' : 'エラー'}

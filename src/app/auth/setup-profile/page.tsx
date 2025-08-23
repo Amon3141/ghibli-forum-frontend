@@ -49,18 +49,25 @@ export default function SetupProfilePage() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        router.push('/auth/login');
+        return;
+      }
+      if (!user.isFirstTimeLogin) {
+        router.push('/');
+        return;
+      }
+    }
+  }, [user, isLoading, router]);
+
   if (isLoading) {
     return <LoadingScreen message="ユーザー情報を確認中..." />;
   }
 
-  if (!user) {
-    router.push('/auth/login');
-    return null;
-  }
-
-  if (!user.isFirstTimeLogin) {
-    router.push('/');
-    return null;
+  if (!user || !user.isFirstTimeLogin) {
+    return <LoadingScreen message="リダイレクト中..." />;
   }
 
   const handleUserUpdate = (updatedData: Partial<User>) => {
@@ -202,7 +209,7 @@ export default function SetupProfilePage() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center gap-1.5 sm:gap-2 max-w-[800px]">
+    <div className="h-full w-full flex flex-col items-center justify-center gap-1.5 sm:gap-2 max-w-[800px] sm:mb-3">
       {/* Header */}
       <h1 className="text-xl sm:text-2xl font-bold text-textcolor pb-1 text-center">
         ジブリ掲示板へようこそ！

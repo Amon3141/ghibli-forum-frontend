@@ -6,6 +6,7 @@ import { api } from '@/utils/api';
 import GeneralAsyncButton from '@/components/ui/GeneralAsyncButton';
 import GeneralButton from '@/components/ui/GeneralButton';
 import MessageBox from '@/components/ui/MessageBox';
+import InputField from '@/components/ui/InputField';
 import { MessageBoxType } from '@/types/types';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import { PageStatus } from '@/types/types';
@@ -20,10 +21,18 @@ export default function VerifyEmailPageClient({ token }: VerifyEmailPageClientPr
 
   const [status, setStatus] = useState<PageStatus>(PageStatus.Loading);
   const [message, setMessage] = useState('');
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState('');
+
+  const handleShowEmailInput = () => {
+    setShowEmailInput(true);
+  };
 
   const handleResendEmail = async () => {
-    const email = prompt('メールアドレスを入力してください：');
-    if (!email) return;
+    if (!email.trim()) {
+      setMessage('メールアドレスを入力してください');
+      return;
+    }
 
     try {
       await resendVerificationEmail(email);
@@ -44,7 +53,9 @@ export default function VerifyEmailPageClient({ token }: VerifyEmailPageClientPr
 
     const verifyEmail = async () => {
       try {
-        const response = await api.get(`/auth/verify-email?token=${token}`);
+        const response = await api.get(`/auth/verify-email?token=${token}`, {
+          timeout: 20000
+        });
         setStatus(PageStatus.Success);
         setMessage(response.data.message);
       } catch (error: any) {
@@ -63,7 +74,7 @@ export default function VerifyEmailPageClient({ token }: VerifyEmailPageClientPr
   }
 
   return (
-    <div className="h-full flex items-center justify-center p-4 mb-5">
+    <div className="h-full w-full max-w-md flex items-center justify-center p-4 mb-5">
       <div className="w-full max-w-md space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-5">
           {status === PageStatus.Success ? 'メール認証完了' : 'メール認証エラー'}
@@ -74,19 +85,33 @@ export default function VerifyEmailPageClient({ token }: VerifyEmailPageClientPr
           message={message}
         />
 
-        <div className={`flex gap-2 ${status === PageStatus.Error ? 'items-center justify-between' : 'justify-end'}`}>
-          {status === PageStatus.Error && (
-            <GeneralAsyncButton
-              onClick={handleResendEmail}
-              isLoading={isSendingEmail}
-              loadingText="送信中..."
-              mainText="確認メールを再送信"
+        {showEmailInput && (
+          <div className="space-y-3">
+            <InputField
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="メールアドレスを入力してください"
+              type="email"
             />
+          </div>
+        )}
+
+        <div className={'flex items-center justify-end gap-2'}>
+          {status === PageStatus.Success && (
+            <GeneralButton onClick={() => router.push('/auth/login')}>
+              ログインページへ
+            </GeneralButton>
           )}
 
-          <GeneralButton onClick={() => router.push('/auth/login')}>
-            ログインページへ
-          </GeneralButton>
+          {status === PageStatus.Error && (
+            <GeneralAsyncButton
+              onClick={showEmailInput ? handleResendEmail : handleShowEmailInput}
+              isLoading={isSendingEmail}
+              loadingText="送信中..."
+              mainText={showEmailInput ? "確認メールを送信" : "確認メールを再送信"}
+              color={showEmailInput ? "primary" : "default"}
+            />
+          )}
         </div>
       </div>
     </div>
