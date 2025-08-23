@@ -14,7 +14,7 @@ export default function HomeClient({ loadedMovies }: HomeClientProps) {
   return (
     <div className="flex flex-col w-full max-w-[1200px]">
       <HeroSection />
-      <div className="text-center py-2 my-3 sm:my-5">
+      <div className="text-center py-2 mt-3 sm:mt-5">
         <h2 className="text-[1.2rem] sm:text-[1.5rem] text-textcolor/90">
           スペース一覧
         </h2>

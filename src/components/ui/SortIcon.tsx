@@ -8,12 +8,12 @@ interface SortIconProps {
 
 export default function SortIcon({ isSorted, sortDirection }: SortIconProps) {
   if (!isSorted) {
-    return <BsArrowDownUp className="text-textcolor/60 w-4" />;
+    return <BsArrowDownUp className="text-textcolor/60 w-3 sm:w-4" />;
   }
 
   if (sortDirection === SortDirection.asc) {
-    return <BsArrowUp className="text-textcolor w-4" />;
+    return <BsArrowUp className="text-textcolor w-3 sm:w-4" />;
   } else if (sortDirection === SortDirection.desc) {
-    return <BsArrowDown className="text-textcolor w-4" />;
+    return <BsArrowDown className="text-textcolor w-3 sm:w-4" />;
   }
 }
