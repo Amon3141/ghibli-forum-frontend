@@ -7,6 +7,7 @@ import { ItemCardColor } from "./ProfileItemCard";
 
 import InputField from "@/components/ui/InputField";
 import GeneralButton from "@/components/ui/GeneralButton";
+import GeneralAsyncButton from "@/components/ui/GeneralAsyncButton";
 
 interface BasicProfileEditingProps {
   user: User;
@@ -169,17 +170,14 @@ export default function BasicProfileEditing({
             キャンセル
           </GeneralButton>
         )}
-        <GeneralButton 
-          color="primary" 
-          onClick={handleSaveEdit} 
+        <GeneralAsyncButton
+          onClick={handleSaveEdit}
+          isLoading={isSaving}
+          loadingText="保存中..."
+          mainText="変更を保存"
+          color="primary"
           disabled={formData.bio?.length > bioMaxLength || formData.username.length === 0}
-          className={`
-            bg-primary/80 border-primary/80
-            ${formData.bio?.length > bioMaxLength || formData.username.length === 0 ? 'opacity-60 cursor-not-allowed' : ''}
-          `}
-        >
-          変更を保存
-        </GeneralButton>
+        />
       </div>
     </div>
   )

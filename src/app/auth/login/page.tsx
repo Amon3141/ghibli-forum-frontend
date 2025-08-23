@@ -71,7 +71,7 @@ export default function LoginForm() {
   }, [user, router]);
 
   if (user) {
-    return <LoadingScreen message="リダイレクト中..." />;
+    return <LoadingScreen message="ホームページにリダイレクト中..." />;
   }
 
   return (

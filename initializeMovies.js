@@ -1,5 +1,8 @@
-require('dotenv').config();
 const axios = require('axios');
+const dotenv = require('dotenv');
+
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production.local' : '.env.development.local';
+dotenv.config({ path: envFile });
 
 const initialMovies = [
   {
@@ -54,11 +57,19 @@ const initialMovies = [
 
 const initializeMovies = async () => {
   try {
-    const baseUrl = process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
-    const newMovies = [];
+    const baseUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseUrl) {
+      throw new Error('BACKEND_URL is not set');
+    }
     
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTc1NTkxNTkwMSwiZXhwIjoxNzU2MDAyMzAxfQ.imUK89UOXNk8P7MwloZqG4AVGYVJdmnhTL2XrxGDtSA";
+    const newMovies = [];
     for (const movie of initialMovies) {
-      const response = await axios.post(`${baseUrl}/api/movies`, movie);
+      const response = await axios.post(`${baseUrl}/movies`, movie, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
       newMovies.push(response.data.movie);
     }
     

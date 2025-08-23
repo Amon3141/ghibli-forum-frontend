@@ -66,8 +66,12 @@ export default function SetupProfilePage() {
     return <LoadingScreen message="ユーザー情報を確認中..." />;
   }
 
-  if (!user || !user.isFirstTimeLogin) {
-    return <LoadingScreen message="リダイレクト中..." />;
+  if (!user) {
+    return <LoadingScreen message="ログインページにリダイレクト中..." />;
+  }
+
+  if (!user.isFirstTimeLogin) {
+    return <LoadingScreen message="ホームページにリダイレクト中..." />;
   }
 
   const handleUserUpdate = (updatedData: Partial<User>) => {
