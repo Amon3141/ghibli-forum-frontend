@@ -39,6 +39,7 @@ export default function ProfileHeader({
 
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(user.imagePath || null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);
   const [editingUser, setEditingUser] = useState<Partial<User>>({});
   const [isLoadingImage, setIsLoadingImage] = useState(false);
@@ -59,6 +60,37 @@ export default function ProfileHeader({
 
   useEffect(() => {
     fetchSasToken();
+  }, []);
+
+  // Cleanup effect for temp image URL
+  useEffect(() => {
+    if (selectedImage) {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+      
+      const newTempUrl = URL.createObjectURL(selectedImage);
+      setTempImageUrl(newTempUrl);
+    } else {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+        setTempImageUrl(null);
+      }
+    }
+
+    return () => {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+    };
+  }, [selectedImage]);
+
+  useEffect(() => {
+    return () => {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+    };
   }, []);
 
   const handleSaveChanges = async () => {
@@ -99,11 +131,10 @@ export default function ProfileHeader({
 
   const profileImageIcon = () => {
     // 編集中で新しい画像を選択している場合
-    if (isEditing && selectedImage) {
-      const temporaryImageUrl = URL.createObjectURL(selectedImage);
+    if (isEditing && selectedImage && tempImageUrl) {
       return (
         <Image 
-          src={temporaryImageUrl}
+          src={tempImageUrl}
           alt={user.username}
           fill
           sizes="100vw"

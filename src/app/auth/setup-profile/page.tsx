@@ -24,6 +24,7 @@ export default function SetupProfilePage() {
   const { handleUploadFile } = useFileUpload();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
   const [sasToken, setSasToken] = useState<string | null>(null);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
 
@@ -48,6 +49,36 @@ export default function SetupProfilePage() {
       setProfileImageUrl(user.imagePath);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (selectedImage) {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+
+      const newTempUrl = URL.createObjectURL(selectedImage);
+      setTempImageUrl(newTempUrl);
+    } else {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+        setTempImageUrl(null);
+      }
+    }
+
+    return () => {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+    };
+  }, [selectedImage]);
+
+  useEffect(() => {
+    return () => {
+      if (tempImageUrl) {
+        URL.revokeObjectURL(tempImageUrl);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -147,11 +178,10 @@ export default function SetupProfilePage() {
   // プロフィール画像表示
   const profileImageIcon = () => {
     // 新しい画像を選択している場合
-    if (selectedImage) {
-      const temporaryImageUrl = URL.createObjectURL(selectedImage);
+    if (selectedImage && tempImageUrl) {
       return (
         <Image 
-          src={temporaryImageUrl}
+          src={tempImageUrl}
           alt={user.username}
           fill
           sizes="(max-width: 768px) 112px, 120px"
