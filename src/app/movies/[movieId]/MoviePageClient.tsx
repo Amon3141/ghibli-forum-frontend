@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLoginPopup } from '@/contexts/LoginPopupContext';
 
 import ThreadCard from "@/components/features/thread/ThreadCard";
 import GeneralButton from "@/components/ui/GeneralButton";
@@ -22,6 +24,9 @@ interface MoviePageProps {
 export default function MoviePageClient({
   movieId, loadedMovie
 }: MoviePageProps) {
+  const { user } = useAuth();
+  const { openLoginPopupWithMessage } = useLoginPopup();
+
   const [movie, setMovie] = useState<Movie | null>(null);
   const [threads, setThreads] = useState<Thread[]>([]);
   
@@ -58,6 +63,15 @@ export default function MoviePageClient({
     setThreads(sortedThreads);
   }
 
+  const handleOpenThreadCreateForm = () => {
+    if (!user) {
+      openLoginPopupWithMessage('スレッドを作成しよう');
+      return;
+    }
+    setShowThreadForm(true);
+    setCreateThreadMessage(null);
+  }
+
   const handleCreateThread = (newThread: Thread) => {
     setThreads(getSortedThreads([newThread, ...threads], sortType, sortDirection));
     setCreateThreadMessage('スレッドが作成されました');
@@ -85,10 +99,7 @@ export default function MoviePageClient({
               <h3 className="text-lg sm:text-xl font-bold mb-1">{movie && movie.title && `${movie.title}の`}スレッド</h3>
               {!showThreadForm && (
                 <GeneralButton
-                  onClick={() => {
-                    setShowThreadForm(true);
-                    setCreateThreadMessage(null);
-                  }}
+                  onClick={handleOpenThreadCreateForm}
                   color="primary"
                 >
                   <span>  + スレッドを作成</span>
