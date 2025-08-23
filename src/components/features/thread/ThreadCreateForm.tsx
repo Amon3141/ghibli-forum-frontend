@@ -54,7 +54,7 @@ export default function ThreadCreateForm({ movieId, setShowThreadForm, onCreateT
         handleCreateThread();
       }}
       className="
-        bg-gray-50 rounded-md border-1 border-gray-200 w-2/3 p-3 sm:p-4 space-y-3
+        bg-gray-50 rounded-md border-1 border-gray-200 w-full p-3 sm:p-4 space-y-3
       "
     >
       <h3 className="text-base sm:text-lg font-bold text-textcolor/90">新しいスレッドを作成</h3>

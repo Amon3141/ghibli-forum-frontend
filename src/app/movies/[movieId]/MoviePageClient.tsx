@@ -96,7 +96,7 @@ export default function MoviePageClient({
               )}
             </div>
             {showThreadForm && (
-              <div className="mb-2">
+              <div className="mb-2 w-full sm:w-2/3">
                 <ThreadCreateForm
                   movieId={movieId}
                   setShowThreadForm={setShowThreadForm}
