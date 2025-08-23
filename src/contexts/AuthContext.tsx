@@ -86,6 +86,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoading(true);
     await api.post('/auth/logout');
     setUser(null);
+    localStorage.removeItem('authToken');
     setIsLoading(false);
   };
 

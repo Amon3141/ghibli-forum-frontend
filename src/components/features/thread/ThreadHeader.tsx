@@ -25,7 +25,7 @@ export default function ThreadHeader({ thread, onClickThreadTrashButton }: Threa
   }
 
   return (
-    <div className="space-y-2 bg-custom-white rounded-lg p-4 sm:p-5 small-text border-1 border-gray-100 group/thread-header">
+    <div className="space-y-2 bg-custom-white rounded-lg p-4 sm:p-5 small-text border-1 border-gray-100">
       <h4 className="text-xl font-bold">{thread.title}</h4>
       <div className="flex items-center gap-1">
         <span className="text-textcolor/80">投稿者:</span>
@@ -45,9 +45,7 @@ export default function ThreadHeader({ thread, onClickThreadTrashButton }: Threa
           onClick={() => handleClickLikeButton()}
         />
         {user && thread.creator?.id === user?.id && (
-          <div className="opacity-0 group-hover/thread-header:opacity-100">
-            <TrashButton onClick={() => onClickThreadTrashButton(thread.id)} />
-          </div>
+          <TrashButton onClick={() => onClickThreadTrashButton(thread.id)} />
         )}
       </div>
     </div>

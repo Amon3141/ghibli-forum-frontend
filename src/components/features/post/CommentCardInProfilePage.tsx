@@ -23,7 +23,7 @@ export default function CommentCardInProfilePage({ comment, onClickTrashButton }
   }
   
   return (
-    <div className="px-2.5 sm:px-3 pt-2.5 pb-3 sm:pb-4 bg-custom-white rounded-md shadow-sm group/comment-card">
+    <div className="px-2.5 sm:px-3 pt-2.5 pb-3 sm:pb-4 bg-custom-white rounded-md shadow-sm small-text">
       <div className="flex items-center justify-between mb-3">
         <p className="text-gray-500 small-text">
           {comment.thread && !comment.thread.isDeleted ? (
@@ -59,9 +59,7 @@ export default function CommentCardInProfilePage({ comment, onClickTrashButton }
         </div>
       
         {onClickTrashButton && user && comment.author?.id === user?.id && (
-          <div className="opacity-0 group-hover/comment-card:opacity-100 small-text">
-            <TrashButton onClick={() => onClickTrashButton(comment.id)} />
-          </div>
+          <TrashButton  onClick={() => onClickTrashButton(comment.id)} />
         )}
       </div>
     </div>

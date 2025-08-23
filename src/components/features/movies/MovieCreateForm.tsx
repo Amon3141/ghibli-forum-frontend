@@ -59,7 +59,6 @@ export default function MovieCreateForm({ movies, setMovies }: MovieCreateFormPr
             onChange={(e) => setNewMovie({ ...newMovie, releaseDate: e.target.value })}
             placeholder="公開日 (yyyy-mm-dd)"
           />
-          {/* <input type="file" accept="image/*" className="[&::-webkit-file-upload-button]:border [&::-webkit-file-upload-button]:border-gray-300 [&::-webkit-file-upload-button]:rounded-sm [&::-webkit-file-upload-button]:p-2" /> */}
         </div>
         <GeneralButton type="submit">作成</GeneralButton>
       </form>

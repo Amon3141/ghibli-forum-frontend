@@ -62,7 +62,7 @@ const initializeMovies = async () => {
       throw new Error('BACKEND_URL is not set');
     }
     
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTc1NTkxNTkwMSwiZXhwIjoxNzU2MDAyMzAxfQ.imUK89UOXNk8P7MwloZqG4AVGYVJdmnhTL2XrxGDtSA";
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNzU1OTE3NTYwLCJleHAiOjE3NTYwMDM5NjB9.MyTJoxYXLa_Z5kpksfD4zRYsblcqGo4-yTNdxvl86cM";
     const newMovies = [];
     for (const movie of initialMovies) {
       const response = await axios.post(`${baseUrl}/movies`, movie, {

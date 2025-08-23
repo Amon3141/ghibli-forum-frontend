@@ -42,8 +42,7 @@ export default function CommentCard({
   return (
     <div className={`
       rounded-md px-3.5 sm:px-4 py-2.5 sm:py-3 text-left
-      flex flex-col items-start gap-1.5 sm:gap-2
-      group/comment-card small-text
+      flex flex-col items-start gap-1.5 sm:gap-2 small-text
       ${selectedCommentId === comment.id 
         ? "bg-gradient-to-b from-primary/50 to-white"
         : "bg-custom-white"
@@ -76,9 +75,7 @@ export default function CommentCard({
             </div>
           </div>
           {user && comment.author?.id === user?.id && (
-            <div className="opacity-0 group-hover/comment-card:opacity-100">
-              <TrashButton onClick={() => onClickTrashButton(comment.id)} />
-            </div>
+            <TrashButton onClick={() => onClickTrashButton(comment.id)} />
           )}
         </div>
       </div>

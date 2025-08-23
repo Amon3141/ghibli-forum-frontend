@@ -213,7 +213,7 @@ export default function SetupProfilePage() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center gap-1.5 sm:gap-2 max-w-[800px] sm:mb-3">
+    <div className="h-full w-full flex flex-col items-center justify-center gap-1.5 sm:gap-2 max-w-[800px] sm:mb-3 overflow-y-auto">
       {/* Header */}
       <h1 className="text-xl sm:text-2xl font-bold text-textcolor pb-1 text-center">
         ジブリ掲示板へようこそ！

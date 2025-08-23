@@ -2,6 +2,7 @@
 import { useState } from "react";
 import InputField from "@/components/ui/InputField";
 import GeneralButton from "@/components/ui/GeneralButton";
+import GeneralAsyncButton from "@/components/ui/GeneralAsyncButton";
 import { Thread } from "@/types/database";
 import { api } from "@/utils/api";
 
@@ -21,6 +22,7 @@ export default function ThreadCreateForm({ movieId, setShowThreadForm, onCreateT
     title: '',
     description: ''
   });
+  const [isCreatingThread, setIsCreatingThread] = useState(false);
   const [createThreadError, setCreateThreadError] = useState<string | null>(null);
 
   const resetThreadForm = () => {
@@ -33,12 +35,15 @@ export default function ThreadCreateForm({ movieId, setShowThreadForm, onCreateT
   }
 
   const handleCreateThread = async () => {
+    setIsCreatingThread(true);
     try {
       const response = await api.post(`/movies/${movieId}/threads`, newThread);
       onCreateThread(response.data);
       resetThreadForm();
     } catch (err: any) {
       setCreateThreadError(err.response?.data?.error || 'スレッドの作成に失敗しました');
+    } finally {
+      setIsCreatingThread(false);
     }
   }
 
@@ -67,7 +72,13 @@ export default function ThreadCreateForm({ movieId, setShowThreadForm, onCreateT
       </div>
       <div className="flex justify-end items-center gap-2">
         <GeneralButton type="button" onClick={resetThreadForm} color="default">キャンセル</GeneralButton>
-        <GeneralButton type="submit" color="primary">作成</GeneralButton>
+        <GeneralAsyncButton
+          type="submit"
+          isLoading={isCreatingThread}
+          loadingText="作成中..."
+          mainText="作成"
+          color="primary"
+        />
       </div>
       {createThreadError && (
         <div className="rounded-sm bg-red-100 p-4">

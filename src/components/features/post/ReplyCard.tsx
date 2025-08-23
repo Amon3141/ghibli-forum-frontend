@@ -29,9 +29,8 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
 
   return (
     <div className={`
-      p-1 text-left
+      p-1 text-left small-text
       flex flex-col items-start gap-1.5 sm:gap-2
-      group/reply-card small-text
     `}>
       <div className="flex items-start justify-between w-full">
         <UsernameIcon user={replyData.author} size={isSm ? 38 : 33} />
@@ -47,9 +46,7 @@ export default function ReplyCard({ replyData, onClickTrashButton: handleClickTr
           onClick={() => handleClickLikeButton()}
         />
         {user && replyData.author?.id === user?.id && (
-          <div className="opacity-0 group-hover/reply-card:opacity-100">
-            <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
-          </div>
+          <TrashButton onClick={() => handleClickTrashButton(replyData.id)} />
         )}
       </div>
     </div>
