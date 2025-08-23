@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'ghibliforumstorage.blob.core.windows.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'ghibliforumeaprodstorage.blob.core.windows.net',
+      },
     ],
   },
   eslint: {
