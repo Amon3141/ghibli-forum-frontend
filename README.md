@@ -3,6 +3,8 @@ OS: macOS
 
 ### Main Program
 ```bash
+# First, run the backend server
+
 # Run the development server:
 npm run dev
 ```
