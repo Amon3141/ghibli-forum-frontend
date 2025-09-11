@@ -1,5 +1,6 @@
 # Ghibli Forum
-A community forum dedicated to Studio Ghibli fans where users can discuss films, share insights, and connect with fellow enthusiasts.
+A community forum dedicated to Studio Ghibli fans where users can discuss films, share insights, and connect with fellow enthusiasts.  
+→ visit [the website](ghibli-forum.vercel.app)  
 
 ## Features
 - Film-specific discussions - Organized threads for each Ghibli movie  
